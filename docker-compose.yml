@@ -1,0 +1,9 @@
+name: scheduler
+
+services:
+  bot:
+    build: .
+    volumes:
+      - ./src:/project/scheduler/srс
+    env_file:
+      - .env
