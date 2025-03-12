@@ -1,3 +1,4 @@
+from core.config import config
 from core.logging import setup_logging
 import logging
 
@@ -11,6 +12,7 @@ def main():
     logger.error("Hello World 4")
     logger.critical("Hello World 5")
     logger.fatal("Hello World 5")
+    logger.info(config.DEBUG)
 
 
 if __name__ == "__main__":
