@@ -5,7 +5,7 @@ logger = logging.getLogger(__name__)
 
 
 def main():
-    logger.debug("Hello World 1")
+    logger.debug("Hello World 10")
     logger.info("Hello World 2")
     logger.warning("Hello World 3")
     logger.error("Hello World 4")
