@@ -2,8 +2,10 @@ name: scheduler
 
 services:
   bot:
-    build: .
+    build:
+      context: .
+      target: ${BUILD_TARGET}
     volumes:
-      - ./src:/project/scheduler/srс
+      - ./src:/project/src
     env_file:
       - .env

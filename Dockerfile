@@ -1,15 +1,38 @@
-FROM python:3.13.2-alpine
+FROM python:3.13.2-alpine AS base
 
-WORKDIR /project/scheduler
+ENV PYTHONDONTWRITEBYTECODE=1 \
+    PYTHONUNBUFFERED=1
+
+WORKDIR /project/src
 
 COPY --from=ghcr.io/astral-sh/uv:latest /uv /uvx /bin/
 
 RUN apk update &&  \
     apk upgrade
 
-COPY ./requirements.txt ./requirements.txt
-RUN --mount=type=cache,target=/root/.cache/uv uv pip install --system -r requirements.txt
+COPY requirements/production.txt ./requirements/
+
+
+# ================================= #
+#           DEVELOPMENT             #
+# ================================= #
+FROM base AS development
+
+COPY requirements/development.txt ./requirements/
+RUN --mount=type=cache,target=/root/.cache/uv uv pip install --system -r requirements/development.txt
 
 COPY . .
 
-CMD ["uv", "run", "src/main.py"]
+CMD ["hupper", "-m", "main"]
+
+
+# ================================= #
+#           PRODUCTION              #
+# ================================= #
+FROM base AS production
+
+RUN --mount=type=cache,target=/root/.cache/uv uv pip install --system -r requirements/production.txt
+
+COPY . .
+
+CMD ["uv", "run", "main.py"]
