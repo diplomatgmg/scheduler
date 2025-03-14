@@ -1,10 +1,28 @@
-import os
+from enum import Enum
 
 from pydantic_settings import BaseSettings
 
 
+class EnvironmentEnum(str, Enum):
+    development = "development"
+    production = "production"
+
+
+class LogLevelEnum(str, Enum):
+    debug = "DEBUG"
+    info = "INFO"
+    warning = "WARNING"
+    error = "ERROR"
+    critical = "CRITICAL"
+
+
 class Settings(BaseSettings):
-    DEBUG: bool = os.getenv("BUILD_TARGET") == "development"
+    ENVIRONMENT: EnvironmentEnum = EnvironmentEnum.development
+    LOG_LEVEL: LogLevelEnum = LogLevelEnum.info
+
+    @property
+    def DEBUG(self) -> bool:  # noqa
+        return self.ENVIRONMENT == EnvironmentEnum.development
 
     class Config:
         env_file = ".env"

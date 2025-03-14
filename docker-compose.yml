@@ -4,7 +4,7 @@ services:
   bot:
     build:
       context: .
-      target: ${BUILD_TARGET}
+      target: ${ENVIRONMENT}
     volumes:
       - ./src:/project/src
     env_file:

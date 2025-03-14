@@ -1,2 +1,2 @@
-from core.config import Settings
-from core.logging import setup_logging
+from core.config import config
+from core.logging import setup_logger
