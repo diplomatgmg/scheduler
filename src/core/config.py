@@ -1,6 +1,7 @@
 from enum import Enum
 
 from pydantic_settings import BaseSettings
+from pydantic import Field
 
 
 class EnvironmentEnum(str, Enum):
@@ -19,6 +20,7 @@ class LogLevelEnum(str, Enum):
 class Settings(BaseSettings):
     ENVIRONMENT: EnvironmentEnum = EnvironmentEnum.development
     LOG_LEVEL: LogLevelEnum = LogLevelEnum.info
+    BOT_TOKEN: str = Field(default=...)
 
     @property
     def DEBUG(self) -> bool:  # noqa

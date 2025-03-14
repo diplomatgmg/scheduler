@@ -1,1 +1,3 @@
+aiogram==3.18.0
 pydantic_settings==2.8.1
+uvloop==0.21.0

@@ -1,21 +1,23 @@
 import logging
 
+import uvloop
+
 from core import config
 from core.logging import setup_logger
+from handlers import get_handlers_router
+from loader import bot, dp
 
 logger = logging.getLogger(__name__)
 
 
-def main():
+async def main() -> None:
     setup_logger()
+    logger.info("Режим разработки - %s", config.ENVIRONMENT.value)
 
-    logger.debug("Hello World 1")
-    logger.info("Hello World 2")
-    logger.warning("Hello World 3")
-    logger.error("Hello World 4")
-    logger.critical("Hello World 5")
-    logger.info(config.DEBUG)
+    dp.include_router(get_handlers_router())
+
+    await dp.start_polling(bot)
 
 
 if __name__ == "__main__":
-    main()
+    uvloop.run(main())

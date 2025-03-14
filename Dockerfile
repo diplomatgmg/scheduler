@@ -23,7 +23,7 @@ RUN --mount=type=cache,target=/root/.cache/uv uv pip install --system -r require
 
 COPY . .
 
-CMD ["hupper", "-m", "main"]
+CMD ["hupper", "-q", "-m", "main", "--watch", "./src"]
 
 
 # ================================= #
