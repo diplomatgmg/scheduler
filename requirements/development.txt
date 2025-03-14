@@ -1,4 +1,0 @@
--r production.txt
-
-black==25.1.0
-hupper==1.12.1

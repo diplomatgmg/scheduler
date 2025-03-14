@@ -1,0 +1,19 @@
+[project]
+name = "scheduler"
+version = "0.1.0"
+description = "Приложение для работы с постами в телеграм-каналах"
+requires-python = ">=3.13.2"
+dependencies = [
+    "loguru>=0.7.3",
+    "pydantic-settings>=2.8.1",
+    "uvloop>=0.21.0",
+]
+
+[dependency-groups]
+bot = [
+    "aiogram>=3.18.0",
+]
+dev = [
+    "black>=25.1.0",
+    "hupper>=1.12.1",
+]

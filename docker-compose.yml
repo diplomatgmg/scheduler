@@ -4,8 +4,9 @@ services:
   bot:
     build:
       context: .
+      dockerfile: ./src/bot/Dockerfile
       target: ${ENVIRONMENT}
     volumes:
-      - ./src:/project/src
+      - ./src/bot:/app/src/bot
     env_file:
       - .env

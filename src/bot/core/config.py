@@ -32,4 +32,4 @@ class Settings(BaseSettings):
         extra = "ignore"
 
 
-config = Settings()
+settings = Settings()
