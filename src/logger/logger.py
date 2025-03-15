@@ -1,5 +1,6 @@
 import logging
 import sys
+from logging import LogRecord
 
 from loguru import logger
 
@@ -9,7 +10,7 @@ from bot.core.config import settings
 class InterceptHandler(logging.Handler):
     """Хендлер для перенаправления логов из logging в loguru"""
 
-    def emit(self, record):
+    def emit(self, record: LogRecord) -> None:
         level = logger.level(record.levelname).name
         logger.opt(depth=6, exception=record.exc_info).log(level, record.getMessage())
 
