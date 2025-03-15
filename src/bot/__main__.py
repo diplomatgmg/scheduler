@@ -1,4 +1,6 @@
 import uvloop
+
+from bot.callbacks import get_callbacks_router
 from logger import bot_logger
 from bot.core.config import settings
 from bot.core.loader import bot, dp
@@ -10,6 +12,7 @@ async def main() -> None:
     bot_logger.success(f"Уровень логирования: {settings.LOG_LEVEL.value}")
 
     dp.include_router(get_handlers_router())
+    dp.include_router(get_callbacks_router())
 
     await dp.start_polling(bot)
 

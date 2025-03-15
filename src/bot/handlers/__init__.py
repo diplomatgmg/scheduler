@@ -1,6 +1,6 @@
 from aiogram import Router
-from src.bot.handlers import test
-from src.bot.handlers import start
+from bot.handlers import test
+from bot.handlers import start
 
 
 def get_handlers_router() -> Router:
