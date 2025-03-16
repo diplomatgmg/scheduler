@@ -4,8 +4,10 @@ version = "0.1.0"
 description = "Приложение для работы с постами в телеграм-каналах"
 requires-python = ">=3.13.2"
 dependencies = [
+    "asyncpg>=0.30.0",
     "loguru>=0.7.3",
     "pydantic-settings>=2.8.1",
+    "sqlalchemy>=2.0.39",
     "uvloop>=0.21.0",
 ]
 
