@@ -1,3 +1,4 @@
+from loguru import logger
 from sqlalchemy.ext.asyncio import (
     create_async_engine,
     async_sessionmaker,
@@ -6,12 +7,13 @@ from sqlalchemy.ext.asyncio import (
 
 from bot.core.config import settings
 from bot.db.models import Base
-from logger import bot_logger
 
-engine = create_async_engine(
-    settings.DB.url,
-    echo=True,
-)
+# Предотвращает дублирование логов SQLAlchemy
+# https://stackoverflow.com/questions/60804288/pycharm-duplicated-log-for-sqlalchemy-echo-true
+# sqlalchemy_log._add_default_handler = lambda _: None  # type: ignore
+
+
+engine = create_async_engine(settings.DB.url)
 
 async_session = async_sessionmaker(
     engine,
@@ -20,7 +22,7 @@ async_session = async_sessionmaker(
 
 
 async def init_db() -> None:
-    bot_logger.debug("Инициализация БД")
+    logger.debug("Инициализация БД")
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)

@@ -1,12 +1,12 @@
-from aiogram import Router
+from aiogram import Dispatcher
+from loguru import logger
+
 from bot.callbacks import menu
 
 
-def get_callbacks_router() -> Router:
-    router = Router()
+def register_callbacks_routers(dp: Dispatcher) -> None:
+    logger.debug("Регистрация callbacks routers")
 
-    router.include_routers(
-        menu.router,
+    dp.include_routers(
+        menu.router
     )
-
-    return router

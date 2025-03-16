@@ -34,4 +34,4 @@ async def on_bot_promoted(event: ChatMemberUpdated) -> None:
 #         response = "Я пока не администратор ни в одном канале."
 #
 #     await message.answer(response)
-#     bot_logger.info(f"User {get_username(message)} requested channel list")
+#     logger.info(f"User {get_username(message)} requested channel list")

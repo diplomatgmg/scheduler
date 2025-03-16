@@ -1,14 +1,14 @@
-from aiogram import Router
-from bot.handlers import test
+from aiogram import Dispatcher
+from loguru import logger
+
 from bot.handlers import start
+from bot.handlers import test
 
 
-def get_handlers_router() -> Router:
-    router = Router()
+def register_handlers_routers(dp: Dispatcher) -> None:
+    logger.debug("Регистрация handlers routers")
 
-    router.include_routers(
+    dp.include_routers(
         start.router,
         test.router,
     )
-
-    return router
