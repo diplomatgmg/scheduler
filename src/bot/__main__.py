@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 import uvloop
 
 from bot.callbacks import register_callbacks_routers
@@ -8,7 +9,7 @@ from bot.middlewares import register_middlewares
 from logger import init_logger
 
 
-async def on_startup() -> None:
+def on_startup() -> None:
     register_middlewares(dp)
     register_handlers_routers(dp)
     register_callbacks_routers(dp)

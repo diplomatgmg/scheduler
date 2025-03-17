@@ -1,16 +1,16 @@
-from enum import Enum
+from enum import StrEnum
 
 from pydantic import Field, SecretStr
 from pydantic_settings import BaseSettings
 from sqlalchemy import URL
 
 
-class EnvironmentEnum(str, Enum):
+class EnvironmentEnum(StrEnum):
     development = "development"
     production = "production"
 
 
-class LogLevelEnum(str, Enum):
+class LogLevelEnum(StrEnum):
     debug = "DEBUG"
     info = "INFO"
     warning = "WARNING"
@@ -44,8 +44,8 @@ class Settings(BaseSettings):
     DB: DBSettings = DBSettings()
 
     @property
-    def DEBUG(self) -> bool:  # noqa
-        return self.ENVIRONMENT == EnvironmentEnum.development
+    def DEBUG(self) -> bool:  # noqa: N802
+        return EnvironmentEnum.development == self.ENVIRONMENT
 
     class Config:
         env_file = ".env"

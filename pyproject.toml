@@ -18,6 +18,7 @@ bot = [
 dev = [
     "hupper>=1.12.1",
     "mypy>=1.15.0",
+    "ruff>=0.11.0",
 ]
 
 [tool.mypy]
@@ -44,3 +45,9 @@ show_absolute_path = true
 module = "bot"
 ignore_missing_imports = true
 
+[tool.ruff]
+fix = true
+unsafe-fixes = true
+lint.preview = true
+lint.select = ["ALL"]
+lint.ignore = ["D", "DOC", "CPY001", "ANN401"]

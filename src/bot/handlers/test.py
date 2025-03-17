@@ -7,4 +7,4 @@ router = Router(name="test")
 
 @router.message(Command(commands=("test",)))
 async def handle_test(message: Message) -> None:
-    await message.answer(f"test :)")
+    await message.answer("test :)")

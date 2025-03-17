@@ -1,4 +1,4 @@
-from enum import Enum
+from enum import StrEnum
 
 from aiogram import Router
 from aiogram.filters.callback_data import CallbackData
@@ -11,7 +11,7 @@ from bot.utils import get_username
 router = Router(name="menu")
 
 
-class MenuActionEnum(str, Enum):
+class MenuActionEnum(StrEnum):
     SETTINGS = "settings"
 
 

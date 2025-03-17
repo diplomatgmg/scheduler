@@ -1,10 +1,11 @@
 from aiogram.filters.callback_data import CallbackQuery
-from aiogram.types import User, Message
+from aiogram.types import Message, User
 
 
 def get_username(entity: User | Message | CallbackQuery | None) -> str:
     """
-    Возвращает имя пользователя или 'unknown', если пользователь отсутствует или не имеет username.
+    Возвращает имя пользователя или 'unknown',
+    если пользователь отсутствует или не имеет username.
     """
     if isinstance(entity, Message):
         user = entity.from_user
