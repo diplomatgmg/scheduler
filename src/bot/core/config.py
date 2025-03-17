@@ -19,11 +19,11 @@ class LogLevelEnum(str, Enum):
 
 
 class DBSettings(BaseSettings):
-    user: str = Field(default=..., alias="POSTGRES_USER")
-    password: SecretStr = Field(default=..., alias="POSTGRES_PASSWORD")
-    host: str = Field(default=..., alias="POSTGRES_HOST")
-    port: int = Field(default=..., alias="POSTGRES_PORT")
-    name: str = Field(default=..., alias="POSTGRES_NAME")
+    user: str = Field(default=..., alias="DB_USER")
+    password: SecretStr = Field(default=..., alias="DB_PASSWORD")
+    host: str = Field(default=..., alias="DB_HOST")
+    port: int = Field(default=..., alias="DB_PORT")
+    name: str = Field(default=..., alias="DB_NAME")
 
     @property
     def url(self) -> URL:
