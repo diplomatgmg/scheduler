@@ -1,8 +1,14 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from aiogram.filters import ADMINISTRATOR, ChatMemberUpdatedFilter
-from aiogram.types import ChatMemberUpdated
 from loguru import logger
 
 from bot.core.loader import bot, dp
+
+if TYPE_CHECKING:
+    from aiogram.types import ChatMemberUpdated
 
 
 @dp.chat_member_handler(ChatMemberUpdatedFilter(member_status_changed=ADMINISTRATOR))

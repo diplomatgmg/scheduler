@@ -1,12 +1,19 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 from aiogram import Router
 from aiogram.filters import CommandStart
-from aiogram.fsm.context import FSMContext
-from aiogram.types import Message
 from loguru import logger
 
 from bot.keyboards.inline.menu import main_keyboard
 from bot.states.post import PostState
 from bot.utils import get_username
+
+if TYPE_CHECKING:
+    from aiogram.fsm.context import FSMContext
+    from aiogram.types import Message
+
 
 router = Router(name="start")
 

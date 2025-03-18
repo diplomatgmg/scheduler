@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from aiogram.filters.callback_data import CallbackQuery
 from aiogram.types import Message, User
 

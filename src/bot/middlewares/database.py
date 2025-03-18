@@ -1,10 +1,16 @@
-from collections.abc import Awaitable, Callable
-from typing import Any
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
 
 from aiogram import BaseMiddleware
-from aiogram.types import TelegramObject
 
 from bot.db.engine import async_session
+
+if TYPE_CHECKING:
+    from collections.abc import Awaitable, Callable
+    from typing import Any
+
+    from aiogram.types import TelegramObject
 
 
 class DatabaseMiddleware(BaseMiddleware):

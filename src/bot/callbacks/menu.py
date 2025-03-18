@@ -1,12 +1,17 @@
+from __future__ import annotations
+
 from enum import StrEnum
+from typing import TYPE_CHECKING
 
 from aiogram import Router
 from aiogram.filters.callback_data import CallbackData
-from aiogram.fsm.context import FSMContext
-from aiogram.types import CallbackQuery
 from loguru import logger
 
 from bot.utils import get_username
+
+if TYPE_CHECKING:
+    from aiogram.fsm.context import FSMContext
+    from aiogram.types import CallbackQuery
 
 router = Router(name="menu")
 
