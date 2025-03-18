@@ -1,4 +1,4 @@
-FROM ghcr.io/astral-sh/uv:0.6.6-python3.13-alpine AS base
+FROM ghcr.io/astral-sh/uv:0.6.7-python3.13-alpine AS base
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
