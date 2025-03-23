@@ -44,7 +44,7 @@ show_absolute_path = true
 [tool.ruff]
 fix = true
 unsafe-fixes = true
-line-length = 100
+line-length = 120
 lint.preview = true
 lint.select = ["ALL"]
-lint.ignore = ["D", "DOC", "CPY001", "ANN401"]
+lint.ignore = ["D", "DOC", "CPY001", "ANN401", "RUF001"]

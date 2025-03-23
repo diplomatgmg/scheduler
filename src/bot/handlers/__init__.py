@@ -4,7 +4,7 @@ from typing import TYPE_CHECKING
 
 from loguru import logger
 
-from bot.handlers import start, test
+from bot.handlers import admin_channels, start, test
 
 if TYPE_CHECKING:
     from aiogram import Dispatcher
@@ -16,4 +16,5 @@ def register_handlers_routers(dp: Dispatcher) -> None:
     dp.include_routers(
         start.router,
         test.router,
+        admin_channels.router,
     )
