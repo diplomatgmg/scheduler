@@ -6,7 +6,10 @@ class Base(DeclarativeBase, AsyncAttrs):
     pass
 
 
-class AdminChannel(Base):
-    __tablename__ = "admin_channels"
-    chat_id: Mapped[int] = mapped_column(primary_key=True)
-    chat_title: Mapped[str] = mapped_column()
+class UserModel(Base):
+    __tablename__ = "users"
+
+    id: Mapped[int] = mapped_column(primary_key=True)
+    first_name: Mapped[str]
+    last_name: Mapped[str | None]
+    username: Mapped[str | None]

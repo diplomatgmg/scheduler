@@ -4,6 +4,7 @@ from typing import TYPE_CHECKING
 
 from loguru import logger
 
+from bot.middlewares.auth import AuthMiddleware
 from bot.middlewares.database import DatabaseMiddleware
 
 if TYPE_CHECKING:
@@ -13,3 +14,4 @@ if TYPE_CHECKING:
 def register_middlewares(dp: Dispatcher) -> None:
     logger.debug("Регистрация middlewares")
     dp.update.outer_middleware(DatabaseMiddleware())
+    dp.message.outer_middleware(AuthMiddleware())
