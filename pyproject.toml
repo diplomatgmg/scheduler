@@ -14,6 +14,7 @@ dependencies = [
 
 [dependency-groups]
 dev = [
+    "black>=25.1.0",
     "hupper>=1.12.1",
     "mypy>=1.15.0",
     "ruff>=0.11.4",
@@ -46,3 +47,6 @@ line-length = 120
 lint.preview = true
 lint.select = ["ALL"]
 lint.ignore = ["D", "DOC", "CPY001", "ANN401", "RUF001"]
+
+[tool.black]
+line-length = 120

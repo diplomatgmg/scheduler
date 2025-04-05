@@ -20,7 +20,7 @@ FROM base AS development
 
 
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-install-project --group bot --group dev
+    uv sync --frozen --no-install-project --dev
 
 CMD ["hupper", "-q", "-m", "bot"]
 
@@ -31,6 +31,6 @@ CMD ["hupper", "-q", "-m", "bot"]
 FROM base AS production
 
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-install-project --group bot
+    uv sync --frozen --no-install-project
 
 CMD ["python", "-m", "bot"]

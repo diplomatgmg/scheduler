@@ -1,7 +1,3 @@
-from __future__ import annotations
-
-from typing import TYPE_CHECKING
-
 from aiogram import Router
 from aiogram.filters import (
     ADMINISTRATOR,
@@ -14,9 +10,6 @@ from loguru import logger
 from bot.core.loader import bot
 from bot.services.bot import get_channel_permissions
 from bot.utils import get_username
-
-if TYPE_CHECKING:
-    from aiogram.types import ChatMemberUpdated
 
 router = Router(name="admin_channels")
 

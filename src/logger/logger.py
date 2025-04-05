@@ -35,6 +35,7 @@ def setup_module_logging(module_name: str) -> None:
     Инициализирует логгер под модуль.
     Создает файл логов для модуля.
     """
+
     def make_log_path(m: str) -> Path:
         return LOG_DIR / m / f"{m}.log"
 

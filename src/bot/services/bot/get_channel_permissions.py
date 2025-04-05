@@ -1,5 +1,3 @@
-
-
 from aiogram.types import ChatMemberAdministrator
 
 from bot.core.loader import bot
