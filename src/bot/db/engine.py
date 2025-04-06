@@ -6,7 +6,7 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from bot.core.config import settings
+from bot.core import settings
 from bot.db.models import Base
 
 # Предотвращает дублирование логов SQLAlchemy
