@@ -1,7 +1,7 @@
 from aiogram import Dispatcher
 from loguru import logger
 
-from bot.handlers import admin_channels, start, test
+from bot.handlers import admin_channels, echo, start, test
 
 
 def register_handlers_routers(dp: Dispatcher) -> None:
@@ -11,4 +11,5 @@ def register_handlers_routers(dp: Dispatcher) -> None:
         start.router,
         test.router,
         admin_channels.router,
+        echo.router,
     )
