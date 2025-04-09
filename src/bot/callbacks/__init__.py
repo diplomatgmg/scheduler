@@ -3,9 +3,11 @@ from loguru import logger
 
 from bot.callbacks import menu
 
+__all__ = ["register_callbacks_routers"]
+
 
 def register_callbacks_routers(dp: Dispatcher) -> None:
-    logger.debug("Регистрация callbacks routers")
+    logger.debug("Register callback routers")
 
     dp.include_routers(
         menu.router,

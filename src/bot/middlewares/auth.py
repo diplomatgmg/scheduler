@@ -9,6 +9,10 @@ from bot.services.user import add_user, find_user
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
 
+__all__ = [
+    "AuthMiddleware",
+]
+
 
 class AuthMiddleware(BaseMiddleware):
     async def __call__(
