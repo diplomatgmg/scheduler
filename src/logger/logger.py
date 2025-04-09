@@ -7,6 +7,10 @@ from loguru import logger
 
 from bot.core import settings
 
+__all__ = [
+    "init_logger",
+]
+
 LOG_DIR = Path(__name__).parent / "logs"
 
 

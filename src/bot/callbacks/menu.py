@@ -6,7 +6,13 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 from loguru import logger
 
-from bot.utils import get_username
+from bot.utils.user import get_username
+
+__all__ = [
+    "MenuActionEnum",
+    "MenuCallback",
+    "handle_menu_callback",
+]
 
 router = Router(name="menu")
 
@@ -25,13 +31,10 @@ async def handle_menu_callback(
     callback_data: MenuCallback,
     state: FSMContext,
 ) -> None:
-    logger.debug(f"Получен callback: {callback_data.action} от {get_username(query)}")
+    logger.debug(f"callback: {callback_data.action} from {get_username(query)}")
 
     if callback_data.action == MenuActionEnum.SETTINGS:
-        if query.message is not None:
-            await query.message.answer("Ты открыл настройки!")
-        else:
-            logger.error(f"Сообщение недоступно для callback от {get_username(query)}")
+        await query.answer("Ты открыл настройки!")
 
     await query.answer()
     await state.clear()

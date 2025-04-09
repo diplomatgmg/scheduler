@@ -7,14 +7,26 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from bot.core import settings
+from bot.core.enums import LogLevelSqlalchemyEnum
 from bot.db.models import Base
+
+__all__ = [
+    "async_session",
+    "init_db",
+]
+
 
 # Предотвращает дублирование логов SQLAlchemy
 # https://stackoverflow.com/questions/60804288/pycharm-duplicated-log-for-sqlalchemy-echo-true
 sqlalchemy_log._add_default_handler = lambda _: None  # type: ignore[assignment]  # noqa: SLF001
 
+echo_level = {
+    LogLevelSqlalchemyEnum.debug: "debug",
+    LogLevelSqlalchemyEnum.info: True,
+    LogLevelSqlalchemyEnum.warning: None,
+}
 
-engine = create_async_engine(settings.DB.url, echo=True)
+engine = create_async_engine(settings.DB.url, echo=echo_level.get(settings.LOG.sqlalchemy_level))
 
 async_session = async_sessionmaker(
     engine,
@@ -23,7 +35,7 @@ async_session = async_sessionmaker(
 
 
 async def init_db() -> None:
-    logger.debug("Инициализация БД")
+    logger.debug("Initializing DB")
 
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)

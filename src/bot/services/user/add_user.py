@@ -4,9 +4,13 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from bot.db.models import UserModel
 
+__all__ = [
+    "add_user",
+]
+
 
 async def add_user(session: AsyncSession, user: User) -> None:
-    logger.debug(f"Создаем пользователя id={user.id}")
+    logger.debug(f"Creating user id={user.id}")
 
     user_model = UserModel(
         id=user.id,

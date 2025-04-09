@@ -4,12 +4,13 @@ from aiogram.filters import (
     PROMOTED_TRANSITION,
     ChatMemberUpdatedFilter,
 )
-from aiogram.types import ChatMemberUpdated
+from aiogram.types import ChatMemberAdministrator, ChatMemberUpdated
 from loguru import logger
 
 from bot.core.loader import bot
-from bot.services.bot import get_channel_permissions
-from bot.utils import get_username
+from bot.utils.user import get_username
+
+__all__ = ()
 
 router = Router(name="admin_channels")
 
@@ -17,7 +18,8 @@ router = Router(name="admin_channels")
 @router.my_chat_member(ChatMemberUpdatedFilter(member_status_changed=PROMOTED_TRANSITION))
 async def on_bot_promoted(event: ChatMemberUpdated) -> None:
     chat_username = get_username(event)
-    logger.debug(f"Бот добавлен в администраторы канала {chat_username}")
+    username = get_username(event.from_user)
+    logger.debug(f"Bot was promoted to administrator by user {username} in the channel {chat_username}")
 
     await bot.send_message(
         event.from_user.id,
@@ -30,7 +32,8 @@ async def on_bot_promoted(event: ChatMemberUpdated) -> None:
 @router.my_chat_member(ChatMemberUpdatedFilter(member_status_changed=~PROMOTED_TRANSITION))
 async def on_bot_demoted(event: ChatMemberUpdated) -> None:
     chat_username = get_username(event)
-    logger.debug(f"Бот удален из администраторов канала {chat_username}")
+    username = get_username(event.from_user)
+    logger.debug(f"Bot was removed from administrators by user {username} in channel {chat_username}")
 
     await bot.send_message(
         event.from_user.id,
@@ -42,9 +45,11 @@ async def on_bot_demoted(event: ChatMemberUpdated) -> None:
 
 @router.my_chat_member(ChatMemberUpdatedFilter(member_status_changed=ADMINISTRATOR))
 async def on_bot_permissions_changed(event: ChatMemberUpdated) -> None:
-    permissions = await get_channel_permissions(event.chat.id)
     chat_username = get_username(event)
-    logger.debug(f"Права доступа бота изменены в канале {chat_username}")
+    username = get_username(event.from_user)
+    logger.debug(f"Bot permissions were updated by user {username} in channel {chat_username}")
+
+    permissions: ChatMemberAdministrator = await bot.get_chat_member(event.chat.id, bot.id)  # type: ignore[assignment]
 
     permissions_list = (
         (permissions.can_post_messages, "Могу отправлять сообщения в канал"),

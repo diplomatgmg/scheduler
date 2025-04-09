@@ -3,6 +3,10 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from bot.callbacks.menu import MenuActionEnum, MenuCallback
 
+__all__ = [
+    "main_keyboard",
+]
+
 
 def main_keyboard() -> InlineKeyboardMarkup:
     """Используется в главном меню или при старте бота."""

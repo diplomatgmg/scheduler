@@ -3,9 +3,13 @@ from loguru import logger
 
 from bot.handlers import admin_channels, echo, start, test
 
+__all__ = [
+    "register_handlers_routers",
+]
+
 
 def register_handlers_routers(dp: Dispatcher) -> None:
-    logger.debug("Регистрация handlers routers")
+    logger.debug("Registering handler routers")
 
     dp.include_routers(
         start.router,

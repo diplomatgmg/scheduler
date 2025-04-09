@@ -1,6 +1,11 @@
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
+__all__ = [
+    "Base",
+    "UserModel",
+]
+
 
 class Base(DeclarativeBase, AsyncAttrs):
     pass

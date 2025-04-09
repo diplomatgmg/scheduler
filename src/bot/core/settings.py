@@ -1,9 +1,12 @@
-from loguru import logger
 from pydantic import BaseModel, Field, SecretStr
 from pydantic_settings import BaseSettings
 from sqlalchemy import URL
 
-from bot.core.enums import EnvironmentEnum, LogLevelEnum
+from bot.core.enums import EnvironmentEnum, LogLevelEnum, LogLevelSqlalchemyEnum
+
+__all__ = [
+    "settings",
+]
 
 
 class EnvSettings(BaseSettings):
@@ -44,6 +47,7 @@ class BotSettings(BaseSettings):
 
 class LogSettings(BaseSettings):
     level: LogLevelEnum
+    sqlalchemy_level: LogLevelSqlalchemyEnum
 
     class Config:
         env_prefix = "LOG_"
@@ -64,4 +68,3 @@ class Settings(BaseModel):
 
 
 settings = Settings()
-logger.info(f"Режим окружения: {settings.ENV.mode}")

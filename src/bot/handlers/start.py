@@ -6,14 +6,16 @@ from loguru import logger
 
 from bot.keyboards.inline.menu import main_keyboard
 from bot.states.post import PostState
-from bot.utils import get_username
+from bot.utils.user import get_username
+
+__all__ = ()
 
 router = Router(name="start")
 
 
 @router.message(CommandStart())
 async def handle_start(message: Message, state: FSMContext) -> None:
-    logger.debug(f"Пользовать {get_username(message)} запустил бота")
+    logger.debug(f"Handler start. User: {get_username(message)}")
 
     message_text = "Здесь вы можете создавать посты, просматривать статистику и выполнять другие задачи."
     await message.answer(message_text, reply_markup=main_keyboard())
@@ -22,6 +24,7 @@ async def handle_start(message: Message, state: FSMContext) -> None:
 
 @router.message(PostState.waiting_for_post)
 async def process_post(message: Message, state: FSMContext) -> None:
-    logger.debug(f"Получено сообщение от пользователя {get_username(message)}")
+    logger.debug(f"process handler. User: {get_username(message)}")
+
     await message.forward(chat_id=message.chat.id)
     await state.clear()

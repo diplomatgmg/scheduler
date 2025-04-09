@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 import uvloop
+from loguru import logger
 
 from bot.callbacks import register_callbacks_routers
+from bot.core import settings
 from bot.core.loader import bot, dp
 from bot.db.engine import init_db
 from bot.handlers import register_handlers_routers
@@ -17,6 +19,7 @@ def on_startup() -> None:
 
 async def main() -> None:
     init_logger()
+    logger.info(f"Environment mode: {settings.ENV.mode}")
     await init_db()
 
     dp.startup.register(on_startup)

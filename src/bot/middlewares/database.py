@@ -6,6 +6,10 @@ from aiogram.types import TelegramObject
 
 from bot.db.engine import async_session
 
+__all__ = [
+    "DatabaseMiddleware",
+]
+
 
 class DatabaseMiddleware(BaseMiddleware):
     async def __call__(

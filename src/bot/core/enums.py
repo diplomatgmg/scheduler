@@ -1,5 +1,11 @@
 from enum import StrEnum
 
+__all__ = [
+    "EnvironmentEnum",
+    "LogLevelEnum",
+    "LogLevelSqlalchemyEnum",
+]
+
 
 class EnvironmentEnum(StrEnum):
     development = "development"
@@ -12,3 +18,9 @@ class LogLevelEnum(StrEnum):
     warning = "WARNING"
     error = "ERROR"
     critical = "CRITICAL"
+
+
+class LogLevelSqlalchemyEnum(StrEnum):
+    debug = "DEBUG"
+    info = "INFO"
+    warning = "WARNING"
