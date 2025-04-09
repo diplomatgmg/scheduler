@@ -14,17 +14,17 @@ def main_keyboard() -> InlineKeyboardMarkup:
         [
             InlineKeyboardButton(
                 text="Создать пост",
-                callback_data=MenuCallback(action=MenuActionEnum.SETTINGS).pack(),
+                callback_data=MenuCallback(action=MenuActionEnum.CREATE).pack(),
             ),
         ],
         [
             InlineKeyboardButton(
-                text="Отложенные",
+                text="Настройки",
                 callback_data=MenuCallback(action=MenuActionEnum.SETTINGS).pack(),
             ),
             InlineKeyboardButton(
                 text="Редактировать",
-                callback_data=MenuCallback(action=MenuActionEnum.SETTINGS).pack(),
+                callback_data=MenuCallback(action=MenuActionEnum.EDIT).pack(),
             ),
         ],
     ]
