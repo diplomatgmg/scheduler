@@ -1,6 +1,6 @@
 from enum import StrEnum
 
-from aiogram import Router, F
+from aiogram import F, Router
 from aiogram.filters.callback_data import CallbackData
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
@@ -23,7 +23,9 @@ class MenuCallback(CallbackData, prefix="menu"):
     action: MenuActionEnum
 
 
-@router.callback_query(MenuCallback.filter(F.action == MenuActionEnum.CREATE.value))
+# mypy корректно видит тип, ide - нет
+# noinspection PyTypeChecker
+@router.callback_query(MenuCallback.filter(F.action == MenuActionEnum.CREATE))
 async def handle_create_callback(
     query: CallbackQuery,
     state: FSMContext,
@@ -33,7 +35,8 @@ async def handle_create_callback(
     await state.clear()
 
 
-@router.callback_query(MenuCallback.filter(F.action == MenuActionEnum.SETTINGS.value))
+# noinspection PyTypeChecker
+@router.callback_query(MenuCallback.filter(F.action == MenuActionEnum.SETTINGS))
 async def handle_settings_callback(
     query: CallbackQuery,
     state: FSMContext,
@@ -43,7 +46,8 @@ async def handle_settings_callback(
     await state.clear()
 
 
-@router.callback_query(MenuCallback.filter(F.action == MenuActionEnum.EDIT.value))
+# noinspection PyTypeChecker
+@router.callback_query(MenuCallback.filter(F.action == MenuActionEnum.EDIT))
 async def handle_edit_callback(
     query: CallbackQuery,
     state: FSMContext,
