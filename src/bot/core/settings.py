@@ -64,7 +64,7 @@ class Settings(BaseModel):
 
     @property
     def debug(self) -> bool:
-        return EnvironmentEnum.development == self.ENV
+        return EnvironmentEnum.development == self.ENV.mode
 
 
 settings = Settings()
