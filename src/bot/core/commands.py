@@ -6,4 +6,5 @@ __all__ = [
 
 main_menu_commands = [
     BotCommand(command="/start", description="Перезапустить бота"),
+    BotCommand(command="/support", description="Обратная связь"),
 ]
