@@ -10,10 +10,16 @@ from bot.handlers import register_handlers_routers
 from bot.middlewares import register_middlewares
 
 
-def on_startup() -> None:
+async def on_startup() -> None:
+    await bot.delete_webhook(drop_pending_updates=True)
     register_middlewares(dp)
     register_handlers_routers(dp)
     register_callbacks_routers(dp)
+
+
+async def on_shutdown() -> None:
+    await bot.delete_webhook()
+    await bot.session.close()
 
 
 async def main() -> None:
@@ -22,6 +28,7 @@ async def main() -> None:
     await init_db()
 
     dp.startup.register(on_startup)
+    dp.shutdown.register(on_shutdown)
 
     await dp.start_polling(bot)
 
