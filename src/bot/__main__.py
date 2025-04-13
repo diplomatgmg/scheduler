@@ -3,11 +3,11 @@ from loguru import logger
 
 from bot.callbacks import register_callbacks_routers
 from bot.core import settings
-from bot.core.commands import main_menu_commands
 from bot.core.loader import bot, dp
 from bot.core.logger import init_logger
 from bot.db.engine import init_db
 from bot.handlers import register_handlers_routers
+from bot.keyboards import main_menu_commands
 from bot.middlewares import register_middlewares
 
 
