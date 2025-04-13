@@ -46,7 +46,7 @@ unsafe-fixes = true
 line-length = 120
 lint.preview = true
 lint.select = ["ALL"]
-lint.ignore = ["D", "DOC", "CPY001", "ANN401", "RUF001"]
+lint.ignore = ["D", "DOC", "CPY001", "ANN401", "RUF001", "RUF003"]
 
 [tool.black]
 line-length = 120

@@ -11,7 +11,8 @@ from bot.middlewares import register_middlewares
 
 
 async def on_startup() -> None:
-    await bot.delete_webhook(drop_pending_updates=True)
+    if not settings.debug:  # Не нужно ждать запуска бота, чтобы отправить команды
+        await bot.delete_webhook(drop_pending_updates=True)
     register_middlewares(dp)
     register_handlers_routers(dp)
     register_callbacks_routers(dp)
