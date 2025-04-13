@@ -1,14 +1,13 @@
-#!/usr/bin/env python
 import uvloop
 from loguru import logger
 
 from bot.callbacks import register_callbacks_routers
 from bot.core import settings
 from bot.core.loader import bot, dp
+from bot.core.logger import init_logger
 from bot.db.engine import init_db
 from bot.handlers import register_handlers_routers
 from bot.middlewares import register_middlewares
-from logger import init_logger
 
 
 def on_startup() -> None:

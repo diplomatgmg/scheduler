@@ -12,10 +12,10 @@ __all__ = [
 
 class LoggingMiddleware(BaseMiddleware):
     async def __call__(
-            self,
-            handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
-            event: TelegramObject,
-            data: dict[str, Any],
+        self,
+        handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
+        event: TelegramObject,
+        data: dict[str, Any],
     ) -> Any:
         logger.debug(event.model_dump_json(indent=4, exclude_none=True))
         return await handler(event, data)
