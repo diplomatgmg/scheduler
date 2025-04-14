@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import (
 )
 
 from bot.core import settings
-from bot.core.enums import LogLevelSqlalchemyEnum
+from bot.core.settings.log import LogLevelSqlalchemyEnum
 from bot.db.models import Base
 
 __all__ = [

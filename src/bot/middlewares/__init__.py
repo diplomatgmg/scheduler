@@ -12,7 +12,7 @@ __all__ = [
 
 
 def register_middlewares(dp: Dispatcher) -> None:
-    logger.debug("Register middlewares")
+    logger.debug("Registering middlewares")
 
     if settings.debug:
         dp.update.outer_middleware(LoggingMiddleware())
