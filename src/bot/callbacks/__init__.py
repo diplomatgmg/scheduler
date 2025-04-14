@@ -7,7 +7,7 @@ __all__ = ["register_callbacks_routers"]
 
 
 def register_callbacks_routers(dp: Dispatcher) -> None:
-    logger.debug("Register callback routers")
+    logger.debug("Registering callback routers")
 
     dp.include_routers(
         menu.router,

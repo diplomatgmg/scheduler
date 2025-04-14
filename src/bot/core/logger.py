@@ -23,8 +23,6 @@ class InterceptHandler(logging.Handler):
 
 
 def setup_root_logging() -> None:
-    logger.info("Инициализация root логгера")
-
     # Перехватывает логи из logging в loguru
     logging.basicConfig(handlers=[InterceptHandler()], level=logging.DEBUG)
 
@@ -56,10 +54,11 @@ def setup_module_logging(module_name: str) -> None:
             level=settings.LOG.level,
         )
 
-    logger.info(f'Логгер для модуля "{module_name}" инициализирован')
+    logger.debug(f'Initializing logger for module "{module_name}"')
 
 
 def init_logger() -> None:
-    logger.info("Инициализация логгера")
+    logger.debug("Initializing logger")
+
     setup_root_logging()
     setup_module_logging("bot")
