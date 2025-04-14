@@ -1,3 +1,5 @@
+version: "3.9"
+
 name: scheduler
 
 services:
@@ -12,6 +14,8 @@ services:
       - .env
     depends_on:
       - pgbouncer
+    networks:
+      - bot_network
 
   postgres:
     image: postgres:17.4-alpine
@@ -21,6 +25,8 @@ services:
       - "${POSTGRES_PORT}:5432"
     env_file:
       - .env
+    networks:
+      - bot_network
 
   pgbouncer:
     image: bitnami/pgbouncer:latest
@@ -32,7 +38,13 @@ services:
       - .env
     depends_on:
       - postgres
+    networks:
+      - bot_network
 
+
+networks:
+  bot_network:
+    driver: bridge
 
 volumes:
   postgres-data:
