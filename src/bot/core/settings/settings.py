@@ -6,6 +6,10 @@ from bot.core.settings.env import EnvironmentEnum, EnvSettings
 from bot.core.settings.log import LogSettings
 from bot.core.settings.sentry import SentrySettings
 
+__all__ = [
+    "settings",
+]
+
 
 class Settings(BaseModel):
     ENV: EnvSettings = EnvSettings()  # type: ignore[call-arg]
