@@ -29,7 +29,7 @@ services:
       - bot_network
 
   pgbouncer:
-    image: bitnami/pgbouncer:latest
+    image: bitnami/pgbouncer:1.24.0
     ports:
       - "${PGBOUNCER_PORT}:6432"
     environment:
