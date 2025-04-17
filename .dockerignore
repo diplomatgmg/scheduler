@@ -4,5 +4,6 @@
 # exclusion
 !/src
 
+!/alembic.ini
 !/pyproject.toml
 !/uv.lock

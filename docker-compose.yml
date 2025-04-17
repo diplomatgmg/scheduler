@@ -8,6 +8,7 @@ services:
       target: ${ENV_MODE}
     volumes:
       - ./src/bot:/app/src/bot
+      - ./src/migrations:/app/src/migrations
     env_file:
       - .env
     depends_on:

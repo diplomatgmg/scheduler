@@ -14,3 +14,11 @@ down: ## compose down
 lint: ## Запуск линтеров
 	@uv run ruff check . & black . & mypy .
 .PHONY: lint
+
+mm: ## Создает миграцию с переданным описанием
+	@docker compose exec bot alembic revision --autogenerate -m "$(args)"
+.PHONY: mm
+
+migrate: ## Применяет миграции
+	@docker compose exec bot alembic upgrade head
+.PHONY: migrate

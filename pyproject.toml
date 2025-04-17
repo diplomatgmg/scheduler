@@ -5,6 +5,7 @@ description = "Приложение для работы с постами в т�
 requires-python = ">=3.13.2"
 dependencies = [
     "aiogram>=3.19.0",
+    "alembic>=1.15.2",
     "asyncpg>=0.30.0",
     "loguru>=0.7.3",
     "pydantic-settings>=2.8.1",
@@ -20,6 +21,15 @@ dev = [
     "mypy>=1.15.0",
     "ruff>=0.11.4",
 ]
+
+[tool.ruff]
+fix = true
+unsafe-fixes = true
+line-length = 120
+lint.preview = true
+lint.select = ["ALL"]
+lint.ignore = ["D", "DOC", "CPY001", "ANN401", "RUF001", "RUF003"]
+extend-exclude = ["migrations"]
 
 [tool.mypy]
 ignore_missing_imports = false
@@ -40,14 +50,6 @@ warn_unused_ignores = true
 follow_imports_for_stubs = true
 namespace_packages = true
 show_absolute_path = true
-
-[tool.ruff]
-fix = true
-unsafe-fixes = true
-line-length = 120
-lint.preview = true
-lint.select = ["ALL"]
-lint.ignore = ["D", "DOC", "CPY001", "ANN401", "RUF001", "RUF003"]
 
 [tool.black]
 line-length = 120
