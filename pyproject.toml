@@ -28,7 +28,7 @@ unsafe-fixes = true
 line-length = 120
 lint.preview = true
 lint.select = ["ALL"]
-lint.ignore = ["D", "DOC", "CPY001", "ANN401", "RUF001", "RUF003"]
+lint.ignore = ["D", "DOC", "TD", "FIX", "CPY001", "ANN401", "RUF001", "RUF002", "RUF003"]
 extend-exclude = ["migrations"]
 
 [tool.mypy]
@@ -53,3 +53,8 @@ show_absolute_path = true
 
 [tool.black]
 line-length = 120
+extend-exclude = '''
+/(
+  | migrations
+)/
+'''

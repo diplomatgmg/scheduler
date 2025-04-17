@@ -7,11 +7,13 @@ __all__ = [
 ]
 
 
-def _extract_user(entity: User | Message | CallbackQuery | ChatMemberUpdated) -> User | Chat | None:
+def _extract_user(entity: User | Message | Chat | CallbackQuery | ChatMemberUpdated) -> User | Chat | None:
     """
     Извлекает объект User из переданной сущности.
     """
     if isinstance(entity, User):
+        return entity
+    if isinstance(entity, Chat):
         return entity
     if isinstance(entity, Message):
         return entity.from_user
@@ -23,7 +25,7 @@ def _extract_user(entity: User | Message | CallbackQuery | ChatMemberUpdated) ->
     return None
 
 
-def get_username(entity: User | Message | CallbackQuery | ChatMemberUpdated) -> str:
+def get_username(entity: User | Chat | Message | CallbackQuery | ChatMemberUpdated) -> str:
     """
     Возвращает username пользователя в формате '@username'.
     Если username не найден — логирует и возвращает 'unknown'.

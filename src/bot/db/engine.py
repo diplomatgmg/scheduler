@@ -1,4 +1,3 @@
-from loguru import logger
 from sqlalchemy import log as sqlalchemy_log
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
@@ -8,11 +7,9 @@ from sqlalchemy.ext.asyncio import (
 
 from bot.core import settings
 from bot.core.settings.log import LogLevelSqlalchemyEnum
-from bot.db.models import Base
 
 __all__ = [
     "async_session",
-    "init_db",
 ]
 
 
@@ -32,10 +29,3 @@ async_session = async_sessionmaker(
     engine,
     class_=AsyncSession,
 )
-
-
-async def init_db() -> None:
-    logger.debug("Initializing DB")
-
-    async with engine.begin() as conn:
-        await conn.run_sync(Base.metadata.create_all)

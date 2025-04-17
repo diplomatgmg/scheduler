@@ -5,7 +5,6 @@ from bot.core import settings
 from bot.core.loader import bot, dp
 from bot.core.logger import init_logger
 from bot.core.settings.sentry import init_sentry
-from bot.db.engine import init_db
 from bot.handlers import register_handlers_routers
 from bot.keyboards import main_menu_commands
 from bot.middlewares import register_middlewares
@@ -29,7 +28,6 @@ async def on_shutdown() -> None:
 async def main() -> None:
     init_logger()
     init_sentry()
-    await init_db()
 
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
