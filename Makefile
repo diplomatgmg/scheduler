@@ -12,7 +12,9 @@ down: ## compose down
 .PHONY: down
 
 lint: ## Запуск линтеров
-	@uv run ruff check . & black . & mypy .
+	uv run ruff check . && \
+	uv run black --check . && \
+	uv run mypy .
 .PHONY: lint
 
 mm: ## Создает миграцию с переданным описанием
