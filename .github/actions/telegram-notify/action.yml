@@ -23,7 +23,7 @@ runs:
         to: ${{ inputs.to }}
         token: ${{ inputs.token }}
         message: |
-          *Job*: ${{ inputs.job_name }}
+          <b>Job</b>: ${{ inputs.job_name }}
           *Repository*: ${{ github.server_url }}/${{ github.repository }}
           *Ref*: {{ commit.ref }}
           *Workflow*: {{ github.workflow }}
