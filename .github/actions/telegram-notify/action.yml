@@ -28,14 +28,4 @@ runs:
           *Actor*: {{ repo.namespace }}
           *Job*: ${{ inputs.job_name }}
           
-          [Workflow Link](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}):
-
-#        message: |
-#
-#          *Job*: ${{ inputs.job_name }}
-#          *Repository*: ${{ github.repository }}
-#          *Event*: ${{ github.event_name }}
-#          *Author*: ${{ github.actor }}
-#          *PR*: ${{ github.event.pull_request.title }}
-#
-#          🔗 [View Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          [🔗 LINK](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
