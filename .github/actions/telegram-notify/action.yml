@@ -23,8 +23,12 @@ runs:
         to: ${{ inputs.to }}
         token: ${{ inputs.token }}
         message: |
-          ❌ Failed CI Job "${{ inputs.job_name }}" in ${{ github.repository }}
-          Commit "${{ github.event.pull_request.head_commit.message }}" from ${{ github.actor }}:
-          
-          Job link:
-          ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          ❌ *Job Failure Alert* ❌
+
+          *Job*: ${{ inputs.job_name }}
+          *Repository*: ${{ github.repository }}
+          *Event*: ${{ github.event_name }}
+          *Author*: ${{ github.actor }}
+          *Branch/PR*: ${{ github.event.pull_request.title || github.ref_name }}
+
+          🔗 [View Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
