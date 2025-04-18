@@ -25,11 +25,11 @@ runs:
         disable_web_page_preview: true
         format: markdown
         message: |
-          ❌ *Job Failure Alert* ❌
+          ❌ *Job Failure* ❌
         
-          🌐 *Repository*: _${{ github.server_url }}/${{ github.repository }}_
-          👤 *Author*: _{{ repo.namespace }}_
-          💼 *Job*: _${{ inputs.job_name }}_
-          ✉️ *Commit/PR*: _${{ github.event.head_commit.message || github.event.pull_request.title }})_
+          🌐 *Repository*: ${{ github.server_url }}/${{ github.repository }}
+          👤 *Actor*: {{ repo.namespace }}
+          💼 *Job*: ${{ inputs.job_name }}
+          ✉️ *Commit/PR*: ${{ github.event.head_commit.message || github.event.pull_request.title }})
             
           [🔗 LINK](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
