@@ -28,7 +28,7 @@ runs:
           ❌ **Job Failure Alert** ❌
           
           **[Repository](${{ github.server_url }}/${{ github.repository }})**
-          *Actor*: {{ repo.namespace }}
+          **Actor**: {{ repo.namespace }}
           **Job**: ${{ inputs.job_name }}
           **Commit/PR**: ${{ github.event.head_commit.message || github.event.pull_request.title }})
 
