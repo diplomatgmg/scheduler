@@ -22,6 +22,7 @@ runs:
       with:
         to: ${{ inputs.to }}
         token: ${{ inputs.token }}
+        format: markdown
         message: |
           ❌ *Job Failure Alert* ❌
 
@@ -29,6 +30,6 @@ runs:
           *Repository*: ${{ github.repository }}
           *Event*: ${{ github.event_name }}
           *Author*: ${{ github.actor }}
-          *Branch/PR*: ${{ github.event.pull_request.title || github.ref_name }}
+          *PR*: ${{ github.event.pull_request.title }}
 
           🔗 [View Workflow Run](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
