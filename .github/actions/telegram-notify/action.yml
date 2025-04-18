@@ -22,10 +22,12 @@ runs:
       with:
         to: ${{ inputs.to }}
         token: ${{ inputs.token }}
-        format: markdown
         message: |
           *Job*: ${{ inputs.job_name }}
-          *Repository*: ${{ github.repository }}
-          *Event*: ${{ github.event_name }}
-          *Author*: ${{ github.actor }}
-          *PR*: ${{ github.event.pull_request.title }}
+          *Repository*: {{ repo }}
+          *Namespace*: {{ repo.namespace }}
+          *Commit SHA*: {{ commit.sha }}
+          *Ref*: {{ commit.ref }}
+          *Workflow*: {{ github.workflow }}
+          *Event*: {{ github.event.name }}
+          *Actor*: {{ repo.namespace }}quest.title }}
