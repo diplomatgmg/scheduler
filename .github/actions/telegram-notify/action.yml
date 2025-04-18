@@ -25,6 +25,7 @@ runs:
         disable_web_page_preview: true
         format: markdown
         message: |
+          ❌ *Job Failure Alert* ❌
           *Repository*: ${{ github.server_url }}/${{ github.repository }}
           *Actor*: {{ repo.namespace }}
           *Job*: ${{ inputs.job_name }}
