@@ -29,4 +29,4 @@ runs:
           *Actor*: {{ repo.namespace }}
           *Job*: ${{ inputs.job_name }}
           
-          [🔗 LINK](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          [**🔗 LINK**](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
