@@ -31,6 +31,16 @@ jobs:
       - name: Run linters
         run: make lint
 
+      - name: Debug Context
+        if: failure()
+        run: |
+          echo "Job Name: ${{ github.job }}"
+          echo "Repository: ${{ github.repository }}"
+          echo "Commit: ${{ github.sha }}"
+          echo "Run ID: ${{ github.run_id }}"
+          echo "to: ${{ secrets.TELEGRAM_CHAT_ID }}"
+          echo "token: ${{ secrets.TELEGRAM_BOT_TOKEN }}"
+
       - name: Notify Telegram on Failure
         if: failure()
         uses: ./.github/actions/telegram-notify
