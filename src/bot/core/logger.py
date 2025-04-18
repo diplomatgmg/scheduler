@@ -1,6 +1,5 @@
 import logging
 import sys
-from logging import LogRecord
 from pathlib import Path
 
 from loguru import logger
@@ -17,7 +16,7 @@ LOG_DIR = Path(__name__).parent / "logs"
 class InterceptHandler(logging.Handler):
     """Хендлер для перенаправления логов из logging в loguru."""
 
-    def emit(self, record: LogRecord) -> None:  # noqa: PLR6301
+    def emit(self, record) -> None:  # noqa: PLR6301
         level = logger.level(record.levelname).name
         logger.opt(depth=6, exception=record.exc_info).log(level, record.getMessage())
 
