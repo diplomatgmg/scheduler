@@ -35,7 +35,7 @@ jobs:
 
       - name: Send Telegram Notification
         if: failure()
-        uses: ./.github/actions/telegram-notify
+        uses: ./.github/workflows/telegram-notify
         with:
           job_name: Lint
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
