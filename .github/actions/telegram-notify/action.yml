@@ -23,6 +23,5 @@ runs:
         to: ${{ inputs.to }}
         token: ${{ inputs.token }}
         message: |
-          ❌ CI Job "${{ inputs.job_name }}" Failed in ${{ github.repository }}!
-          Commit: ${{ github.sha }}
-          Link: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
+          ❌ CI job "${{ inputs.job_name }}" failed in https://github.com/${{ github.repository }}!
+          Job link: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
