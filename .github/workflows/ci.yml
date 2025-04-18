@@ -32,3 +32,9 @@ jobs:
 
       - name: Run linters
         run: make lint
+
+      - name: Notify Telegram on Failure
+        if: failure()
+        uses: ./.github/actions/telegram-notify
+        with:
+          job_name: Lint

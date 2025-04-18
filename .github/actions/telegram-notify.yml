@@ -1,0 +1,30 @@
+# $schema: https://json.schemastore.org/github-workflow.json
+
+name: Telegram Notify
+
+on:
+  workflow_call:
+    inputs:
+      job_name:
+        description: 'Name of the failed job'
+        required: true
+        type: string
+    secrets:
+      TELEGRAM_BOT_TOKEN:
+        required: true
+      TELEGRAM_CHAT_ID:
+        required: true
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Send Telegram Notification
+        uses: appleboy/telegram-action@master
+        with:
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          message: |
+            ❌ CI Job "${{ inputs.job_name }}" Failed in ${{ github.repository }}!
+            Commit: ${{ github.sha }}
+            Link: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
