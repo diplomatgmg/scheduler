@@ -9,11 +9,14 @@ on:
         description: 'Name of the failed job'
         required: true
         type: string
-    secrets:
-      TELEGRAM_BOT_TOKEN:
+      to:
+        description: 'Telegram Chat ID'
         required: true
-      TELEGRAM_CHAT_ID:
+        type: string
+      token:
+        description: 'Telegram Bot Token'
         required: true
+        type: string
 
 jobs:
   notify:
