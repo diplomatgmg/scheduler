@@ -30,6 +30,6 @@ runs:
           🌐 *Repository*: ${{ github.server_url }}/${{ github.repository }}
           👤 *Actor*: {{ repo.namespace }}
           💼 *Job*: ${{ inputs.job_name }}
-          ✉️ *Commit/PR*: ${{ github.event.head_commit.message || github.event.pull_request.title }})
+          ✉️ *Commit/PR*: `${{ github.event.head_commit.message || github.event.pull_request.title }}`
             
           [🔗 LINK](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
