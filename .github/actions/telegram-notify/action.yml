@@ -22,6 +22,7 @@ runs:
       with:
         to: ${{ inputs.to }}
         token: ${{ inputs.token }}
+        format: html
         message: |
           <b>Job</b>: ${{ inputs.job_name }}
           *Repository*: ${{ github.server_url }}/${{ github.repository }}
