@@ -25,8 +25,8 @@ jobs:
       - name: Send Telegram Notification
         uses: appleboy/telegram-action@master
         with:
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          to: ${{ inputs.to }}
+          token: ${{ inputs.token }}
           message: |
             ❌ CI Job "${{ inputs.job_name }}" Failed in ${{ github.repository }}!
             Commit: ${{ github.sha }}
