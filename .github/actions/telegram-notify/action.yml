@@ -22,6 +22,7 @@ runs:
       with:
         to: ${{ inputs.to }}
         token: ${{ inputs.token }}
+        disable_web_page_preview: true
         format: markdown
         message: |
           *Repository*: ${{ github.server_url }}/${{ github.repository }}
