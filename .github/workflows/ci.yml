@@ -65,6 +65,7 @@ jobs:
           push: ${{ github.event_name != 'pull_request' }}
           context: .
           file: ./src/bot/Dockerfile
+          tags: ${{ vars.DOCKER_USERNAME }}/${{ vars.PROJECT_NAME }}:latest
 
       - name: Notify Telegram on Failure
         if: failure()
