@@ -43,8 +43,8 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    needs:
-      - lint
+#    needs:
+#      - lint
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -66,7 +66,8 @@ jobs:
         with:
           push: ${{ github.event_name != 'pull_request' }}
           tags: ${{ steps.meta.outputs.tags }}
-          context: ./src/bot
+          context: .
+          file: ./src/bot/Dockerfile
 
       - name: Notify Telegram on Failure
         if: failure()
