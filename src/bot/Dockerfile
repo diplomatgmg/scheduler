@@ -9,18 +9,29 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+COPY pyproject.toml uv.lock ./
 
-COPY . .
+
+# ============================ #
+#        DEPS INSTALLING      #
+# ============================ #
+FROM base AS deps-dev
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-install-project --dev
+
+FROM base AS deps-prod
+
+RUN --mount=type=cache,target=/root/.cache/uv \
+    uv sync --frozen --no-install-project
 
 
 # ================================= #
 #           DEVELOPMENT             #
 # ================================= #
-FROM base AS development
+FROM deps-dev AS development
 
-
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-install-project --dev
+COPY . .
 
 CMD ["hupper", "-q", "-m", "bot"]
 
@@ -28,9 +39,8 @@ CMD ["hupper", "-q", "-m", "bot"]
 # ================================= #
 #           PRODUCTION              #
 # ================================= #
-FROM base AS production
+FROM deps-prod AS production
 
-RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-install-project
+COPY . .
 
 CMD ["python", "-m", "bot"]

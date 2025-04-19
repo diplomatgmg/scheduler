@@ -2,13 +2,7 @@ name: scheduler
 
 services:
   bot:
-    build:
-      context: .
-      dockerfile: ./src/bot/Dockerfile
-      target: ${ENV_MODE}
-    volumes:
-      - ./src/bot:/app/src/bot
-      - ./src/migrations:/app/src/migrations
+    image: ${DOCKER_USERNAME}/${PROJECT_NAME}:latest
     env_file:
       - .env
     depends_on:
