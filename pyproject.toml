@@ -16,7 +16,6 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "black>=25.1.0",
     "hupper>=1.12.1",
     "mypy>=1.15.0",
     "ruff>=0.11.4",
@@ -28,7 +27,7 @@ unsafe-fixes = true
 line-length = 120
 lint.preview = true
 lint.select = ["ALL"]
-lint.ignore = ["D", "DOC", "TD", "FIX", "CPY001", "ANN401", "RUF001", "RUF002", "RUF003"]
+lint.ignore = ["D", "DOC", "TD", "FIX", "CPY001", "COM812",  "ANN401", "RUF001", "RUF002", "RUF003"]
 extend-exclude = ["migrations"]
 
 [tool.mypy]
@@ -50,11 +49,3 @@ warn_unused_ignores = true
 follow_imports_for_stubs = true
 namespace_packages = true
 show_absolute_path = true
-
-[tool.black]
-line-length = 120
-extend-exclude = '''
-/(
-  | migrations
-)/
-'''
