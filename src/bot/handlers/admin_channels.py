@@ -40,8 +40,7 @@ async def on_bot_demoted(event: ChatMemberUpdated, session: AsyncSession) -> Non
 
     await bot.send_message(
         event.from_user.id,
-        f"Я больше не администратор в канале {chat_username}\n\n"
-        f"<b>Теперь я не смогу управлять постами в канале</b>",
+        f"Я больше не администратор в канале {chat_username}\n\n<b>Теперь я не смогу управлять постами в канале</b>",
         parse_mode="HTML",
     )
     await remove_user_channel(session, event.from_user, event.chat)
