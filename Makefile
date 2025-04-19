@@ -14,7 +14,6 @@ down: ## compose down
 lint: ## Запуск линтеров
 	@uv run ruff check . && \
  	uv run ruff format . && \
-	uv run black --check . && \
 	uv run mypy .
 .PHONY: lint
 
