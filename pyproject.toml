@@ -49,11 +49,3 @@ warn_unused_ignores = true
 follow_imports_for_stubs = true
 namespace_packages = true
 show_absolute_path = true
-
-[tool.black]
-line-length = 120
-extend-exclude = '''
-/(
-  | migrations
-)/
-'''
