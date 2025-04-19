@@ -1,4 +1,5 @@
 import uvloop
+from loguru import logger
 
 from bot.callbacks import register_callbacks_routers
 from bot.core import settings
@@ -26,6 +27,8 @@ async def on_shutdown() -> None:
 
 
 async def main() -> None:
+    logger.info(f"Environment mode: {settings.ENV.mode}")
+
     init_logger()
     init_sentry()
 
