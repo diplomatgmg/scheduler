@@ -1,4 +1,4 @@
-# $schema: https://json.schemastore.org/github-action.json
+# $schema: https://json.schemastore.org/github-workflow.json
 
 name: Building
 
