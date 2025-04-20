@@ -1,0 +1,35 @@
+# $schema: https://json.schemastore.org/github-action.json
+
+name: Building
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ vars.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v6
+        with:
+          push: ${{ github.event_name != 'pull_request' }}
+          context: .
+          file: ./src/bot/Dockerfile
+          tags: ${{ vars.DOCKER_USERNAME }}/${{ vars.PROJECT_NAME }}:latest
+
+      - name: Notify Telegram on Failure
+        if: failure()
+        uses: ./.github/actions/telegram-notify
+        with:
+          job_name: Build
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
