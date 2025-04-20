@@ -1,4 +1,4 @@
-# $schema: https://json.schemastore.org/github-workflow.json
+# $schema: https://json.schemastore.org/github-action.json
 
 name: CI Pipeline
 
@@ -12,65 +12,11 @@ on:
 
 jobs:
   lint:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up Python
-        uses: actions/setup-python@v5
-        with:
-          python-version: "3.12.2"
-
-      - name: Install uv
-        uses: astral-sh/setup-uv@v5
-
-      - name: Install dependencies
-        run: uv sync --dev
-
-      - name: Check using Ruff
-        run: uv run ruff check .
-
-      - name: Check using Ruff formatter
-        run: uv run ruff format --check .
-
-      - name: Check Type Hints
-        run: uv run mypy .
-
-      - name: Send Telegram Notification
-        if: failure()
-        uses: ./.github/actions/telegram-notify
-        with:
-          job_name: Linting
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+    uses: ./.github/workflows/lint.yml
+    secrets: inherit
 
   build:
-    runs-on: ubuntu-latest
     needs:
       - lint
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Log in to Docker Hub
-        uses: docker/login-action@v3
-        with:
-          username: ${{ vars.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
-
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v6
-        with:
-          push: ${{ github.event_name != 'pull_request' }}
-          context: .
-          file: ./src/bot/Dockerfile
-          tags: ${{ vars.DOCKER_USERNAME }}/${{ vars.PROJECT_NAME }}:latest
-
-      - name: Notify Telegram on Failure
-        if: failure()
-        uses: ./.github/actions/telegram-notify
-        with:
-          job_name: Build
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+    uses: ./.github/workflows/build.yml
+    secrets: inherit
