@@ -12,18 +12,24 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Setup SSH
-        uses: kielabokkie/ssh-key-and-known-hosts-action@v1
-        with:
-          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-          ssh-host: ${{ vars.SERVER_IP }}
-
       - name: Copy docker-compose.yml to server
-        run: |
-          scp ./docker-compose.yml ${{ vars.SSH_USER }}@${{ vars.SERVER_IP }}:/srv/${{ vars.PROJECT_NAME }}/docker-compose.yml
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: ${{ vars.SERVER_IP }}
+          username: ${{ vars.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          source: "docker-compose.yml"
+          target: "/srv/${{ vars.PROJECT_NAME }}"
 
-      - name: Run server
-        run: cd /srv/${{ vars.PROJECT_NAME }} && docker compose up -d
+      - name: Execute docker compose on server
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ vars.SERVER_IP }}
+          username: ${{ vars.SSH_USER }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+          script: |
+            cd /srv/${{ vars.PROJECT_NAME }}
+            docker compose up -d --force-recreate
 
       - name: Notify Telegram on Failure
         if: failure()
