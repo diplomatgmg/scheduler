@@ -23,7 +23,7 @@ jobs:
           scp ./docker-compose.yml ${{ vars.SSH_USER }}@${{ vars.SERVER_IP }}:/srv/${{ vars.PROJECT_NAME }}/docker-compose.yml
 
       - name: Run server
-        run: cd /srv/${{ vars.PROJECT_NAME }} && make up
+        run: cd /srv/${{ vars.PROJECT_NAME }} && docker compose up -d
 
       - name: Notify Telegram on Failure
         if: failure()
