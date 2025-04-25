@@ -20,8 +20,14 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
 
+      - name: Restore mypy cache
+        uses: actions/cache@v4
+        with:
+          path: .mypy_cache
+          key: ${{ runner.os }}-${{ runner.python.version }}-mypy-${{ hashFiles('**/uv.lock', '**/pyproject.toml') }}
+
       - name: Install dependencies
-        run: uv sync --dev
+        run: uv sync --frozen --dev
 
       - name: Check using Ruff
         run: uv run ruff check .
@@ -31,6 +37,13 @@ jobs:
 
       - name: Check Type Hints
         run: uv run mypy .
+
+      - name: Save mypy cache
+        uses: actions/cache@v4
+        if: success()
+        with:
+          path: .mypy_cache
+          key: ${{ runner.os }}-${{ runner.python.version }}-mypy-${{ hashFiles('**/uv.lock', '**/pyproject.toml') }}
 
       - name: Send Telegram Notification
         if: failure()
