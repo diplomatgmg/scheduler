@@ -39,3 +39,7 @@ jobs:
           job_name: Deploy
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
+      - name: Cleanup Docker images on runner
+        if: always()
+        run: docker image prune -a -f || true
