@@ -12,6 +12,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Setup SSH
+        uses: kielabokkie/ssh-key-and-known-hosts-action@v1
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+          ssh-host: ${{ vars.SERVER_IP }}
+
       - name: Push docker-compose.yml to server
         run: |
           scp ./docker-compose.yml ${{ vars.SSH_USER }}@${{ vars.SERVER_IP }}:/srv/${{ vars.PROJECT_NAME }}/docker-compose.yml
