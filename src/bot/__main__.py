@@ -27,7 +27,7 @@ async def on_shutdown() -> None:
 
 
 async def main() -> None:
-    logger.info(f"Environment mode: {settings.ENV.mode}")
+    logger.info(f"Env mode: {settings.ENV.mode}, log level: {settings.LOG.level}")
 
     init_logger()
     init_sentry()

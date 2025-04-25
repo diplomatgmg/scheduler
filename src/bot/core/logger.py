@@ -58,7 +58,6 @@ def setup_module_logging(module_name: str) -> None:
 
 
 def init_logger() -> None:
-    logger.debug("Initializing logger")
-
+    """Инициализирует логгеры"""
     setup_root_logging()
     setup_module_logging("bot")
