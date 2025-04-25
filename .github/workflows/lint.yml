@@ -38,6 +38,13 @@ jobs:
       - name: Check Type Hints
         run: uv run mypy .
 
+      - name: Save mypy cache
+        uses: actions/cache@v4
+        if: success()
+        with:
+          path: .mypy_cache
+          key: ${{ steps.restore-mypy-cache.outputs.cache-primary-key }}
+
       - name: Send Telegram Notification
         if: failure()
         uses: ./.github/actions/telegram-notify
