@@ -18,6 +18,17 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
           ssh-host: ${{ vars.SERVER_IP }}
 
-      - name: Push docker-compose.yml to server
+      - name: Copy docker-compose.yml to server
         run: |
           scp ./docker-compose.yml ${{ vars.SSH_USER }}@${{ vars.SERVER_IP }}:/srv/${{ vars.PROJECT_NAME }}/docker-compose.yml
+
+      - name: Run server
+        run: cd /srv/${{ vars.PROJECT_NAME }} && make up
+
+      - name: Notify Telegram on Failure
+        if: failure()
+        uses: ./.github/actions/telegram-notify
+        with:
+          job_name: Deploy
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
