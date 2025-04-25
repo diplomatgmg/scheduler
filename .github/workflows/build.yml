@@ -6,7 +6,7 @@ on:
   workflow_call:
 
 env:
-  ENV=PROD
+  ENV_MODE: production
 
 jobs:
   build:
