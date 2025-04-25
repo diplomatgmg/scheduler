@@ -1,0 +1,17 @@
+# $schema: https://json.schemastore.org/github-workflow.json
+
+name: Deploying
+
+on:
+  workflow_call:
+
+jobs:
+  deploy:
+    runs-on: self-hosted
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Push docker-compose.yml to server
+        run: |
+          scp ./docker-compose.yml ${{ vars.SSH_USER }}@${{ vars.SERVER_IP }}:/srv/${{ vars.PROJECT_NAME }}/docker-compose.yml
