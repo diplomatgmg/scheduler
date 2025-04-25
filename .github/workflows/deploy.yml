@@ -21,7 +21,7 @@ jobs:
           source: "docker-compose.yml"
           target: "/srv/${{ vars.PROJECT_NAME }}"
 
-      - name: Execute docker compose on server
+      - name: Start Docker services
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ vars.SERVER_IP }}
@@ -29,7 +29,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /srv/${{ vars.PROJECT_NAME }}
-            docker compose up -d --force-recreate
+            docker compose up -d
 
       - name: Notify Telegram on Failure
         if: failure()
