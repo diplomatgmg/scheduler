@@ -28,8 +28,6 @@ jobs:
           context: .
           file: ./src/bot/Dockerfile
           tags: ${{ vars.DOCKER_USERNAME }}/${{ vars.PROJECT_NAME }}:latest
-          build-args: |
-            ENV_MODE=production
 
       - name: Notify Telegram on Failure
         if: failure()
