@@ -43,7 +43,7 @@ jobs:
         if: success()
         with:
           path: .mypy_cache
-          key: ${{ steps.restore-mypy-cache.outputs.cache-primary-key }}
+          key: ${{ runner.os }}-${{ runner.python.version }}-mypy-${{ hashFiles('**/uv.lock', '**/pyproject.toml') }}
 
       - name: Send Telegram Notification
         if: failure()
