@@ -20,7 +20,7 @@ class AuthMiddleware(BaseMiddleware):
         handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
         message: Message,  # type: ignore[override]
         data: dict[str, Any],
-    ) -> Any:
+    ):
         session: AsyncSession = data["session"]
         user = message.from_user
 
