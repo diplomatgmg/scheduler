@@ -40,7 +40,7 @@ async def handle_create_callback(query: CallbackQuery, state: FSMContext, sessio
 
     channels = await find_user_channels(session, query.from_user)
     if not channels:
-        await safe_reply(query, "У вас ещё не добавлены каналы. Добавьте хотя бы один.")
+        await safe_reply(query, "Бот не является администратором ни одного канала.")
         return
 
     await state.clear()

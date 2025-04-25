@@ -5,6 +5,9 @@ name: Building
 on:
   workflow_call:
 
+env:
+  ENV=PROD
+
 jobs:
   build:
     runs-on: self-hosted
@@ -25,6 +28,8 @@ jobs:
           context: .
           file: ./src/bot/Dockerfile
           tags: ${{ vars.DOCKER_USERNAME }}/${{ vars.PROJECT_NAME }}:latest
+          build-args: |
+            ENV_MODE=production
 
       - name: Notify Telegram on Failure
         if: failure()
