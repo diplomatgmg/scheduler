@@ -17,7 +17,7 @@ router = Router(name="start")
 async def handle_start(message: Message, state: FSMContext) -> None:
     logger.debug(f"Handler start. User: {get_username(message)}")
 
-    message_text = "ТЕСТ. Здесь вы можете создавать посты, просматривать статистику и выполнять другие задачи."
+    message_text = "Здесь вы можете создавать посты, просматривать статистику и выполнять другие задачи."
     await message.answer(message_text, reply_markup=main_keyboard())
     await state.set_state(PostState.waiting_for_post)
 
