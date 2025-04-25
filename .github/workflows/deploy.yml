@@ -42,4 +42,4 @@ jobs:
 
       - name: Cleanup Docker images on runner
         if: always()
-        run: docker image prune -a -f || true
+        run: docker image prune -a -f

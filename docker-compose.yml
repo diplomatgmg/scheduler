@@ -20,6 +20,11 @@ services:
       - .env
     networks:
       - bot_network
+    healthcheck:
+      test: [ "CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${POSTGRES_DB}" ]
+      interval: 10s
+      timeout: 5s
+      start_period: 5s
 
   pgbouncer:
     image: bitnami/pgbouncer:1.24.0
