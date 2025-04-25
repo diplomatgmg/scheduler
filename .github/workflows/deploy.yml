@@ -18,7 +18,7 @@ jobs:
           host: ${{ vars.SERVER_IP }}
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
-          source: "docker-compose.yml"
+          source: "docker-compose.yml, Makefile"
           target: "/srv/${{ vars.PROJECT_NAME }}"
 
       - name: Start Docker services
@@ -29,7 +29,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /srv/${{ vars.PROJECT_NAME }}
-            make mm
+            make migrate
             docker compose up -d
 
       - name: Notify Telegram on Failure
