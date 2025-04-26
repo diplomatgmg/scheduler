@@ -17,6 +17,7 @@ router = Router(name="menu")
 
 # FIXME Хотелось бы изменить структуру для каждого MenuAction. menu > (create, edit, settings)
 
+
 # mypy корректно видит тип, ide - нет
 # noinspection PyTypeChecker
 @router.callback_query(MenuCallback.filter(F.action == MenuActionEnum.CREATE))
