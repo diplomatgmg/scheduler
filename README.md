@@ -1,4 +1,4 @@
-[![.github/workflows/ci.yml](https://github.com/diplomatgmg/scheduler/actions/workflows/ci.yml/badge.svg)](https://github.com/diplomatgmg/scheduler/actions/workflows/ci.yml)
+[![.github/workflows/ci-cd.yml](https://github.com/diplomatgmg/scheduler/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/diplomatgmg/scheduler/actions/workflows/ci-cd.yml)
 
 # [Scheduler Bot](https://github.com/diplomatgmg/scheduler)
 
