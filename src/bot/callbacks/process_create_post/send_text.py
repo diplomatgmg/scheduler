@@ -32,6 +32,7 @@ async def handle_send_text(message: Message, state: FSMContext) -> None:
         logger.critical(f"State: {state}. Message {message}")
         return
 
+    # FIXME ????????
     make_linked(selected_channel_title, selected_channel_username)
 
     # FIXME Понять в каких ситуациях это происходит
@@ -43,8 +44,9 @@ async def handle_send_text(message: Message, state: FSMContext) -> None:
 
     post_text = message.text
 
+    # FIXME Сделать linked
     await message.answer(
-        f"Получен текст для публикации в канал {selected_channel_title}':\n\n"
+        f"Получен текст для публикации в канал {selected_channel_title}:\n\n"
         f"{post_text}\n\n"
         "Функция публикации пока не реализована. Состояние FSM сброшено."
     )
