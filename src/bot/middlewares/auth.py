@@ -18,7 +18,7 @@ class AuthMiddleware(BaseMiddleware):
     async def __call__(
         self,
         handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
-        message: Message,  # type: ignore[override]
+        message: Message,  # type: ignore[override] # FIXME Почему Message а не TelegramObject?
         data: dict[str, Any],
     ) -> Any:
         session: AsyncSession = data["session"]

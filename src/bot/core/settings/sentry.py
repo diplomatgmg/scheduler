@@ -24,7 +24,7 @@ class SentrySettings(BaseSettings):
 
 
 def init_sentry() -> None:
-    logger.debug("Initializing sentry")
+    logger.debug("Initializing Sentry")
 
     sentry_settings = SentrySettings()  # type: ignore[call-arg]
 

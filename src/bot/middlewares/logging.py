@@ -17,5 +17,6 @@ class LoggingMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: dict[str, Any],
     ) -> Any:
-        logger.debug(event.model_dump_json(indent=4, exclude_none=True))
+        logger.debug(event.model_dump_json(indent=4, exclude_none=True, exclude_defaults=True))
+
         return await handler(event, data)
