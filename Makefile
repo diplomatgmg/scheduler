@@ -11,6 +11,10 @@ down: ## compose down
 	docker-compose down
 .PHONY: down
 
+stop: ## compose stop
+	docker-compose stop
+.PHONY: stop
+
 lint: ## Запуск линтеров
 	@uv run ruff check . && \
  	uv run ruff format . && \
