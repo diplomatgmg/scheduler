@@ -1,6 +1,6 @@
 # $schema: https://json.schemastore.org/github-workflow.json
 
-name: CI Pipeline
+name: CI/CD Pipeline
 
 on:
   push:
