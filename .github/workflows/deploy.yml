@@ -30,7 +30,6 @@ jobs:
           script: |
             cd /srv/${{ vars.PROJECT_NAME }}
             docker compose up -d
-#           Могут быть проблемы, если сервер остановлен. Возможно, стоит добавить wait-for-it (healthcheck?)
             make migrate
 
       - name: Notify Telegram on Failure
