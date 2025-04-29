@@ -1,3 +1,5 @@
+[![.github/workflows/ci.yml](https://github.com/diplomatgmg/scheduler/actions/workflows/ci.yml/badge.svg)](https://github.com/diplomatgmg/scheduler/actions/workflows/ci.yml)
+
 # [Scheduler Bot](https://github.com/diplomatgmg/scheduler)
 
 Телеграм-бот для управления постами в каналах.  
