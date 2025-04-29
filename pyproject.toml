@@ -8,7 +8,7 @@ dependencies = [
     "alembic>=1.15.2",
     "asyncpg>=0.30.0",
     "loguru>=0.7.3",
-    "pydantic-settings>=2.8.1",
+    "pydantic-settings>=2.9.1",
     "sentry-sdk>=2.25.1",
     "sqlalchemy>=2.0.39",
     "uvloop>=0.21.0",
@@ -18,7 +18,7 @@ dependencies = [
 dev = [
     "hupper>=1.12.1",
     "mypy>=1.15.0",
-    "ruff>=0.11.4",
+    "ruff>=0.11.7",
 ]
 
 [tool.ruff]
