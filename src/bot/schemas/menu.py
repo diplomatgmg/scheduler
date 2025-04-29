@@ -13,6 +13,7 @@ class MenuActionEnum(StrEnum):
     CREATE = "create"
     SETTINGS = "settings"
     EDIT = "edit"
+    BACK = "back"
 
 
 class MenuCallback(CallbackData, prefix="menu"):
