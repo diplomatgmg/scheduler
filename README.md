@@ -1,4 +1,15 @@
-[![.github/workflows/ci-cd.yml](https://github.com/diplomatgmg/scheduler/actions/workflows/ci-cd.yml/badge.svg)](https://github.com/diplomatgmg/scheduler/actions/workflows/ci-cd.yml)
+<p align="center">
+    <a href="https://github.com/diplomatgmg/scheduler/actions/workflows/ci-cd.yml"><img src="https://img.shields.io/github/actions/workflow/status/diplomatgmg/scheduler/ci-cd.yml?label=CI/CD%20Pipeline" alt="CI/CD Pipeline"></a>
+    <a href="https://github.com/astral-sh/ruff"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/ruff/main/assets/badge/v2.json" alt="Code style"></a>
+    <a href="https://github.com/astral-sh/uv"><img src="https://img.shields.io/endpoint?url=https://raw.githubusercontent.com/astral-sh/uv/main/assets/badge/v0.json" alt="Package manager"></a>
+    <a href="https://www.python.org/downloads"><img src="https://img.shields.io/badge/python-3.12%2B-blue?label=Python" alt="Python"></a>
+<p>
+
+<p align="center">
+    <a href="https://github.com/diplomatgmg/scheduler/actions/workflows/lint.yml"><img src="https://img.shields.io/github/actions/workflow/status/diplomatgmg/scheduler/lint.yml?label=Lint" alt="Lint"></a>
+    <a href="https://github.com/diplomatgmg/scheduler/actions/workflows/build.yml"><img src="https://img.shields.io/github/actions/workflow/status/diplomatgmg/scheduler/build.yml?label=Build" alt="Build"></a>
+    <a href="https://github.com/diplomatgmg/scheduler/actions/workflows/deploy.yml"><img src="https://img.shields.io/github/actions/workflow/status/diplomatgmg/scheduler/deploy.yml?label=Deploy" alt="Deploy"></a>
+<p>
 
 # [Scheduler Bot](https://github.com/diplomatgmg/scheduler)
 
