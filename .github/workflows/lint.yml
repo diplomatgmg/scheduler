@@ -8,6 +8,7 @@ on:
 jobs:
   lint:
     runs-on: self-hosted
+    timeout-minutes: 3
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
