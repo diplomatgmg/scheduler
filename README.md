@@ -5,11 +5,6 @@
     <a href="https://www.python.org/downloads"><img src="https://img.shields.io/badge/python-3.12%2B-blue?label=Python" alt="Python"></a>
 <p>
 
-<p align="center">
-    <a href="https://github.com/diplomatgmg/scheduler/actions/workflows/lint.yml"><img src="https://img.shields.io/github/actions/workflow/status/diplomatgmg/scheduler/lint.yml?label=Lint" alt="Lint"></a>
-    <a href="https://github.com/diplomatgmg/scheduler/actions/workflows/build.yml"><img src="https://img.shields.io/github/actions/workflow/status/diplomatgmg/scheduler/build.yml?label=Build" alt="Build"></a>
-    <a href="https://github.com/diplomatgmg/scheduler/actions/workflows/deploy.yml"><img src="https://img.shields.io/github/actions/workflow/status/diplomatgmg/scheduler/deploy.yml?label=Deploy" alt="Deploy"></a>
-<p>
 
 # [Scheduler Bot](https://github.com/diplomatgmg/scheduler)
 
