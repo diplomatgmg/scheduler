@@ -4,11 +4,9 @@ name: CI/CD
 
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
   pull_request:
-    branches:
-      - main
+    branches: [ main ]
 
 concurrency:
   group: ci-cd-${{ github.ref }}
@@ -20,14 +18,12 @@ jobs:
     secrets: inherit
 
   build:
-    needs:
-      - lint
+    needs: [ lint ]
     uses: ./.github/workflows/build.yml
     secrets: inherit
 
   deploy:
-    needs:
-      - build
+    needs: [ build ]
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
