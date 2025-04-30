@@ -1,6 +1,6 @@
 from aiogram import Router
 
-from bot.callbacks.process_settings.settings import settings_router
+from bot.handlers.settings import settings
 
 __all__ = [
     "router",
@@ -9,5 +9,5 @@ __all__ = [
 
 router = Router(name="process_settings")
 router.include_routers(
-    settings_router,
+    settings.router,
 )
