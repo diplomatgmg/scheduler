@@ -1,5 +1,3 @@
-name: scheduler
-
 services:
   bot:
     image: ${DOCKER_USERNAME}/${PROJECT_NAME}:latest
@@ -43,6 +41,7 @@ services:
 networks:
   bot_network:
     driver: bridge
+
 
 volumes:
   postgres-data:
