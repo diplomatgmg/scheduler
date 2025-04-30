@@ -6,7 +6,7 @@ from pydantic import Field
 from pydantic_settings import BaseSettings
 from sentry_sdk.integrations.logging import LoggingIntegration
 
-from bot.core.settings.env import EnvironmentEnum
+from bot.core.config.env import EnvironmentEnum
 
 __all__ = [
     "SentrySettings",

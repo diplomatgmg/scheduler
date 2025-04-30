@@ -1,11 +1,11 @@
 from pydantic_settings import BaseSettings
 
 __all__ = [
-    "BotSettings",
+    "BotConfig",
 ]
 
 
-class BotSettings(BaseSettings):
+class BotConfig(BaseSettings):
     token: str
     support_username: str
 

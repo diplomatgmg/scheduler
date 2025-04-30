@@ -3,11 +3,11 @@ from pydantic_settings import BaseSettings
 from sqlalchemy import URL
 
 __all__ = [
-    "DBSettings",
+    "DBConfig",
 ]
 
 
-class DBSettings(BaseSettings):
+class DBConfig(BaseSettings):
     user: str
     password: SecretStr
     host: str

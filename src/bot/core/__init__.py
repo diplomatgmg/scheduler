@@ -1,5 +1,5 @@
-from bot.core.settings import settings
+from bot.core.config import config
 
 __all__ = [
-    "settings",
+    "config",
 ]

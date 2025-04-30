@@ -3,7 +3,7 @@ from enum import StrEnum
 from pydantic_settings import BaseSettings
 
 __all__ = [
-    "EnvSettings",
+    "EnvConfig",
     "EnvironmentEnum",
 ]
 
@@ -13,7 +13,7 @@ class EnvironmentEnum(StrEnum):
     production = "production"
 
 
-class EnvSettings(BaseSettings):
+class EnvConfig(BaseSettings):
     mode: EnvironmentEnum
 
     class Config:
