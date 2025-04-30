@@ -5,8 +5,8 @@ from sqlalchemy.ext.asyncio import (
     create_async_engine,
 )
 
-from bot.core import settings
-from bot.core.settings.log import LogLevelSqlalchemyEnum
+from bot.core import config
+from bot.core.config.log import LogLevelSqlalchemyEnum
 
 __all__ = [
     "async_session",
@@ -23,9 +23,11 @@ echo_level = {
     LogLevelSqlalchemyEnum.warning: None,
 }
 
-engine = create_async_engine(settings.DB.url, echo=echo_level.get(settings.LOG.sqlalchemy_level))
+engine = create_async_engine(config.DB.url, echo=echo_level.get(config.LOG.sqlalchemy_level))
 
 async_session = async_sessionmaker(
     engine,
     class_=AsyncSession,
 )
+
+# FIXME Думаю, лучше вынести бд в src/database

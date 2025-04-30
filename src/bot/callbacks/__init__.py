@@ -1,19 +1,7 @@
-from aiogram import Dispatcher
-from loguru import logger
-
-from bot.callbacks import process_create_post, process_edit_post, process_settings
+from bot.callbacks.post import PostCallback
+from bot.callbacks.select_channel import SelectChannelCallback
 
 __all__ = [
-    "process_create_post",
-    "register_callbacks_routers",
+    "PostCallback",
+    "SelectChannelCallback",
 ]
-
-
-def register_callbacks_routers(dp: Dispatcher) -> None:
-    logger.debug("Registering callback routers")
-
-    dp.include_routers(
-        process_create_post.router,
-        process_edit_post.router,
-        process_settings.router,
-    )

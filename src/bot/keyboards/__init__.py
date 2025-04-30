@@ -1,5 +1,5 @@
-from bot.keyboards.main_menu import main_menu_commands
+from bot.keyboards.default_commands import default_commands
 
 __all__ = [
-    "main_menu_commands",
+    "default_commands",
 ]

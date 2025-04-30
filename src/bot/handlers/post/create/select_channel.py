@@ -4,24 +4,26 @@ from aiogram.types import CallbackQuery
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.keyboards.inline.menu import select_channel_keyboard
-from bot.schemas.menu import MenuActionEnum, MenuCallback
+from bot.callbacks import PostCallback
+from bot.callbacks.post import PostActionEnum
+from bot.keyboards.inline.post import select_channel_keyboard
 from bot.services.user import find_user_channels
-from bot.states.post import PostState
+from bot.states import PostState
 from bot.utils.messages import get_message, safe_reply
 from bot.utils.user import get_username
 
 __all__ = [
-    "create_post_router",
+    "router",
 ]
 
 
-create_post_router = Router(name="create_post")
+router = Router(name="select_channel")
 
 
 # noinspection PyTypeChecker
-@create_post_router.callback_query(MenuCallback.filter(F.action == MenuActionEnum.CREATE))
+@router.callback_query(PostCallback.filter(F.action == PostActionEnum.CREATE))
 async def handle_select_channel_callback(query: CallbackQuery, state: FSMContext, session: AsyncSession) -> None:
+    """Обработчик для выбора канала, в котором необходимо создать пост"""
     logger.debug(f"[handle_select_channel_callback] callback from {get_username(query)}")
 
     channels = await find_user_channels(session, query.from_user)
@@ -33,4 +35,7 @@ async def handle_select_channel_callback(query: CallbackQuery, state: FSMContext
     await state.set_state(PostState.waiting_for_channel)
 
     message = await get_message(query)
-    await message.edit_text(text="Выберите канал для публикации поста.", reply_markup=select_channel_keyboard(channels))
+    await message.edit_text(
+        text="Выберите канал для публикации поста.",
+        reply_markup=select_channel_keyboard(channels),
+    )

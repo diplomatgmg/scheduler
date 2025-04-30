@@ -3,9 +3,9 @@ from enum import StrEnum
 from pydantic_settings import BaseSettings
 
 __all__ = [
+    "LogConfig",
     "LogLevelEnum",
     "LogLevelSqlalchemyEnum",
-    "LogSettings",
 ]
 
 
@@ -23,7 +23,7 @@ class LogLevelSqlalchemyEnum(StrEnum):
     warning = "WARNING"
 
 
-class LogSettings(BaseSettings):
+class LogConfig(BaseSettings):
     level: LogLevelEnum
     sqlalchemy_level: LogLevelSqlalchemyEnum
 

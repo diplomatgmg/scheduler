@@ -1,10 +1,10 @@
 from aiogram.types import BotCommand
 
 __all__ = [
-    "main_menu_commands",
+    "default_commands",
 ]
 
-main_menu_commands = [
+default_commands = [
     BotCommand(command="/start", description="Перезапустить бота"),
     BotCommand(command="/support", description="Обратная связь"),
 ]

@@ -31,6 +31,8 @@ lint.ignore = ["D", "DOC", "TD", "FIX", "CPY001", "COM812",  "ANN401", "RUF001",
 extend-exclude = ["migrations"]
 
 [tool.mypy]
+cache_dir = ".cache/mypy"
+incremental = true
 ignore_missing_imports = false
 warn_return_any = true
 warn_unused_configs = true

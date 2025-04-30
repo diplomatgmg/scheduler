@@ -1,6 +1,6 @@
 from aiogram import Bot, Dispatcher
 
-from bot.core import settings
+from bot.core import config
 
 __all__ = [
     "bot",
@@ -8,4 +8,4 @@ __all__ = [
 ]
 
 dp = Dispatcher()
-bot = Bot(token=settings.BOT.token)
+bot = Bot(token=config.BOT.token)

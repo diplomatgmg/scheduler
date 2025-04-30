@@ -5,7 +5,7 @@ from pathlib import Path
 
 from loguru import logger
 
-from bot.core import settings
+from bot.core import config
 
 __all__ = [
     "init_logger",
@@ -29,7 +29,7 @@ def setup_root_logging() -> None:
     logger.remove()
     logger.add(
         sys.stdout,
-        level=settings.LOG.level,
+        level=config.LOG.level,
         colorize=True,
     )
 
@@ -45,13 +45,13 @@ def setup_module_logging(module_name: str) -> None:
 
     module_logger = logger.bind(name=module_name)
 
-    if not settings.debug:
+    if not config.debug:
         module_logger.add(
             make_log_path(module_name),
             rotation="1 MB",
             retention="7 days",
             compression="zip",
-            level=settings.LOG.level,
+            level=config.LOG.level,
         )
 
     logger.debug(f'Initializing logger for module "{module_name}"')
