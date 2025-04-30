@@ -29,3 +29,5 @@ async_session = async_sessionmaker(
     engine,
     class_=AsyncSession,
 )
+
+# FIXME Думаю, лучше вынести бд в src/database
