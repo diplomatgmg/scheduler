@@ -12,6 +12,7 @@ __all__ = [
 
 
 class Config(BaseModel):
+    # Окружение подтягивается из .env. Pydantic этого не понимает.
     ENV: EnvConfig = EnvConfig()  # type: ignore[call-arg]
     SENTRY: SentrySettings = SentrySettings()  # type: ignore[call-arg]
     BOT: BotConfig = BotConfig()  # type: ignore[call-arg]
