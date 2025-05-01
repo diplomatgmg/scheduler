@@ -1,7 +1,7 @@
 from pydantic_settings import BaseSettings
 
 __all__ = [
-    "BotConfig",
+    "bot_config",
 ]
 
 
@@ -11,3 +11,6 @@ class BotConfig(BaseSettings):
 
     class Config:
         env_prefix = "BOT_"
+
+
+bot_config = BotConfig()  # type: ignore[call-arg]

@@ -5,7 +5,7 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from bot.callbacks import PostCallback, SelectChannelCallback
 from bot.callbacks.post import PostActionEnum
-from bot.db.models import ChannelModel
+from common.database.models import ChannelModel
 
 __all__ = [
     "select_another_channel_keyboard",

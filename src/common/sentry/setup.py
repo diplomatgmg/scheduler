@@ -1,0 +1,29 @@
+import logging
+
+import sentry_sdk
+from loguru import logger
+from sentry_sdk.integrations.logging import LoggingIntegration
+
+from common.environment.config import env_config
+from common.sentry.config import sentry_config
+
+__all__ = [
+    "setup_sentry",
+]
+
+
+def setup_sentry() -> None:
+    logger.debug("Initializing Sentry")
+
+    sentry_logging = LoggingIntegration(
+        level=logging.INFO,
+        event_level=logging.ERROR,
+    )
+
+    sentry_sdk.init(
+        dsn=sentry_config.dsn_url,
+        environment=env_config.mode,
+        traces_sample_rate=sentry_config.traces_sample_rate,
+        integrations=[sentry_logging],
+        send_default_pii=True,
+    )

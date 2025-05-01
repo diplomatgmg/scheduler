@@ -2,7 +2,7 @@ from loguru import logger
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.db.models import UserModel
+from common.database.models import UserModel
 
 __all__ = [
     "find_user",

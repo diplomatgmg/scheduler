@@ -2,7 +2,7 @@ from aiogram.types import User
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.db.models import UserModel
+from common.database.models import UserModel
 
 __all__ = [
     "add_user",

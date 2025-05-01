@@ -4,7 +4,7 @@ from typing import Any
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
 
-from bot.db.engine import async_session
+from common.database.engine import async_session
 
 __all__ = [
     "DatabaseMiddleware",

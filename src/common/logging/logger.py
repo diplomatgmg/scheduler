@@ -5,11 +5,14 @@ from pathlib import Path
 
 from loguru import logger
 
-from bot.core import config
+from common.environment.config import env_config
+from common.logging.config import log_config
 
 __all__ = [
-    "init_logger",
+    "setup_logging",
+    "setup_module_logging",
 ]
+
 
 LOG_DIR = Path(__name__).parent / "logs"
 
@@ -22,14 +25,16 @@ class InterceptHandler(logging.Handler):
         logger.opt(depth=6, exception=record.exc_info).log(level, record.getMessage())
 
 
-def setup_root_logging() -> None:
+def setup_logging() -> None:
+    """Инициализирует logger"""
+
     # Перехватывает логи из logging в loguru
     logging.basicConfig(handlers=[InterceptHandler()], level=logging.DEBUG)
 
     logger.remove()
     logger.add(
         sys.stdout,
-        level=config.LOG.level,
+        level=log_config.level,
         colorize=True,
     )
 
@@ -45,19 +50,13 @@ def setup_module_logging(module_name: str) -> None:
 
     module_logger = logger.bind(name=module_name)
 
-    if not config.debug:
+    if not env_config.debug:
         module_logger.add(
             make_log_path(module_name),
             rotation="1 MB",
             retention="7 days",
             compression="zip",
-            level=config.LOG.level,
+            level=log_config.level,
         )
 
     logger.debug(f'Initializing logger for module "{module_name}"')
-
-
-def init_logger() -> None:
-    """Инициализирует логгеры"""
-    setup_root_logging()
-    setup_module_logging("bot")

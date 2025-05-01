@@ -5,8 +5,8 @@ from loguru import logger
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.db.models import ChannelModel
 from bot.utils.user import get_username
+from common.database.models import ChannelModel
 
 __all__ = [
     "find_user_channels",
