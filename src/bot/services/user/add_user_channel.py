@@ -3,8 +3,8 @@ from loguru import logger
 from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.db.models import ChannelModel
 from bot.utils.user import get_username
+from common.database.models import ChannelModel
 
 __all__ = [
     "add_user_channel",

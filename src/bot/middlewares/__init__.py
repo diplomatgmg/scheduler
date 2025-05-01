@@ -5,8 +5,10 @@ from bot.core import config
 from bot.middlewares.auth import AuthMiddleware
 from bot.middlewares.database import DatabaseMiddleware
 from bot.middlewares.logging import LoggingMiddleware
+from common.environment.config import env_config
 
 __all__ = [
+    "config",
     "register_middlewares",
 ]
 
@@ -14,7 +16,7 @@ __all__ = [
 def register_middlewares(dp: Dispatcher) -> None:
     logger.debug("Registering middlewares")
 
-    if config.debug:
+    if env_config.debug:
         dp.update.outer_middleware(LoggingMiddleware())
 
     dp.update.outer_middleware(DatabaseMiddleware())

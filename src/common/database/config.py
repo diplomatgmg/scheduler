@@ -3,7 +3,7 @@ from pydantic_settings import BaseSettings
 from sqlalchemy import URL
 
 __all__ = [
-    "DBConfig",
+    "db_config",
 ]
 
 
@@ -27,3 +27,6 @@ class DBConfig(BaseSettings):
             port=self.port,
             database=self.name,
         )
+
+
+db_config = DBConfig()  # type: ignore[call-arg]
