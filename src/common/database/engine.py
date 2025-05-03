@@ -1,6 +1,5 @@
 from sqlalchemy import log as sqlalchemy_log
-from sqlalchemy.ext.asyncio import (AsyncSession, async_sessionmaker,
-                                    create_async_engine)
+from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
 
 from common.database.config import db_config
 from common.logging.config import log_config
