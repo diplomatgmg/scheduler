@@ -7,6 +7,7 @@ from bot.middlewares.database import DatabaseMiddleware
 from bot.middlewares.logging import LoggingMiddleware
 from common.environment.config import env_config
 
+
 __all__ = [
     "config",
     "register_middlewares",

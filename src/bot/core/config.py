@@ -1,5 +1,6 @@
 from pydantic_settings import BaseSettings
 
+
 __all__ = [
     "bot_config",
 ]

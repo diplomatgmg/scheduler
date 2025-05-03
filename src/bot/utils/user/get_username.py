@@ -2,6 +2,7 @@ from aiogram.filters.callback_data import CallbackQuery
 from aiogram.types import Chat, ChatMemberUpdated, Message, User
 from loguru import logger
 
+
 __all__ = [
     "get_username",
 ]

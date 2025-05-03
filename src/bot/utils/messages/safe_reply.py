@@ -1,6 +1,7 @@
 from aiogram.exceptions import TelegramAPIError
 from aiogram.types import CallbackQuery
 
+
 __all__ = [
     "safe_reply",
 ]

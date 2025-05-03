@@ -17,7 +17,8 @@ stop: ## compose stop
 
 lint: ## Запуск линтеров
 	@uv run ruff check . && \
- 	uv run ruff format . && \
+	uv run ruff format . && \
+	uv run isort . && \
 	uv run mypy .
 .PHONY: lint
 

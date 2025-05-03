@@ -12,6 +12,7 @@ from bot.states import PostState
 from bot.utils.messages import get_message, make_linked
 from bot.utils.user import get_username
 
+
 __all__ = [
     "router",
 ]
@@ -21,14 +22,12 @@ router = Router(name="wait_text")
 
 
 @router.callback_query(SelectChannelCallback.filter(), PostState.waiting_for_channel)
-async def handle_channel_selected(
-    query: CallbackQuery, callback_data: SelectChannelCallback, state: FSMContext
-) -> None:
+async def handle_wait_text(query: CallbackQuery, callback_data: SelectChannelCallback, state: FSMContext) -> None:
     """Обработчик для получения поста, который необходимо создать на канале"""
     selected_channel_title = callback_data.channel_title
     selected_channel_username = callback_data.channel_username
 
-    logger.debug(f"[handle_channel_selected] Channel '{selected_channel_title}' selected by {get_username(query)}")
+    logger.debug(f'Waiting text for channel "{selected_channel_title}" from {get_username(query)}')
 
     await state.update_data(
         PostContext(

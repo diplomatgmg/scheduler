@@ -1,5 +1,6 @@
 from aiogram.types import BotCommand
 
+
 __all__ = [
     "default_commands",
 ]

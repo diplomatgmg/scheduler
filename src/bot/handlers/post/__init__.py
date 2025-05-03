@@ -2,6 +2,7 @@ from aiogram import Router
 
 from bot.handlers.post import create, edit
 
+
 __all__ = ["router"]
 
 

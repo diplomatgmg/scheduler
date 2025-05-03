@@ -1,11 +1,12 @@
 import logging
 
-import sentry_sdk
 from loguru import logger
+import sentry_sdk
 from sentry_sdk.integrations.logging import LoggingIntegration
 
 from common.environment.config import env_config
 from common.sentry.config import sentry_config
+
 
 __all__ = [
     "setup_sentry",

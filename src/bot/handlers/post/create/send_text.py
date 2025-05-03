@@ -8,6 +8,7 @@ from bot.states import PostState
 from bot.utils.messages import make_linked
 from bot.utils.user import get_username
 
+
 __all__ = [
     "router",
 ]
@@ -20,7 +21,7 @@ router = Router(name="send_text")
 @router.message(PostState.waiting_for_post)
 async def handle_send_text(message: Message, state: FSMContext) -> None:
     """Обрабатывает полученный текст для публикации."""
-    logger.debug(f"[handle_send_text] Received text from {get_username(message)}")
+    logger.debug(f"Sending text callback from {get_username(message)}")
 
     post_state = PostContext(**(await state.get_data()))
     linked_channel = make_linked(post_state.selected_channel_title, post_state.selected_channel_username)

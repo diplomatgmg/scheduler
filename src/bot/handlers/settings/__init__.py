@@ -2,6 +2,7 @@ from aiogram import Router
 
 from bot.handlers.settings import settings
 
+
 __all__ = [
     "router",
 ]
