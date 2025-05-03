@@ -548,7 +548,7 @@ dev = [
     { name = "hupper", specifier = ">=1.12.1" },
     { name = "isort", specifier = ">=6.0.1" },
     { name = "mypy", specifier = ">=1.15.0" },
-    { name = "ruff", specifier = ">=0.11.7" },
+    { name = "ruff", specifier = ">=0.11.8" },
 ]
 
 [[package]]
