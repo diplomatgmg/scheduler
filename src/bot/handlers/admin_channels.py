@@ -1,9 +1,6 @@
 from aiogram import Router
-from aiogram.filters import (
-    ADMINISTRATOR,
-    PROMOTED_TRANSITION,
-    ChatMemberUpdatedFilter,
-)
+from aiogram.filters import (ADMINISTRATOR, PROMOTED_TRANSITION,
+                             ChatMemberUpdatedFilter)
 from aiogram.types import ChatMemberAdministrator, ChatMemberUpdated
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
