@@ -1,11 +1,9 @@
 from collections.abc import Sequence
 
-from aiogram.types import User
 from loguru import logger
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.utils.user import get_username
 from common.database.models import ChannelModel
 
 __all__ = [

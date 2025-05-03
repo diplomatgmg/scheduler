@@ -2,7 +2,7 @@ from loguru import logger
 from sqlalchemy import delete
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from common.database.models import ChannelModel, UserModel
+from common.database.models import ChannelModel
 
 __all__ = [
     "remove_user_channel",
@@ -10,9 +10,9 @@ __all__ = [
 
 
 async def remove_user_channel(
-        session: AsyncSession,
-        user_id: int,
-        chat_id: int,
+    session: AsyncSession,
+    user_id: int,
+    chat_id: int,
 ) -> bool:
     """Удаляет канал пользователя из базы данных."""
     logger.debug(f"Removing channel id={chat_id} for user id={user_id}")
