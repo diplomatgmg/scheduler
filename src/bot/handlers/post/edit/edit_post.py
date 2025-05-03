@@ -22,7 +22,7 @@ async def handle_edit_callback(
     query: CallbackQuery,
     state: FSMContext,
 ) -> None:
-    logger.debug(f"[handle_edit_callback] callback from {get_username(query)}")
+    logger.debug(f"Editing post callback from {get_username(query)}")
 
     message = await get_message(query)
     await message.answer("Редактирование открыто")

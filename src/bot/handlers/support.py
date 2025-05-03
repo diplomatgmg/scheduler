@@ -13,6 +13,6 @@ router = Router(name="support")
 
 @router.message(Command("support"))
 async def handle_support(message: Message) -> None:
-    logger.debug(f"Handler support. User: {get_username(message)}")
+    logger.debug(f"Support handler for user: {get_username(message)}")
 
     await message.reply(f"Вопросы, предложения, обратная связь - @{bot_config.support_username}")

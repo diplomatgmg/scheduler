@@ -7,3 +7,4 @@ services:
     volumes:
       - ./src/bot:/app/src/bot
       - ./src/migrations:/app/src/migrations
+      - ./src/common:/app/src/common

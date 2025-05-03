@@ -10,7 +10,7 @@ __all__ = [
 
 
 async def show_main_menu(message: Message, *, edit_previous_text: bool = False) -> None:
-    logger.debug(f"[show_main_menu]. User: {get_username(message)}")
+    logger.debug(f"Showing main menu for user: {get_username(message)}")
 
     message_text = "Здесь вы можете создавать посты, просматривать статистику и выполнять другие задачи."
 

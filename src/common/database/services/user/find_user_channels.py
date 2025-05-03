@@ -13,9 +13,10 @@ __all__ = [
 ]
 
 
-async def find_user_channels(session: AsyncSession, user: User) -> Sequence[ChannelModel]:
-    logger.debug(f"Getting channels for user {get_username(user)}")
+async def find_user_channels(session: AsyncSession, user_id: int) -> Sequence[ChannelModel]:
+    """Возвращает каналы пользователя из БД."""
+    logger.debug(f"Getting channels for user id={user_id}")
 
-    stmt = select(ChannelModel).where(ChannelModel.user_id == user.id)
+    stmt = select(ChannelModel).where(ChannelModel.user_id == user_id)
     result = await session.execute(stmt)
     return result.scalars().all()

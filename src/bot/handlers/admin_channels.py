@@ -9,10 +9,12 @@ from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bot.core.loader import bot
-from bot.services.user import add_user_channel, remove_user_channel
 from bot.utils.user import get_username
+from common.database.models import ChannelModel
+from common.database.services.user import add_user_channel, remove_user_channel
 
 __all__ = ()
+
 
 router = Router(name="admin_channels")
 
@@ -43,7 +45,8 @@ async def on_bot_demoted(event: ChatMemberUpdated, session: AsyncSession) -> Non
         f"Я больше не администратор в канале {chat_username}\n\n<b>Теперь я не смогу управлять постами в канале</b>",
         parse_mode="HTML",
     )
-    await remove_user_channel(session, event.from_user, event.chat)
+
+    await remove_user_channel(session, event.from_user.id, event.chat.id)
 
 
 @router.my_chat_member(ChatMemberUpdatedFilter(member_status_changed=ADMINISTRATOR))
@@ -79,7 +82,7 @@ async def on_bot_permissions_changed(event: ChatMemberUpdated, session: AsyncSes
             f"Пожалуйста, дайте необходимый доступ в настройках канала</b>",
             parse_mode="HTML",
         )
-        await remove_user_channel(session, event.from_user, event.chat)
+        await remove_user_channel(session, event.from_user.id, event.chat.id)
         return
 
     await bot.send_message(
@@ -90,4 +93,12 @@ async def on_bot_permissions_changed(event: ChatMemberUpdated, session: AsyncSes
         "<b>Все необходимые права выданы!</b>",
         parse_mode="HTML",
     )
-    await add_user_channel(session, event.from_user, event.chat)
+
+    new_channel = ChannelModel(
+        user_id=event.from_user.id,
+        chat_id=event.chat.id,
+        title=event.chat.title or "Без названия",
+        username=event.chat.username,
+    )
+
+    await add_user_channel(session, event.from_user.id, new_channel)

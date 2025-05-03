@@ -13,29 +13,19 @@ __all__ = [
 
 async def add_user_channel(
     session: AsyncSession,
-    user: User,
-    chat: Chat,
+    user_id: int,
+    channel: ChannelModel,
 ) -> ChannelModel | None:
     """Добавляет канал пользователя в БД, если его ещё нет."""
-    logger.debug(f"Adding channel {chat.title} for user {get_username(user)}")
+    logger.debug(f"Adding channel id={channel.id} for user id={user_id}")
 
-    if not chat.title:
-        logger.warning(f"Cannot get title for chat {get_username(chat)}")
-
-    new_channel = ChannelModel(
-        user_id=user.id,
-        chat_id=chat.id,
-        title=chat.title or "Без названия",
-        username=chat.username,
-    )
-
-    session.add(new_channel)
+    session.add(channel)
 
     try:
         await session.commit()
     except IntegrityError:
-        logger.warning(f"Channel {chat.id} already exists for user {user.id}")
+        logger.warning(f"Channel id={channel.id} already exists for user id={user_id}")
         await session.rollback()
         return None
 
-    return new_channel
+    return channel
