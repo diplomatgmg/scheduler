@@ -34,10 +34,8 @@ extend-exclude = ["migrations"]
 [tool.mypy]
 cache_dir = ".mypy_cache"
 incremental = true
-ignore_missing_imports = false
 warn_return_any = true
 warn_unused_configs = true
-show_error_codes = true
 show_error_context = true
 disallow_subclassing_any = true
 disallow_any_generics = true
@@ -46,12 +44,9 @@ disallow_untyped_defs = true
 disallow_incomplete_defs = true
 check_untyped_defs = true
 disallow_untyped_decorators = true
-no_implicit_optional = true
 warn_redundant_casts = true
 warn_unused_ignores = true
 follow_imports_for_stubs = true
-namespace_packages = true
-show_absolute_path = true
 
 [tool.isort]
 profile = "black"
