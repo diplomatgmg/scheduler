@@ -2,6 +2,7 @@ from pydantic_settings import BaseSettings
 
 from common.logging.enums import LogLevelEnum, LogLevelSqlalchemyEnum
 
+
 __all__ = [
     "log_config",
 ]

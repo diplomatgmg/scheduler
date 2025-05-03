@@ -9,6 +9,7 @@ from bot.utils.user import get_username
 from common.database.models import ChannelModel
 from common.database.services.user import add_user_channel, remove_user_channel
 
+
 __all__ = ()
 
 

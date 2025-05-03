@@ -7,6 +7,7 @@ from aiogram.types import Message, TelegramObject
 from common.database.models import UserModel
 from common.database.services.user import add_user, find_user
 
+
 if TYPE_CHECKING:
     from sqlalchemy.ext.asyncio import AsyncSession
 

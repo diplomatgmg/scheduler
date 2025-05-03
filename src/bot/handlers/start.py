@@ -4,6 +4,7 @@ from aiogram.types import Message
 
 from bot.handlers.menu import show_main_menu
 
+
 __all__ = [
     "handle_start",
 ]

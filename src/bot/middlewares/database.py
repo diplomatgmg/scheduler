@@ -6,6 +6,7 @@ from aiogram.types import TelegramObject
 
 from common.database.engine import async_session
 
+
 __all__ = [
     "DatabaseMiddleware",
 ]

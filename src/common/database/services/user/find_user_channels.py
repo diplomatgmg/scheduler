@@ -6,6 +6,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from common.database.models import ChannelModel
 
+
 __all__ = [
     "find_user_channels",
 ]

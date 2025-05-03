@@ -2,6 +2,7 @@ from pydantic_settings import BaseSettings
 
 from common.environment.enums import EnvironmentEnum
 
+
 __all__ = [
     "env_config",
 ]

@@ -4,6 +4,7 @@ from loguru import logger
 from bot.keyboards.inline.menu import main_keyboard
 from bot.utils.user import get_username
 
+
 __all__ = [
     "show_main_menu",
 ]

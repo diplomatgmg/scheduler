@@ -3,6 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from common.database.models import UserModel
 
+
 __all__ = [
     "add_user",
 ]

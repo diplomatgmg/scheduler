@@ -1,12 +1,13 @@
 import logging
-import sys
 from logging import LogRecord
 from pathlib import Path
+import sys
 
 from loguru import logger
 
 from common.environment.config import env_config
 from common.logging.config import log_config
+
 
 __all__ = [
     "setup_logging",

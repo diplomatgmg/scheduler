@@ -2,6 +2,7 @@ from aiogram import Bot, Dispatcher
 
 from bot.core.config import bot_config
 
+
 __all__ = [
     "bot",
     "dp",

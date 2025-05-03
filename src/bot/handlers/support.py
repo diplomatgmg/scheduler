@@ -6,6 +6,7 @@ from loguru import logger
 from bot.core.config import bot_config
 from bot.utils.user import get_username
 
+
 __all__ = ()
 
 router = Router(name="support")

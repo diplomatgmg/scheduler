@@ -5,6 +5,7 @@ from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
 from loguru import logger
 
+
 __all__ = [
     "LoggingMiddleware",
 ]

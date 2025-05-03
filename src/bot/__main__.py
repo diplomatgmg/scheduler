@@ -1,5 +1,5 @@
-import uvloop
 from loguru import logger
+import uvloop
 
 from bot.core.loader import bot, dp
 from bot.handlers import register_handlers_routers
@@ -9,6 +9,7 @@ from common.environment.config import env_config
 from common.logging.config import log_config
 from common.logging.logger import setup_logging, setup_module_logging
 from common.sentry.setup import setup_sentry
+
 
 __all__ = ()
 

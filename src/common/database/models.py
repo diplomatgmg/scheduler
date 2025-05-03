@@ -2,6 +2,7 @@ from sqlalchemy import BigInteger, ForeignKey
 from sqlalchemy.ext.asyncio import AsyncAttrs
 from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
 
+
 __all__ = [
     "Base",
     "ChannelModel",

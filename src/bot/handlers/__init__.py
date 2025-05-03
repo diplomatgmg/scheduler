@@ -3,6 +3,7 @@ from loguru import logger
 
 from bot.handlers import admin_channels, post, start, support
 
+
 __all__ = [
     "register_handlers_routers",
 ]

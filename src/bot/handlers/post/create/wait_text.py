@@ -12,6 +12,7 @@ from bot.states import PostState
 from bot.utils.messages import get_message, make_linked
 from bot.utils.user import get_username
 
+
 __all__ = [
     "router",
 ]

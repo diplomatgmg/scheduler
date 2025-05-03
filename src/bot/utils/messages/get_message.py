@@ -2,6 +2,7 @@ from aiogram.types import CallbackQuery, Message
 
 from bot.exceptions import MessageNotAvailableError
 
+
 __all__ = [
     "get_message",
 ]

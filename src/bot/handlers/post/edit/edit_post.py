@@ -8,6 +8,7 @@ from bot.callbacks.post import PostActionEnum
 from bot.utils.messages import get_message
 from bot.utils.user import get_username
 
+
 __all__ = [
     "router",
 ]

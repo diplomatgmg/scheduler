@@ -4,6 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from common.database.models import ChannelModel
 
+
 __all__ = [
     "add_user_channel",
 ]

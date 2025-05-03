@@ -5,6 +5,7 @@ from common.database.config import db_config
 from common.logging.config import log_config
 from common.logging.enums import LogLevelSqlalchemyEnum
 
+
 __all__ = [
     "async_session",
 ]

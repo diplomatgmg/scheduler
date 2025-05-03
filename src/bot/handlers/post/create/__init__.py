@@ -2,6 +2,7 @@ from aiogram import Router
 
 from bot.handlers.post.create import select_channel, send_text, wait_text
 
+
 __all__ = [
     "router",
 ]
