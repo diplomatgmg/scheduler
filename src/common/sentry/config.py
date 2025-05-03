@@ -15,4 +15,4 @@ class SentryConfig(BaseSettings):
         env_prefix = "SENTRY_"
 
 
-sentry_config = SentryConfig()  # type: ignore[call-arg]
+sentry_config = SentryConfig()

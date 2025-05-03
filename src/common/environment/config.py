@@ -19,4 +19,4 @@ class EnvConfig(BaseSettings):
         return EnvironmentEnum.development == self.mode
 
 
-env_config = EnvConfig()  # type: ignore[call-arg]
+env_config = EnvConfig()

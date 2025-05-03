@@ -32,6 +32,7 @@ lint.ignore = ["I", "D", "DOC", "TD", "FIX", "CPY001", "COM812",  "ANN401", "RUF
 extend-exclude = ["migrations"]
 
 [tool.mypy]
+plugins = "pydantic.mypy"
 cache_dir = ".mypy_cache"
 incremental = true
 warn_return_any = true
