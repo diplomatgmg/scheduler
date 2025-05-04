@@ -27,7 +27,9 @@ class UserModel(Base):
 
 class ChannelModel(Base):
     __tablename__ = "channels"
-    __table_args__ = (UniqueConstraint("user_id", "chat_id", name="unique_user_chat"),)
+    __table_args__ = (
+        UniqueConstraint("user_id", "chat_id", name="unique_user_chat"),
+    )
 
     id: Mapped[int] = mapped_column(primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id", ondelete="CASCADE"))
