@@ -5,6 +5,7 @@ from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bot.core.loader import bot
+from bot.utils.messages import make_linked
 from bot.utils.user import get_username
 from common.database.models import ChannelModel
 from common.database.services.user import add_user_channel, remove_user_channel
@@ -16,30 +17,43 @@ __all__ = ()
 router = Router(name="admin_channels")
 
 
+def _get_linked_channel(event: ChatMemberUpdated) -> str:
+    chat_title = event.chat.title or "Неизвестно"
+    chat_username = get_username(event)
+    return make_linked(chat_title, chat_username)
+
+
 @router.my_chat_member(ChatMemberUpdatedFilter(member_status_changed=PROMOTED_TRANSITION))
 async def on_bot_promoted(event: ChatMemberUpdated, session: AsyncSession) -> None:
-    chat_username = get_username(event)
-    username = get_username(event.from_user)
-    logger.debug(f"Bot was promoted to administrator by user {username} in channel {chat_username}")
+    """Обрабатывает права бота когда он становится администратором канала"""
+    logger.debug(f"Bot was promoted to administrator by user_id={event.from_user.id} in channel_id={event.chat.id}")
+
+    linked_channel = _get_linked_channel(event)
 
     await bot.send_message(
         event.from_user.id,
-        f"Вы добавили меня в администраторы канала {chat_username}",
+        f"✅  Вы добавили меня в администраторы канала {linked_channel}",
+        parse_mode="HTML",
     )
 
-    # FIXME Обязательно ли вручную вызывать? Как пробросить автоматически дальше?
     await on_bot_permissions_changed(event, session)
 
 
 @router.my_chat_member(ChatMemberUpdatedFilter(member_status_changed=~PROMOTED_TRANSITION))
 async def on_bot_demoted(event: ChatMemberUpdated, session: AsyncSession) -> None:
-    chat_username = get_username(event)
-    username = get_username(event.from_user)
-    logger.debug(f"Bot was removed from administrators by user {username} in channel {chat_username}")
+    logger.debug(f"Bot was removed from administrators by user_id={event.from_user.id} in channel_id={event.chat.id}")
+
+    # Иногда возникает при перезагрузке бота
+    if event.from_user.is_bot:
+        logger.warning(f"Action performed by bot {get_username(event.from_user)}")
+        return
+
+    linked_channel = _get_linked_channel(event)
 
     await bot.send_message(
         event.from_user.id,
-        f"Я больше не администратор в канале {chat_username}\n\n<b>Теперь я не смогу управлять постами в канале</b>",
+        f"ℹ️  Я больше не администратор в канале {linked_channel}\n\n"
+        f"⚠️  <b>Теперь я не смогу управлять постами в канале</b>",
         parse_mode="HTML",
     )
 
@@ -48,16 +62,17 @@ async def on_bot_demoted(event: ChatMemberUpdated, session: AsyncSession) -> Non
 
 @router.my_chat_member(ChatMemberUpdatedFilter(member_status_changed=ADMINISTRATOR))
 async def on_bot_permissions_changed(event: ChatMemberUpdated, session: AsyncSession) -> None:
-    chat_username = get_username(event)
-    username = get_username(event.from_user)
-    logger.debug(f"Bot permissions were updated by user {username} in channel {chat_username}")
+    logger.debug(f"Bot permissions were updated by user_id={event.from_user.id} in channel_id={event.chat.id}")
 
-    # Хендлер отработает только если бот стал администратором
-    permissions: ChatMemberAdministrator = await bot.get_chat_member(event.chat.id, bot.id)  # type: ignore[assignment]
+    linked_channel = _get_linked_channel(event)
+
+    if not isinstance(event.new_chat_member, ChatMemberAdministrator):
+        logger.warning(f"Expected ChatMemberAdministrator, got {type(event.new_chat_member)}")
+        return
 
     permissions_list = (
-        (permissions.can_post_messages, "Могу отправлять сообщения в канал"),
-        (permissions.can_delete_messages, "Могу удалять сообщения в канале"),
+        (event.new_chat_member.can_post_messages, "Могу отправлять сообщения в канал"),
+        (event.new_chat_member.can_delete_messages, "Могу удалять сообщения в канале"),
     )
 
     message_permissions = ""
@@ -72,10 +87,10 @@ async def on_bot_permissions_changed(event: ChatMemberUpdated, session: AsyncSes
     if not all_granted:
         await bot.send_message(
             event.from_user.id,
-            f"Мои права доступа в канале {chat_username} были изменены.\n\n"
+            f"ℹ️  Мои права доступа в канале {linked_channel} были изменены.\n\n"
             f"Необходимые права:\n"
             f"{message_permissions}\n"
-            f"<b>Для полноценной работы мне необходимы вышеперечисленные права.\n"
+            f"⚠️  <b>Для полноценной работы мне необходимы вышеперечисленные права.\n"
             f"Пожалуйста, дайте необходимый доступ в настройках канала</b>",
             parse_mode="HTML",
         )
@@ -84,18 +99,18 @@ async def on_bot_permissions_changed(event: ChatMemberUpdated, session: AsyncSes
 
     await bot.send_message(
         event.from_user.id,
-        f"Мои права доступа в канале {chat_username} были изменены.\n\n"
+        f"ℹ️  Мои права доступа в канале {linked_channel} были изменены.\n\n"
         f"Необходимые права:\n"
         f"{message_permissions}\n"
-        "<b>Все необходимые права выданы!</b>",
+        "🎉  <b>Все необходимые права выданы!</b>",
         parse_mode="HTML",
     )
 
-    new_channel = ChannelModel(
+    channel = ChannelModel(
         user_id=event.from_user.id,
         chat_id=event.chat.id,
-        title=event.chat.title or "Без названия",
-        username=event.chat.username,
+        title=event.chat.title or "Неизвестно",
+        username=event.chat.username or "Неизвестно",
     )
 
-    await add_user_channel(session, event.from_user.id, new_channel)
+    await add_user_channel(session, channel.user_id, channel)

@@ -14,4 +14,4 @@ class BotConfig(BaseSettings):
         env_prefix = "BOT_"
 
 
-bot_config = BotConfig()  # type: ignore[call-arg]
+bot_config = BotConfig()

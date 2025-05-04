@@ -1,6 +1,5 @@
 from aiogram.filters.callback_data import CallbackQuery
 from aiogram.types import Chat, ChatMemberUpdated, Message, User
-from loguru import logger
 
 
 __all__ = [
@@ -8,17 +7,11 @@ __all__ = [
 ]
 
 
-def _extract_user(entity: User | Message | Chat | CallbackQuery | ChatMemberUpdated) -> User | Chat | None:
-    """
-    Извлекает объект User из переданной сущности.
-    """
-    if isinstance(entity, User):
+def _extract_entity(entity: User | Message | Chat | CallbackQuery | ChatMemberUpdated) -> User | Chat | None:
+    """Извлекает объект Chat/User из переданной сущности."""
+    if isinstance(entity, (User, Chat)):
         return entity
-    if isinstance(entity, Chat):
-        return entity
-    if isinstance(entity, Message):
-        return entity.from_user
-    if isinstance(entity, CallbackQuery):
+    if isinstance(entity, (Message, CallbackQuery)):
         return entity.from_user
     if isinstance(entity, ChatMemberUpdated):
         return entity.chat
@@ -26,20 +19,14 @@ def _extract_user(entity: User | Message | Chat | CallbackQuery | ChatMemberUpda
     return None
 
 
-def get_username(entity: User | Chat | Message | CallbackQuery | ChatMemberUpdated) -> str:
-    """
-    Возвращает username пользователя в формате '@username'.
-    Если username не найден — логирует и возвращает 'unknown'.
-    """
-    user = _extract_user(entity)
+def get_username(entity: User | Chat | Message | CallbackQuery | ChatMemberUpdated) -> str | None:
+    """Возвращает username объекта если он существует."""
+    subject = _extract_entity(entity)
+    if subject is None:
+        return None
 
-    if user is None:
-        logger.error(f"Cannot extract User from entity: {entity!r}")
-        return "unknown"
-
-    username = user.username
+    username = subject.username
     if not username:
-        logger.error(f"User has no username: {user!r}")
-        return "unknown"
+        return None
 
-    return f"@{username}"
+    return username

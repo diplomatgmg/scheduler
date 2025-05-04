@@ -20,7 +20,7 @@
 - **Loguru**, **Sentry**
 - **Docker**, **Docker Compose**
 - **uvloop**
-- **uv**, **mypy**, **ruff**
+- **uv**, **mypy**, **ruff**, **isort** - linting, formatting
 - **Makefile**
 
 ## Структура

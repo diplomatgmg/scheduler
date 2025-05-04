@@ -16,4 +16,4 @@ class LogConfig(BaseSettings):
         env_prefix = "LOG_"
 
 
-log_config = LogConfig()  # type: ignore[call-arg]
+log_config = LogConfig()

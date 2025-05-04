@@ -5,4 +5,4 @@ services:
       dockerfile: ./src/bot/Dockerfile
       target: ${ENV_MODE}
     volumes:
-      - .:/app
+      - ./src:/app/src

@@ -30,4 +30,4 @@ class DBConfig(BaseSettings):
         )
 
 
-db_config = DBConfig()  # type: ignore[call-arg]
+db_config = DBConfig()
