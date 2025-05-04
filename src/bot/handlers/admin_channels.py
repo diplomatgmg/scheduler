@@ -43,21 +43,18 @@ async def on_bot_promoted(event: ChatMemberUpdated, session: AsyncSession) -> No
 async def on_bot_demoted(event: ChatMemberUpdated, session: AsyncSession) -> None:
     logger.debug(f"Bot was removed from administrators by user_id={event.from_user.id} in channel_id={event.chat.id}")
 
-    # Иногда возникает при перезагрузке бота
-    if event.from_user.is_bot:
-        logger.warning(f"Action performed by bot {get_username(event.from_user)}")
-        return
-
     linked_channel = _get_linked_channel(event)
 
-    await bot.send_message(
-        event.from_user.id,
-        f"ℹ️  Я больше не администратор в канале {linked_channel}\n\n"
-        f"⚠️  <b>Теперь я не смогу управлять постами в канале</b>",
-        parse_mode="HTML",
-    )
-
-    await remove_user_channel(session, event.from_user.id, event.chat.id)
+    # TelegramAPI может удалить бота раньше, чем тот успеет отправить сообщение
+    try:
+        await bot.send_message(
+            event.from_user.id,
+            f"ℹ️  Я больше не администратор в канале {linked_channel}\n\n"
+            f"⚠️  <b>Теперь я не смогу управлять постами в канале</b>",
+            parse_mode="HTML",
+        )
+    finally:
+        await remove_user_channel(session, event.from_user.id, event.chat.id)
 
 
 @router.my_chat_member(ChatMemberUpdatedFilter(member_status_changed=ADMINISTRATOR))
