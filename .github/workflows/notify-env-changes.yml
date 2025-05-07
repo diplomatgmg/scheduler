@@ -18,13 +18,14 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Check if .env.example changed
+        id: check-env
         run: |
-          if git diff | grep -q "/.env.example"; then
+          if git diff --name-only HEAD^ HEAD | grep -q .env.example; then
             echo "changed=true" >> $GITHUB_OUTPUT
           fi
 
       - name: Notify Telegram if .env.example changed
-        if: steps.env-check.outputs.changed == 'true'
+        if: steps.check-env.outputs.changed == 'true'
         uses: ./.github/actions/telegram-notify
         with:
           job_name: Env‑file updated
