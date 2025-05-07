@@ -34,14 +34,14 @@ jobs:
             docker compose up -d
             make migrate
 
+      - name: Cleanup Docker images on runner
+        if: always()
+        run: docker image prune -a -f
+
       - name: Notify Telegram on Failure
         if: failure()
-        uses: ./.github/actions/telegram-notify
+        uses: ./.github/actions/notify-on-failure
         with:
           job_name: Deploy
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-
-      - name: Cleanup Docker images on runner
-        if: always()
-        run: docker image prune -a -f

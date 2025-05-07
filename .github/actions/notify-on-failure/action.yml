@@ -18,7 +18,6 @@ runs:
   using: composite
   steps:
     - name: Send Telegram Notification
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       uses: appleboy/telegram-action@master
       with:
         to: ${{ inputs.to }}
@@ -29,8 +28,8 @@ runs:
           ❌ *Job Failure* ❌
 
           📂 *Repository*: ${{ github.server_url }}/${{ github.repository }}
-          👤 *Actor*: {{ repo.namespace }}
+          👤 *Actor*: {{ github.actor }}
           🛠️ *Job*: ${{ inputs.job_name }}
           ✉️ *Commit/PR*: `${{ github.event.head_commit.message || github.event.pull_request.title }}`
-            
+
           [🔗 LINK](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})

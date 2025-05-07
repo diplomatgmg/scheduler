@@ -33,7 +33,7 @@ jobs:
 
       - name: Notify Telegram on Failure
         if: failure()
-        uses: ./.github/actions/telegram-notify
+        uses: ./.github/actions/notify-on-failure
         with:
           job_name: Build
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
