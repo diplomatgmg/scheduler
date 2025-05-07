@@ -31,8 +31,8 @@ runs:
           *${{ inputs.title }}*
 
           📂 *Repository*: ${{ github.server_url }}/${{ github.repository }}
-          👤 *Actor*:      ${{ github.actor }}
-          🛠️ *Job*:        ${{ inputs.job_name }}
+          👤 *Actor*:            ${{ github.actor }}
+          🛠️ *Job*:                ${{ inputs.job_name }}
           ✉️ *Commit/PR*: `${{ github.event.head_commit.message || github.event.pull_request.title }}`
 
           [🔗 LINK](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
