@@ -36,5 +36,4 @@ jobs:
 
       - name: Debug output
         if: always()
-        run:
-          echo "Changed: ${{ steps.check-env.outputs.changed }}"
+        run: echo "Changed: ${{ steps.check-env.outputs.changed }}"
