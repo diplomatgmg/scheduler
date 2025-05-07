@@ -28,23 +28,9 @@ jobs:
 
       - name: Notify Telegram if .env.example changed
         if: steps.check-env.outputs.changed == 'true'
-        uses: appleboy/telegram-action@master
+        uses: ./.github/actions/telegram-notify
         with:
+          job_name: Build
+          title: ⚠️ Env File Changed ⚠️
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
-          disable_web_page_preview: true
-          format: markdown
-          message: |
-            ⚠️ *Env File Changed* ⚠️
-
-            📂 *Repository*: ${{ github.server_url }}/${{ github.repository }}
-            👤 *Actor*: {{ github.actor }}
-            🛠️ *Job*: ${{ inputs.job_name }}
-            ✉️ *Commit/PR*: `${{ github.event.head_commit.message || github.event.pull_request.title }}`
-
-            [🔗 LINK](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
-
-      - name: Debug output
-        if: always()
-        run: |
-          echo "Changed: ${{ steps.check-env.outputs.changed }}"

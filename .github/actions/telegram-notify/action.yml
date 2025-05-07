@@ -7,6 +7,9 @@ inputs:
   job_name:
     description: 'Name of the failed job'
     required: true
+  title:
+    description: 'Notification title with emoji'
+    required: true
   to:
     description: 'Telegram Chat ID'
     required: true
@@ -25,7 +28,7 @@ runs:
         disable_web_page_preview: true
         format: markdown
         message: |
-          ❌ *Job Failure* ❌
+          *${{ inputs.title }}*
 
           📂 *Repository*: ${{ github.server_url }}/${{ github.repository }}
           👤 *Actor*: {{ github.actor }}

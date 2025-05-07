@@ -52,8 +52,9 @@ jobs:
 
       - name: Send Telegram Notification
         if: failure()
-        uses: ./.github/actions/notify-on-failure
+        uses: ./.github/actions/telegram-notify
         with:
           job_name: Linting
+          title: ❌ Job Failure ❌
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
