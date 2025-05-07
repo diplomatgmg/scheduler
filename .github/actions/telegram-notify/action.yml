@@ -26,15 +26,13 @@ runs:
         to: ${{ inputs.to }}
         token: ${{ inputs.token }}
         disable_web_page_preview: true
-        format: html
+        format: markdown
         message: |
-          <b>${{ inputs.title }}</b>
+          ${{ inputs.title }}
 
-          📂 <b>Repository:</b> <a href="${{ github.server_url }}/${{ github.repository }}">${{ github.repository }}</a>
-          👤 <b>Actor:</b> ${{ github.actor }}
-          🛠️ <b>Job:</b> ${{ inputs.job_name }}
+          📂 *Repository*: ${{ github.server_url }}/${{ github.repository }}
+          👤 *Actor*: {{ github.actor }}
+          🛠️ *Job*: ${{ inputs.job_name }}
+          ✉️ *Commit/PR*: ```${{ github.event.head_commit.message || github.event.pull_request.title }}```
 
-          ✉️ <b>Commit/PR:</b>
-          <pre><code>${{ github.event.head_commit.message || github.event.pull_request.title }}</code></pre>
-
-          🔗 <a href="${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}">Workflow Run Link</a>
+          [🔗 LINK](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
