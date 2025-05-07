@@ -6,3 +6,7 @@ services:
       target: ${ENV_MODE}
     volumes:
       - ./src:/app/src
+
+  notifier:
+    profiles:
+      - none
