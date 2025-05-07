@@ -33,3 +33,8 @@ jobs:
           job_name: Env‑file updated
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+
+      - name: Debug output
+        if: always()
+        run:
+          echo "Changed: ${{ steps.check-env.outputs.changed }}"
