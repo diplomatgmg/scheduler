@@ -1,4 +1,3 @@
-from loguru import logger
 import uvloop
 
 from bot.core.loader import bot, dp
@@ -6,7 +5,6 @@ from bot.handlers import register_handlers_routers
 from bot.keyboards import default_commands
 from bot.middlewares import register_middlewares
 from common.environment.config import env_config
-from common.logging.config import log_config
 from common.logging.logger import setup_logging
 from common.sentry.setup import setup_sentry
 
@@ -30,8 +28,6 @@ async def on_shutdown() -> None:
 
 
 async def main() -> None:
-    logger.info(f"Env mode: {env_config.mode}, log level: {log_config.level}")
-
     setup_logging("bot")
     setup_sentry()
 
