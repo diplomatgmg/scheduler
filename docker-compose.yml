@@ -1,5 +1,6 @@
 services:
   bot:
+    container_name: ${ENV_PROJECT_NAME}-bot
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
     env_file:
       - .env
@@ -11,6 +12,7 @@ services:
       - app-logs:/app/logs
 
   api:
+    container_name: ${ENV_PROJECT_NAME}-api
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-api:latest
     env_file:
       - .env
@@ -28,6 +30,7 @@ services:
       start_period: 3s
 
   postgres:
+    container_name: ${ENV_PROJECT_NAME}-postgres
     image: postgres:17.4-alpine
     volumes:
       - postgres-data:/var/lib/postgresql/data
@@ -45,6 +48,7 @@ services:
       start_period: 3s
 
   pgbouncer:
+    container_name: ${ENV_PROJECT_NAME}-pgbouncer
     image: bitnami/pgbouncer:1.24.0
     ports:
       - "${PGBOUNCER_PORT}:6432"
@@ -58,8 +62,9 @@ services:
       - app-network
 
   notifier:
-    restart: unless-stopped
+    container_name: ${ENV_PROJECT_NAME}-bot
     image: lorcas/docker-telegram-notifier
+    restart: unless-stopped
     volumes:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     env_file:
