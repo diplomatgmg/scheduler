@@ -7,6 +7,16 @@ services:
     volumes:
       - ./src:/app/src
 
+  api:
+    build:
+      context: .
+      dockerfile: src/api/Dockerfile
+      target: ${ENV_MODE}
+    ports:
+      - "${API_PORT}:8000"
+    volumes:
+      - ./src:/app/src
+
   notifier:
     profiles:
       - none

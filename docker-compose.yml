@@ -1,12 +1,22 @@
 services:
   bot:
-    image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}:latest
+    image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
     env_file:
       - .env
     depends_on:
       - pgbouncer
     networks:
-      - bot_network
+      - app_network
+
+  api:
+    image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-api:latest
+    env_file:
+      - .env
+    depends_on:
+      - pgbouncer
+    networks:
+      - app_network
+
 
   postgres:
     image: postgres:17.4-alpine
@@ -17,7 +27,7 @@ services:
     env_file:
       - .env
     networks:
-      - bot_network
+      - app_network
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${POSTGRES_DB}" ]
       interval: 10s
@@ -35,7 +45,7 @@ services:
     depends_on:
       - postgres
     networks:
-      - bot_network
+      - app_network
 
   notifier:
     restart: unless-stopped
@@ -49,7 +59,7 @@ services:
 
 
 networks:
-  bot_network:
+  app_network:
     driver: bridge
 
 

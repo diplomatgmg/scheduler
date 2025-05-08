@@ -18,12 +18,12 @@ COPY pyproject.toml uv.lock ./
 FROM base AS deps-dev
 
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-install-project --dev
+    uv sync --frozen --no-install-project --dev --group bot --group bot-dev
 
 FROM base AS deps-prod
 
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-install-project --no-dev
+    uv sync --frozen --no-install-project --group bot
 
 
 # ================================= #

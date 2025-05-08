@@ -10,6 +10,9 @@ class BotConfig(BaseSettings):
     token: str
     support_username: str
 
+    webhook_url: str
+    webhook_path: str
+
     class Config:
         env_prefix = "BOT_"
 

@@ -15,7 +15,7 @@
 
 ## Что внутри
 
-- **Python 3.12**, **aiogram**
+- **Python 3.12**, **aiogram**, **FastAPI**
 - **SQLAlchemy**, **PostgreSQL**, **PgBouncer**
 - **Loguru**, **Sentry**
 - **Docker**, **Docker Compose**

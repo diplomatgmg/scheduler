@@ -13,6 +13,11 @@ jobs:
     name: Build and Push Docker Image
     runs-on: self-hosted
     timeout-minutes: 10
+
+    strategy:
+      matrix:
+        service: [bot, api]
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -23,13 +28,15 @@ jobs:
           username: ${{ vars.ENV_DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push Docker image
+      - name: Build and push ${{ matrix.service }} image
         uses: docker/build-push-action@v6
         with:
           push: ${{ github.event_name != 'pull_request' }}
           context: .
-          file: ./src/bot/Dockerfile
-          tags: ${{ vars.ENV_DOCKER_USERNAME }}/${{ vars.ENV_PROJECT_NAME }}:latest
+          file: ./src/${{ matrix.service }}/Dockerfile
+          tags: |
+            ${{ vars.ENV_DOCKER_USERNAME }}/${{ vars.ENV_PROJECT_NAME }}-${{ matrix.service }}:latest
+            ${{ vars.ENV_DOCKER_USERNAME }}/${{ vars.ENV_PROJECT_NAME }}-${{ matrix.service }}:${{ github.sha }}
 
       - name: Notify Telegram on Failure
         if: failure()

@@ -43,6 +43,6 @@ jobs:
         uses: ./.github/actions/telegram-notify
         with:
           job_name: Deploy
-          title: ❌ Job Failure ❌
+          title: ❌ Deploy Failure ❌
           to: ${{ secrets.TELEGRAM_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_BOT_TOKEN }}

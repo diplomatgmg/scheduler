@@ -4,23 +4,36 @@ version = "0.1.0"
 description = "Приложение для работы с постами в телеграм-каналах"
 requires-python = ">=3.13.2"
 dependencies = [
-    "aiogram>=3.19.0",
     "alembic>=1.15.2",
     "asyncpg>=0.30.0",
     "loguru>=0.7.3",
     "pydantic-settings>=2.9.1",
     "sentry-sdk>=2.25.1",
     "sqlalchemy>=2.0.39",
-    "uvloop>=0.21.0",
 ]
 
 [dependency-groups]
+bot = [
+    "aiogram>=3.19.0",
+    "uvloop>=0.21.0",
+]
+
+api = [
+    "fastapi>=0.115.12",
+    "uvicorn[standard]>=0.34.2",
+]
+
 dev = [
-    "hupper>=1.12.1",
     "isort>=6.0.1",
     "mypy>=1.15.0",
     "ruff>=0.11.8",
 ]
+
+bot-dev = [
+    "hupper>=1.12.1",
+]
+
+api-dev = []
 
 [tool.ruff]
 fix = true
