@@ -10,6 +10,8 @@ services:
       - app-network
     volumes:
       - app-logs:/app/logs
+    labels:
+      telegram-notifier.monitor: true
 
   api:
     container_name: ${ENV_PROJECT_NAME}-api
@@ -28,6 +30,8 @@ services:
       timeout: 3s
       retries: 3
       start_period: 3s
+    labels:
+      telegram-notifier.monitor: true
 
   postgres:
     container_name: ${ENV_PROJECT_NAME}-postgres
@@ -46,6 +50,8 @@ services:
       timeout: 3s
       retries: 3
       start_period: 3s
+    labels:
+      telegram-notifier.monitor: true
 
   pgbouncer:
     container_name: ${ENV_PROJECT_NAME}-pgbouncer
@@ -60,6 +66,8 @@ services:
       - postgres
     networks:
       - app-network
+    labels:
+      telegram-notifier.monitor: true
 
   notifier:
     container_name: ${ENV_PROJECT_NAME}-bot
@@ -69,8 +77,8 @@ services:
       - /var/run/docker.sock:/var/run/docker.sock:ro
     env_file:
       - .env
-    labels:
-      telegram-notifier.monitor: false
+    environment:
+      ONLY_WHITELIST: true
 
 
 networks:
