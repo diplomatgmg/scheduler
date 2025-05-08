@@ -32,6 +32,9 @@ def setup_logging(module_name: str) -> None:
     if module_name in _LOGGING_INITIALIZED:
         return
 
+    logger.info(f"Env mode: {env_config.mode}, log level: {log_config.level}")
+    logger.debug(f'Initializing logger for module "{module_name}"')
+
     # Перехватывает логи из logging в loguru
     logging.basicConfig(handlers=[InterceptHandler()], level=logging.NOTSET)
 
@@ -56,5 +59,4 @@ def setup_logging(module_name: str) -> None:
             level=log_config.level,
         )
 
-    logger.debug(f'Initializing logger for module "{module_name}"')
     _LOGGING_INITIALIZED.add(module_name)
