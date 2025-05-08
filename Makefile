@@ -5,6 +5,7 @@ help:
 
 venv: ## Создает виртуальное окружение
 	@uv sync \
+	--no-install-project \
 	--dev \
 	--group bot \
 	--group bot-dev \
