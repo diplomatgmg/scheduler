@@ -12,6 +12,11 @@ services:
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-api:latest
     env_file:
       - .env
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:${API_PORT}/api/v1/health/" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
     depends_on:
       - pgbouncer
     networks:
