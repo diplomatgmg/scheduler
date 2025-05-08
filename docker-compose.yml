@@ -12,16 +12,15 @@ services:
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-api:latest
     env_file:
       - .env
+    depends_on:
+      - pgbouncer
+    networks:
+      - app_network
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:${API_PORT}/api/v1/health/" ]
       interval: 10s
       timeout: 3s
       retries: 3
-    depends_on:
-      - pgbouncer
-    networks:
-      - app_network
-
 
   postgres:
     image: postgres:17.4-alpine
@@ -36,8 +35,8 @@ services:
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${POSTGRES_DB}" ]
       interval: 10s
-      timeout: 5s
-      start_period: 5s
+      timeout: 3s
+      retries: 3
 
   pgbouncer:
     image: bitnami/pgbouncer:1.24.0
