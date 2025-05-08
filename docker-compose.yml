@@ -1,6 +1,6 @@
 services:
   bot:
-    image: ${DOCKER_USERNAME}/${PROJECT_NAME}:latest
+    image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}:latest
     env_file:
       - .env
     depends_on:

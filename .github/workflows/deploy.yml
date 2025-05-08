@@ -21,7 +21,7 @@ jobs:
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           source: "docker-compose.yml, Makefile"
-          target: "/srv/${{ vars.PROJECT_NAME }}"
+          target: "/srv/${{ vars.ENV_PROJECT_NAME }}"
 
       - name: Start Docker services
         uses: appleboy/ssh-action@v1.0.3
@@ -30,7 +30,7 @@ jobs:
           username: ${{ vars.SSH_USER }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
-            cd /srv/${{ vars.PROJECT_NAME }}
+            cd /srv/${{ vars.ENV_PROJECT_NAME }}
             docker compose up -d
             make migrate
 
