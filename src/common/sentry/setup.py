@@ -17,7 +17,7 @@ def setup_sentry() -> None:
     logger.debug("Initializing Sentry")
 
     sentry_logging = LoggingIntegration(
-        level=logging.INFO,
+        level=logging.WARNING,
         event_level=logging.ERROR,
     )
 
