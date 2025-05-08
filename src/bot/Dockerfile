@@ -33,7 +33,7 @@ FROM deps-dev AS development
 
 COPY . .
 
-CMD ["hupper", "-q", "-m", "bot"]
+CMD ["hupper", "-q", "-m", "bot.main"]
 
 
 # ================================= #
@@ -43,4 +43,4 @@ FROM deps-prod AS production
 
 COPY . .
 
-CMD ["python", "-m", "bot"]
+CMD ["python", "-m", "bot.main"]

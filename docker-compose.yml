@@ -6,7 +6,9 @@ services:
     depends_on:
       - pgbouncer
     networks:
-      - app_network
+      - app-network
+    volumes:
+      - app-logs:/app/logs
 
   api:
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-api:latest
@@ -15,12 +17,15 @@ services:
     depends_on:
       - pgbouncer
     networks:
-      - app_network
+      - app-network
+    volumes:
+      - app-logs:/app/logs
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:${API_PORT}/api/v1/health/" ]
       interval: 10s
       timeout: 3s
       retries: 3
+      start_period: 3s
 
   postgres:
     image: postgres:17.4-alpine
@@ -31,12 +36,13 @@ services:
     env_file:
       - .env
     networks:
-      - app_network
+      - app-network
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${POSTGRES_DB}" ]
       interval: 10s
       timeout: 3s
       retries: 3
+      start_period: 3s
 
   pgbouncer:
     image: bitnami/pgbouncer:1.24.0
@@ -49,7 +55,7 @@ services:
     depends_on:
       - postgres
     networks:
-      - app_network
+      - app-network
 
   notifier:
     restart: unless-stopped
@@ -63,9 +69,10 @@ services:
 
 
 networks:
-  app_network:
+  app-network:
     driver: bridge
 
 
 volumes:
   postgres-data:
+  app-logs:

@@ -11,11 +11,11 @@ from common.logging.config import log_config
 
 __all__ = [
     "setup_logging",
-    "setup_module_logging",
 ]
 
 
 LOG_DIR = Path(__name__).parent / "logs"
+_LOGGING_INITIALIZED: set[str] = set()
 
 
 class InterceptHandler(logging.Handler):
@@ -26,11 +26,14 @@ class InterceptHandler(logging.Handler):
         logger.opt(depth=6, exception=record.exc_info).log(level, record.getMessage())
 
 
-def setup_logging() -> None:
-    """Инициализирует logger"""
+def setup_logging(module_name: str) -> None:
+    """Инициализирует logger для модуля"""
+
+    if module_name in _LOGGING_INITIALIZED:
+        return
 
     # Перехватывает логи из logging в loguru
-    logging.basicConfig(handlers=[InterceptHandler()], level=logging.DEBUG)
+    logging.basicConfig(handlers=[InterceptHandler()], level=logging.NOTSET)
 
     logger.remove()
     logger.add(
@@ -38,13 +41,6 @@ def setup_logging() -> None:
         level=log_config.level,
         colorize=True,
     )
-
-
-def setup_module_logging(module_name: str) -> None:
-    """
-    Инициализирует логгер под модуль.
-    Создает файл логов для модуля.
-    """
 
     def make_log_path(m: str) -> Path:
         return LOG_DIR / m / f"{m}.log"
@@ -61,3 +57,4 @@ def setup_module_logging(module_name: str) -> None:
         )
 
     logger.debug(f'Initializing logger for module "{module_name}"')
+    _LOGGING_INITIALIZED.add(module_name)

@@ -1,8 +1,14 @@
 from fastapi import FastAPI
+import uvicorn
 
+from api.core.config import api_config
 from api.endpoints import v1_router
 from common.environment.config import env_config
+from common.logging.config import log_config
+from common.logging.logger import setup_logging
 
+
+setup_logging("api")
 
 app = FastAPI(
     title=f"{env_config.project_name} API",
@@ -12,6 +18,12 @@ app = FastAPI(
 app.include_router(v1_router, prefix="/api/v1")
 
 
-@app.get("/")
-async def read_root() -> dict[str, str]:
-    return {"message": f"Welcome to {env_config.project_name}"}
+if __name__ == "__main__":
+    uvicorn.run(
+        app,
+        host=str(api_config.host),
+        port=api_config.port,
+        log_config=None,
+        log_level=log_config.level.lower(),
+        reload=False,
+    )

@@ -33,7 +33,7 @@ FROM deps-dev AS development
 
 COPY . .
 
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+CMD ["python", "-m", "api.main"]
 
 
 # ================================= #
@@ -45,4 +45,4 @@ RUN apk add --no-cache curl
 
 COPY . .
 
-CMD ["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["python", "-m", "api.main"]
