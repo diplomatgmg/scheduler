@@ -1,29 +1,29 @@
 services:
   bot:
-    container_name: ${ENV_PROJECT_NAME}-bot
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
+    container_name: ${ENV_PROJECT_NAME}-bot
     env_file:
       - .env
-    depends_on:
-      - pgbouncer
-    networks:
-      - app-network
     volumes:
       - app-logs:/app/logs
+    networks:
+      - app-network
+    depends_on:
+      - pgbouncer
     labels:
       telegram-notifier.monitor: true
 
   api:
-    container_name: ${ENV_PROJECT_NAME}-api
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-api:latest
+    container_name: ${ENV_PROJECT_NAME}-api
     env_file:
       - .env
-    depends_on:
-      - pgbouncer
-    networks:
-      - app-network
     volumes:
       - app-logs:/app/logs
+    networks:
+      - app-network
+    depends_on:
+      - pgbouncer
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:${API_PORT}/api/v1/health/" ]
       interval: 10s
@@ -34,14 +34,14 @@ services:
       telegram-notifier.monitor: true
 
   postgres:
-    container_name: ${ENV_PROJECT_NAME}-postgres
     image: postgres:17.4-alpine
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
+    container_name: ${ENV_PROJECT_NAME}-postgres
     ports:
       - "${POSTGRES_PORT}:5432"
     env_file:
       - .env
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
     networks:
       - app-network
     healthcheck:
@@ -54,37 +54,36 @@ services:
       telegram-notifier.monitor: true
 
   pgbouncer:
-    container_name: ${ENV_PROJECT_NAME}-pgbouncer
     image: bitnami/pgbouncer:1.24.0
+    container_name: ${ENV_PROJECT_NAME}-pgbouncer
     ports:
       - "${PGBOUNCER_PORT}:6432"
     environment:
       - POSTGRESQL_HOST=postgres
     env_file:
       - .env
-    depends_on:
-      - postgres
     networks:
       - app-network
+    depends_on:
+      - postgres
     labels:
       telegram-notifier.monitor: true
 
   notifier:
-    container_name: ${ENV_PROJECT_NAME}-bot
     image: lorcas/docker-telegram-notifier
+    container_name: ${ENV_PROJECT_NAME}-notifier
     restart: unless-stopped
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock:ro
-    env_file:
-      - .env
     environment:
       ONLY_WHITELIST: true
+    env_file:
+      - .env
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
 
 
 networks:
   app-network:
     driver: bridge
-
 
 volumes:
   postgres-data:
