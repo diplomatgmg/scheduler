@@ -6,3 +6,25 @@ services:
       target: ${ENV_MODE}
     volumes:
       - ./src:/app/src
+
+  api:
+    build:
+      context: .
+      dockerfile: src/api/Dockerfile
+      target: ${ENV_MODE}
+    ports:
+      - "${API_PORT}:${API_PORT}"
+    volumes:
+      - ./src:/app/src
+    healthcheck:
+      test: placeholder
+      disable: true
+
+  postgres:
+    healthcheck:
+      test: placeholder
+      disable: true
+
+  notifier:
+    profiles:
+      - none

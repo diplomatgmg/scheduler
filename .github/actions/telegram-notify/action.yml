@@ -7,6 +7,9 @@ inputs:
   job_name:
     description: 'Name of the failed job'
     required: true
+  title:
+    description: 'Notification title with emoji'
+    required: true
   to:
     description: 'Telegram Chat ID'
     required: true
@@ -18,7 +21,6 @@ runs:
   using: composite
   steps:
     - name: Send Telegram Notification
-      if: github.event_name == 'push' && github.ref == 'refs/heads/main'
       uses: appleboy/telegram-action@master
       with:
         to: ${{ inputs.to }}
@@ -26,11 +28,9 @@ runs:
         disable_web_page_preview: true
         format: markdown
         message: |
-          ❌ *Job Failure* ❌
+          *${{ inputs.title }}*
 
-          📂 *Repository*: ${{ github.server_url }}/${{ github.repository }}
-          👤 *Actor*: {{ repo.namespace }}
-          🛠️ *Job*: ${{ inputs.job_name }}
-          ✉️ *Commit/PR*: `${{ github.event.head_commit.message || github.event.pull_request.title }}`
-            
-          [🔗 LINK](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          📂 [Repo](${{ github.server_url }}/${{ github.repository }})
+          👤 *Actor*: [${{ github.actor }}](${{ github.server_url }}/${{ github.actor }})
+          🛠️ *Job*: [${{ inputs.job_name }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
+          ✉️ *Commit/PR*: ```${{ github.event.head_commit.message || github.event.pull_request.title }}```

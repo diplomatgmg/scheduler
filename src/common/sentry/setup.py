@@ -22,7 +22,7 @@ def setup_sentry() -> None:
     )
 
     sentry_sdk.init(
-        dsn=sentry_config.dsn_url,
+        dsn=str(sentry_config.dsn_url),
         environment=env_config.mode,
         traces_sample_rate=sentry_config.traces_sample_rate,
         integrations=[sentry_logging],

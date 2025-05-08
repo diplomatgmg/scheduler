@@ -10,6 +10,7 @@ __all__ = [
 
 class EnvConfig(BaseSettings):
     mode: EnvironmentEnum
+    project_name: str
 
     class Config:
         env_prefix = "ENV_"

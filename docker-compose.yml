@@ -1,12 +1,31 @@
 services:
   bot:
-    image: ${DOCKER_USERNAME}/${PROJECT_NAME}:latest
+    image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
     env_file:
       - .env
     depends_on:
       - pgbouncer
     networks:
-      - bot_network
+      - app-network
+    volumes:
+      - app-logs:/app/logs
+
+  api:
+    image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-api:latest
+    env_file:
+      - .env
+    depends_on:
+      - pgbouncer
+    networks:
+      - app-network
+    volumes:
+      - app-logs:/app/logs
+    healthcheck:
+      test: [ "CMD", "curl", "-f", "http://localhost:${API_PORT}/api/v1/health/" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 3s
 
   postgres:
     image: postgres:17.4-alpine
@@ -17,12 +36,13 @@ services:
     env_file:
       - .env
     networks:
-      - bot_network
+      - app-network
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${POSTGRES_DB}" ]
       interval: 10s
-      timeout: 5s
-      start_period: 5s
+      timeout: 3s
+      retries: 3
+      start_period: 3s
 
   pgbouncer:
     image: bitnami/pgbouncer:1.24.0
@@ -35,13 +55,24 @@ services:
     depends_on:
       - postgres
     networks:
-      - bot_network
+      - app-network
+
+  notifier:
+    restart: unless-stopped
+    image: lorcas/docker-telegram-notifier
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    env_file:
+      - .env
+    labels:
+      telegram-notifier.monitor: false
 
 
 networks:
-  bot_network:
+  app-network:
     driver: bridge
 
 
 volumes:
   postgres-data:
+  app-logs:

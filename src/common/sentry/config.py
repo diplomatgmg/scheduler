@@ -1,4 +1,4 @@
-from pydantic import Field
+from pydantic import Field, HttpUrl
 from pydantic_settings import BaseSettings
 
 
@@ -8,7 +8,7 @@ __all__ = [
 
 
 class SentryConfig(BaseSettings):
-    dsn_url: str
+    dsn_url: HttpUrl
     traces_sample_rate: float = Field(ge=0.0, le=1.0)
 
     class Config:

@@ -1,0 +1,36 @@
+# $schema: https://json.schemastore.org/github-workflow.json
+
+name: Notify env changes
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+jobs:
+  check-env-changes:
+    name: Notify on .env.example changes
+    runs-on: self-hosted
+    timeout-minutes: 1
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if .env.example changed
+        id: check-env
+        run: |
+          if git diff --name-only HEAD^ HEAD | grep -q .env.example; then
+            echo "changed=true" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Notify Telegram if .env.example changed
+        if: steps.check-env.outputs.changed == 'true'
+        uses: ./.github/actions/telegram-notify
+        with:
+          job_name: Build
+          title: ⚠️ Env File Changed ⚠️
+          to: ${{ secrets.TELEGRAM_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}

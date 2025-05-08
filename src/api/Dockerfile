@@ -18,12 +18,12 @@ COPY pyproject.toml uv.lock ./
 FROM base AS deps-dev
 
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-install-project --dev --group bot --group bot-dev
+    uv sync --frozen --no-install-project --dev --group api --group api-dev
 
 FROM base AS deps-prod
 
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-install-project --group bot
+    uv sync --frozen --no-install-project --no-dev --group api
 
 
 # ================================= #
@@ -33,7 +33,7 @@ FROM deps-dev AS development
 
 COPY . .
 
-CMD ["hupper", "-q", "-m", "bot.main"]
+CMD ["python", "-m", "api.main"]
 
 
 # ================================= #
@@ -41,6 +41,8 @@ CMD ["hupper", "-q", "-m", "bot.main"]
 # ================================= #
 FROM deps-prod AS production
 
+RUN apk add --no-cache curl
+
 COPY . .
 
-CMD ["python", "-m", "bot.main"]
+CMD ["python", "-m", "api.main"]
