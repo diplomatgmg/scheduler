@@ -73,6 +73,8 @@ services:
     image: lorcas/docker-telegram-notifier
     container_name: ${ENV_PROJECT_NAME}-notifier
     restart: unless-stopped
+    env_file:
+      - .env
     environment:
       ONLY_WHITELIST: true
     volumes:
