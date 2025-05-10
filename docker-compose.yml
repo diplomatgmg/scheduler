@@ -10,6 +10,8 @@ services:
       - app-network
     depends_on:
       - pgbouncer
+      - redis
+      - api
     labels:
       telegram-notifier.monitor: true
 
@@ -24,6 +26,7 @@ services:
       - app-network
     depends_on:
       - pgbouncer
+      - redis
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:${API_PORT}/api/v1/health" ]
       interval: 10s
@@ -69,6 +72,14 @@ services:
     labels:
       telegram-notifier.monitor: true
 
+  redis:
+    image: redis:8.0.0-alpine
+    container_name: ${ENV_PROJECT_NAME}-redis
+    ports:
+      - "${REDIS_PORT}:6379"
+    volumes:
+      - redis-data:/data
+
   notifier:
     image: lorcas/docker-telegram-notifier
     container_name: ${ENV_PROJECT_NAME}-notifier
@@ -87,4 +98,5 @@ networks:
 
 volumes:
   postgres-data:
+  redis-data:
   app-logs:
