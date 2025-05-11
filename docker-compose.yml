@@ -85,7 +85,7 @@ services:
     networks:
       - app-network
     healthcheck:
-      test: [ "CMD", "redis-cli", "ping" ]
+      test: [ "CMD", "redis-cli", "-p", "${REDIS_PORT}", "ping" ]
       interval: 10s
       timeout: 3s
       retries: 3
