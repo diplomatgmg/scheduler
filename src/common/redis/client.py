@@ -17,6 +17,7 @@ T = TypeVar("T")
 
 
 class RedisQueueClient:
+    """Клиент для работы с очередями в Redis"""
     _client: Redis
 
     def __init__(self, client: Redis | None = None) -> None:
