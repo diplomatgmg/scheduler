@@ -79,6 +79,7 @@ services:
     container_name: ${ENV_PROJECT_NAME}-redis
     ports:
       - "${REDIS_PORT}:${REDIS_PORT}"
+    command: [ "redis-server", "--port", "${REDIS_PORT}" ]
     volumes:
       - redis-data:/data
     networks:
