@@ -1,13 +1,13 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
+from bot.callbacks import PostCallback
+from bot.callbacks.post import PostActionEnum
+
 
 __all__ = [
     "main_keyboard",
 ]
-
-from bot.callbacks import PostCallback
-from bot.callbacks.post import PostActionEnum
 
 
 def main_keyboard() -> InlineKeyboardMarkup:

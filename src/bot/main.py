@@ -1,5 +1,9 @@
+import asyncio
+
 import uvloop
 
+from bot.core.config import bot_config
+from bot.core.consumer import start_redis_consumer
 from bot.core.loader import bot, dp
 from bot.handlers import register_handlers_routers
 from bot.keyboards import default_commands
@@ -13,13 +17,13 @@ __all__ = ()
 
 
 async def on_startup() -> None:
-    if not env_config.debug:  # Не нужно ждать запуска бота, чтобы отправлять команды
-        await bot.delete_webhook(drop_pending_updates=True)
-
     register_middlewares(dp)
     register_handlers_routers(dp)
 
     await bot.set_my_commands(default_commands)
+
+    if not env_config.debug:  # Не нужно ждать запуска бота, чтобы отправлять команды
+        await bot.delete_webhook(drop_pending_updates=True)
 
 
 async def on_shutdown() -> None:
@@ -34,7 +38,18 @@ async def main() -> None:
     dp.startup.register(on_startup)
     dp.shutdown.register(on_shutdown)
 
-    await dp.start_polling(bot)
+    if bot_config.use_webhook:
+        await bot.set_webhook(
+            str(bot_config.webhook_url),
+            drop_pending_updates=True,
+            secret_token=bot_config.webhook_token,
+        )
+        await dp.emit_startup()
+        redis_consumer_task = asyncio.create_task(start_redis_consumer())
+        await redis_consumer_task
+        await dp.emit_shutdown()
+    else:
+        await dp.start_polling(bot)
 
 
 if __name__ == "__main__":

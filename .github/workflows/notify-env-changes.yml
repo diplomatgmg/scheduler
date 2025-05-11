@@ -32,5 +32,5 @@ jobs:
         with:
           job_name: Build
           title: ⚠️ Env File Changed ⚠️
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          to: ${{ secrets.TELEGRAM_NOTIFIER_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_NOTIFIER_BOT_TOKEN }}

@@ -21,7 +21,7 @@ echo_level = {
     LogLevelSqlalchemyEnum.warning: None,
 }
 
-engine = create_async_engine(db_config.url, echo=echo_level.get(log_config.sqlalchemy_level))
+engine = create_async_engine(db_config.url, echo=echo_level[log_config.sqlalchemy_level])
 
 async_session = async_sessionmaker(
     engine,

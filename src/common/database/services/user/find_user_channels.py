@@ -5,6 +5,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from common.database.models import ChannelModel
+from common.redis.decorators import cache
 
 
 __all__ = [
@@ -12,6 +13,7 @@ __all__ = [
 ]
 
 
+@cache()
 async def find_user_channels(session: AsyncSession, user_id: int) -> Sequence[ChannelModel]:
     """Возвращает каналы пользователя из БД."""
     logger.debug(f"Getting channels for user id={user_id}")

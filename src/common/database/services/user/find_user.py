@@ -3,6 +3,7 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from common.database.models import UserModel
+from common.redis.decorators import cache
 
 
 __all__ = [
@@ -10,6 +11,7 @@ __all__ = [
 ]
 
 
+@cache()
 async def find_user(session: AsyncSession, user_id: int) -> UserModel | None:
     """Возвращает пользователя из БД."""
     logger.debug(f"Getting user id={user_id}")
