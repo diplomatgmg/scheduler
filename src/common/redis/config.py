@@ -1,5 +1,5 @@
 from pydantic import Field, RedisDsn
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
 __all__ = [
@@ -13,8 +13,7 @@ class RedisConfig(BaseSettings):
     db: int = Field(ge=0)
     cache_time: int
 
-    class Config:
-        env_prefix = "REDIS_"
+    model_config = SettingsConfigDict(env_prefix="REDIS_")
 
     @property
     def dsn(self) -> RedisDsn:

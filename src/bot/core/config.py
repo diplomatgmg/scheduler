@@ -2,7 +2,7 @@ import re
 from urllib.parse import urljoin
 
 from pydantic import field_validator
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from common.schemas.url import HttpsUrl
 
@@ -20,8 +20,7 @@ class BotConfig(BaseSettings):
     webhook_path: str
     webhook_token: str
 
-    class Config:
-        env_prefix = "BOT_"
+    model_config = SettingsConfigDict(env_prefix="BOT_")
 
     @property
     def webhook_url(self) -> HttpsUrl:

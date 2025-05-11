@@ -1,4 +1,4 @@
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 
 from common.environment.enums import EnvironmentEnum
 
@@ -12,8 +12,7 @@ class EnvConfig(BaseSettings):
     mode: EnvironmentEnum
     project_name: str
 
-    class Config:
-        env_prefix = "ENV_"
+    model_config = SettingsConfigDict(env_prefix="ENV_")
 
     @property
     def debug(self) -> bool:
