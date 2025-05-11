@@ -79,6 +79,14 @@ services:
       - "${REDIS_PORT}:6379"
     volumes:
       - redis-data:/data
+    networks:
+      - app-network
+    healthcheck:
+      test: [ "CMD", "redis-cli", "ping" ]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+      start_period: 3s
 
   notifier:
     image: lorcas/docker-telegram-notifier

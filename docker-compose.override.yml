@@ -25,6 +25,11 @@ services:
       test: placeholder
       disable: true
 
+  redis:
+    healthcheck:
+      test: placeholder
+      disable: true
+
   notifier:
     profiles:
       - none

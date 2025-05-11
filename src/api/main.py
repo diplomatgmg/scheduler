@@ -7,9 +7,7 @@ from common.environment.config import env_config
 from common.logging.config import log_config
 from common.logging.logger import setup_logging
 from common.sentry.setup import setup_sentry
-import asyncio
 
-from loguru import logger
 
 app = FastAPI(
     title=f"{env_config.project_name} API",
@@ -23,9 +21,6 @@ def main() -> None:
     setup_logging("api")
     setup_sentry()
 
-    # FIXME remove
-    logger.error(f"Using event loop: {type(asyncio.get_event_loop())}")
-
     uvicorn.run(
         "api.main:app",
         host=str(api_config.host),
@@ -33,7 +28,6 @@ def main() -> None:
         log_config=None,
         log_level=log_config.level.lower(),
         reload=env_config.debug,
-        # FIXME remove uvloop
     )
 
 
