@@ -13,7 +13,7 @@ async def start_redis_consumer() -> None:
     queue = RedisQueueClient()
 
     while True:
-        update = await queue.pop(RedisCacheKeyEnum.TELEGRAM_UPDATES, dict)
+        update = await queue.pop(RedisCacheKeyEnum.TELEGRAM_UPDATES)
 
         if update:
             await dp.feed_raw_update(bot, update)

@@ -11,6 +11,7 @@ class RedisConfig(BaseSettings):
     host: str
     port: int = Field(ge=1, le=65535)
     db: int = Field(ge=0)
+    cache_time: int
 
     class Config:
         env_prefix = "REDIS_"

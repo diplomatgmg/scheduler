@@ -7,6 +7,7 @@ dependencies = [
     "alembic>=1.15.2",
     "asyncpg>=0.30.0",
     "loguru>=0.7.3",
+    "orjson>=3.10.18",
     "pydantic-settings>=2.9.1",
     "redis==5",
     "sentry-sdk>=2.25.1",
