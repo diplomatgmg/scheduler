@@ -1,0 +1,40 @@
+# $schema: https://json.schemastore.org/github-workflow.json
+
+name: Testing
+
+on:
+    workflow_call:
+
+env:
+  COMPOSE_BAKE: true
+
+jobs:
+  test:
+    name: Test project
+    runs-on: ubuntu-latest # Важно. Не self-hosted.
+    timeout-minutes: 3
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Create .env from .env.example
+        run: |
+          cp .env.example .env
+          echo "ENV_MODE=development" >> .env
+          echo "ENV_PROJECT_NAME=${{ vars.ENV_PROJECT_NAME }}-testing" >> .env
+          echo "SENTRY_ENABLED=false" >> .env
+
+      - name: Run Project
+        run: make up
+
+      - name: Run tests
+        run: make test
+
+      - name: Send Telegram Notification
+        if: failure()
+        uses: ./.github/actions/telegram-notify
+        with:
+          job_name: Testing
+          title: ❌ Test Failure ❌
+          to: ${{ secrets.TELEGRAM_NOTIFIER_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_NOTIFIER_BOT_TOKEN }}

@@ -1,3 +1,5 @@
+name: ${ENV_PROJECT_NAME}
+
 services:
   bot:
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
@@ -9,9 +11,12 @@ services:
     networks:
       - app-network
     depends_on:
-      - pgbouncer
-      - redis
-      - api
+      pgbouncer:
+        condition: service_started
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_healthy
     labels:
       telegram-notifier.monitor: true
 
@@ -27,8 +32,10 @@ services:
     networks:
       - app-network
     depends_on:
-      - pgbouncer
-      - redis
+      pgbouncer:
+        condition: service_started
+      redis:
+        condition: service_healthy
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:${API_PORT}/api/v1/health" ]
       interval: 10s
@@ -70,7 +77,8 @@ services:
     networks:
       - app-network
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     labels:
       telegram-notifier.monitor: true
 
@@ -91,12 +99,27 @@ services:
       retries: 3
       start_period: 3s
 
+  tester:
+    profiles:
+      - tests
+    build:
+      context: .
+      dockerfile: ./src/tests/Dockerfile
+    env_file:
+      - .env
+    networks:
+      - app-network
+
   notifier:
+    profiles:
+      - monitoring
     image: lorcas/docker-telegram-notifier
     container_name: ${ENV_PROJECT_NAME}-notifier
     restart: unless-stopped
     env_file:
       - .env
+    networks:
+      - app-network
     environment:
       ONLY_WHITELIST: true
     volumes:
@@ -106,6 +129,7 @@ services:
 networks:
   app-network:
     driver: bridge
+
 
 volumes:
   postgres-data:

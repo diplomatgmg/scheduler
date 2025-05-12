@@ -31,7 +31,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /srv/${{ vars.ENV_PROJECT_NAME }}
-            docker compose up -d
+            docker compose --profile monitoring up -d
             make migrate
 
       - name: Cleanup Docker images on runner
@@ -44,5 +44,5 @@ jobs:
         with:
           job_name: Deploy
           title: ❌ Deploy Failure ❌
-          to: ${{ secrets.TELEGRAM_CHAT_ID }}
-          token: ${{ secrets.TELEGRAM_BOT_TOKEN }}
+          to: ${{ secrets.TELEGRAM_NOTIFIER_CHAT_ID }}
+          token: ${{ secrets.TELEGRAM_NOTIFIER_BOT_TOKEN }}

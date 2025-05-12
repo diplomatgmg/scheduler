@@ -14,6 +14,10 @@ __all__ = [
 
 
 def setup_sentry() -> None:
+    if sentry_config.enabled:
+        logger.debug("Skip initializing Sentry")
+        return
+
     logger.debug("Initializing Sentry")
 
     sentry_logging = LoggingIntegration(

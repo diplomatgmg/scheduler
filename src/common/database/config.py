@@ -1,5 +1,5 @@
 from pydantic import Field, SecretStr
-from pydantic_settings import BaseSettings
+from pydantic_settings import BaseSettings, SettingsConfigDict
 from sqlalchemy import URL
 
 
@@ -15,8 +15,7 @@ class DBConfig(BaseSettings):
     port: int = Field(ge=1, le=65535)
     name: str
 
-    class Config:
-        env_prefix = "DB_"
+    model_config = SettingsConfigDict(env_prefix="DB_")
 
     @property
     def url(self) -> URL:

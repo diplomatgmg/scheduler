@@ -30,7 +30,7 @@ jobs:
         if: steps.check-env.outputs.changed == 'true'
         uses: ./.github/actions/telegram-notify
         with:
-          job_name: Build
+          job_name: Check .env.example changes
           title: ⚠️ Env File Changed ⚠️
           to: ${{ secrets.TELEGRAM_NOTIFIER_CHAT_ID }}
           token: ${{ secrets.TELEGRAM_NOTIFIER_BOT_TOKEN }}

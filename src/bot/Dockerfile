@@ -13,7 +13,7 @@ COPY pyproject.toml uv.lock ./
 
 
 # ============================ #
-#        DEPS INSTALLING      #
+#        DEPS INSTALLING       #
 # ============================ #
 FROM base AS deps-dev
 
@@ -39,8 +39,9 @@ CMD ["hupper", "-q", "-m", "bot.main"]
 # ================================= #
 #           PRODUCTION              #
 # ================================= #
-FROM deps-prod AS production
+FROM python:3.13-alpine AS production
 
-COPY . .
+COPY --from=deps-prod /app/.venv ./.venv
+COPY src/ ./src/
 
 CMD ["python", "-m", "bot.main"]
