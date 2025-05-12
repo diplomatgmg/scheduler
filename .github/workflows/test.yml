@@ -21,6 +21,7 @@ jobs:
         run: |
           cp .env.example .env
           export ENV_MODE=development
+          export ENV_PROJECT_NAME=${{ vars.ENV_PROJECT_NAME }}-testing
           export SENTRY_ENABLED=false
 
       - name: Run Project
