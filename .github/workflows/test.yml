@@ -7,7 +7,6 @@ on:
 
 env:
   COMPOSE_BAKE: true
-  ENV_MODE: development
 
 jobs:
   test:
@@ -19,13 +18,18 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create .env from .env.example
-        run: cp .env.example .env
+        run: |
+          cp .env.example .env
+          export ENV_MODE=development
 
       - name: Run Project
         run: make up
 
       - name: Run tests
         run: make test
+
+      - name: Stop Project
+        run: make down
 
       - name: Send Telegram Notification
         if: failure()
