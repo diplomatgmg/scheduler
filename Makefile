@@ -34,12 +34,19 @@ stop: ## compose stop
 	docker compose stop
 .PHONY: stop
 
-lint: ## Запуск линтеров
+lint: ## Запуск линтеров без правок
+	@uv run ruff check . && \
+	uv run isort . --check-only && \
+	uv run ruff format --check . && \
+	uv run mypy .
+.PHONY: lint
+
+lint-fix: ## Запуск линтеров с правками
 	@uv run ruff check . && \
 	uv run isort . && \
 	uv run ruff format . && \
 	uv run mypy .
-.PHONY: lint
+.PHONY: lint-fix
 
 mm: ## Создает миграцию с переданным описанием
 	@docker compose exec bot alembic revision --autogenerate -m "$(args)"

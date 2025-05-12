@@ -31,17 +31,8 @@ jobs:
       - name: Install dependencies
         run: make venv
 
-      - name: Check using Ruff
-        run: uv run ruff check .
-
-      - name: Check using Ruff formatter
-        run: uv run ruff format --check .
-
-      - name: Check using isort formatter
-        run: uv run isort . --check-only
-
-      - name: Check Type Hints
-        run: uv run mypy .
+      - name: Check Linting and Formating
+        run: make lint
 
       - name: Save mypy cache
         uses: actions/cache@v4
