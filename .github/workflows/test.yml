@@ -17,6 +17,9 @@ jobs:
       - name: Create .env from .env.example
         run: cp .env.example .env
 
+      - name: Run Project
+        run: make up
+
       - name: Run tests
         run: make test
 

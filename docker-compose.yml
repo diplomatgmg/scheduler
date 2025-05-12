@@ -1,3 +1,5 @@
+name: ${ENV_PROJECT_NAME}
+
 services:
   bot:
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest

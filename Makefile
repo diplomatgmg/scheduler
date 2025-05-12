@@ -23,15 +23,15 @@ venv: ## Создает виртуальное окружение
 .PHONY: venv
 
 up: ## compose up
-	docker compose up --build -d
+	@docker compose up --build -d
 .PHONY: up
 
 down: ## compose down
-	docker compose down
+	@docker compose down
 .PHONY: down
 
 stop: ## compose stop
-	docker compose stop
+	@docker compose stop
 .PHONY: stop
 
 lint: ## Запуск линтеров без правок
