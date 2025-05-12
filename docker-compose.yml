@@ -105,6 +105,8 @@ services:
       - app-network
 
   notifier:
+    profiles:
+      - monitoring
     image: lorcas/docker-telegram-notifier
     container_name: ${ENV_PROJECT_NAME}-notifier
     restart: unless-stopped
@@ -119,6 +121,7 @@ services:
 networks:
   app-network:
     driver: bridge
+
 
 volumes:
   postgres-data:
