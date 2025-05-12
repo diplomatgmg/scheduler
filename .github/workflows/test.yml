@@ -28,9 +28,6 @@ jobs:
       - name: Run tests
         run: make test
 
-      - name: Stop Project
-        run: make down
-
       - name: Send Telegram Notification
         if: failure()
         uses: ./.github/actions/telegram-notify
