@@ -39,11 +39,10 @@ CMD ["python", "-m", "api.main"]
 # ================================= #
 #           PRODUCTION              #
 # ================================= #
-FROM python:3.13-alpine AS production
+FROM deps-prod AS production
 
 RUN apk add --no-cache curl
 
-COPY --from=deps-prod /app/.venv ./.venv
-COPY src/ ./src/
+COPY . .
 
 CMD ["python", "-m", "bot.main"]

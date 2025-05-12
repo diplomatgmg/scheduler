@@ -39,12 +39,8 @@ CMD ["hupper", "-q", "-m", "bot.main"]
 # ================================= #
 #           PRODUCTION              #
 # ================================= #
-FROM python:3.13-alpine AS production
+FROM deps-prod AS production
 
-ENV PYTHONPATH=/app/src \
-    PATH="/app/.venv/bin:$PATH"
-
-COPY --from=deps-prod /app/.venv ./.venv
-COPY src/ ./src/
+COPY . .
 
 CMD ["python", "-m", "bot.main"]
