@@ -1,3 +1,6 @@
+include .env
+export
+
 .PHONY: help
 
 help:
@@ -10,7 +13,8 @@ venv: ## Создает виртуальное окружение
 	--group bot \
 	--group bot-dev \
 	--group api \
-	--group api-dev
+	--group api-dev \
+	--group tests
 .PHONY: venv
 
 up: ## compose up
@@ -39,3 +43,7 @@ mm: ## Создает миграцию с переданным описание�
 migrate: ## Применяет миграции
 	@docker compose exec bot alembic upgrade head
 .PHONY: migrate
+
+test:
+	@docker compose run --quiet --rm tester pytest src/tests; docker rmi "$(ENV_PROJECT_NAME)-tester"
+.PHONY: test
