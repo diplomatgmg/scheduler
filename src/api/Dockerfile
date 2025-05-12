@@ -45,4 +45,4 @@ RUN apk add --no-cache curl
 
 COPY . .
 
-CMD ["python", "-m", "bot.main"]
+CMD ["python", "-m", "api.main"]
