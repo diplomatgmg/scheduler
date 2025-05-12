@@ -41,6 +41,8 @@ CMD ["hupper", "-q", "-m", "bot.main"]
 # ================================= #
 FROM python:3.13-alpine AS production
 
+WORKDIR /app
+
 COPY --from=deps-prod /app/.venv ./.venv
 COPY src/ ./src/
 
