@@ -5,6 +5,10 @@ name: Testing
 on:
     workflow_call:
 
+env:
+  COMPOSE_BAKE: true
+  ENV_MODE: development
+
 jobs:
   test:
     name: Test project
