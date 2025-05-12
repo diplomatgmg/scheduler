@@ -14,7 +14,7 @@ __all__ = [
 
 
 def setup_sentry() -> None:
-    if sentry_config.enabled:
+    if not sentry_config.enabled:
         logger.debug("Skip initializing Sentry")
         return
 
