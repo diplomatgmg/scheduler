@@ -8,6 +8,7 @@ __all__ = [
 
 
 class SentryConfig(BaseSettings):
+    enabled: bool
     dsn_url: HttpUrl
     traces_sample_rate: float = Field(ge=0.0, le=1.0)
 
