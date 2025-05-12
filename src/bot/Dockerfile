@@ -41,7 +41,8 @@ CMD ["hupper", "-q", "-m", "bot.main"]
 # ================================= #
 FROM python:3.13-alpine AS production
 
-ENV PYTHONPATH=/app/src
+ENV PYTHONPATH=/app/src \
+    PATH="/app/.venv/bin:$PATH"
 
 COPY --from=deps-prod /app/.venv ./.venv
 COPY src/ ./src/
