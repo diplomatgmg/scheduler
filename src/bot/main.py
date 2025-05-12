@@ -11,7 +11,7 @@ from bot.middlewares import register_middlewares
 from common.environment.config import env_config
 from common.logging.logger import setup_logging
 from common.sentry.setup import setup_sentry
-
+from loguru import logger
 
 __all__ = ()
 
@@ -39,6 +39,7 @@ async def main() -> None:
     dp.shutdown.register(on_shutdown)
 
     if bot_config.use_webhook:
+        logger.debug("Using webhook")
         await bot.set_webhook(
             str(bot_config.webhook_url),
             drop_pending_updates=True,
@@ -49,6 +50,7 @@ async def main() -> None:
         await redis_consumer_task
         await dp.emit_shutdown()
     else:
+        logger.debug("Start polling")
         await dp.start_polling(bot)
 
 
