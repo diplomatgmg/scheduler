@@ -11,6 +11,7 @@ from bot.middlewares import register_middlewares
 from common.logging.logger import setup_logging
 from common.sentry.setup import setup_sentry
 
+
 __all__ = ()
 
 
