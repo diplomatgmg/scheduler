@@ -18,11 +18,7 @@ jobs:
         uses: actions/checkout@v4
 
       - name: Create .env from .env.example
-        run: |
-          cp .env.example .env
-          export ENV_MODE=development
-          export ENV_PROJECT_NAME=${{ vars.ENV_PROJECT_NAME }}-testing
-          export SENTRY_ENABLED=false
+        run: cp .env.example .env
 
       - name: Run Project
         run: make up
