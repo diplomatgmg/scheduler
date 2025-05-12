@@ -11,9 +11,12 @@ services:
     networks:
       - app-network
     depends_on:
-      - pgbouncer
-      - redis
-      - api
+      pgbouncer:
+        condition: service_started
+      redis:
+        condition: service_healthy
+      api:
+        condition: service_healthy
     labels:
       telegram-notifier.monitor: true
 
@@ -29,8 +32,10 @@ services:
     networks:
       - app-network
     depends_on:
-      - pgbouncer
-      - redis
+      pgbouncer:
+        condition: service_started
+      redis:
+        condition: service_healthy
     healthcheck:
       test: [ "CMD", "curl", "-f", "http://localhost:${API_PORT}/api/v1/health" ]
       interval: 10s
@@ -72,7 +77,8 @@ services:
     networks:
       - app-network
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     labels:
       telegram-notifier.monitor: true
 

@@ -31,7 +31,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /srv/${{ vars.ENV_PROJECT_NAME }}
-            docker compose up -d
+            docker compose --profile monitoring up -d
             make migrate
 
       - name: Cleanup Docker images on runner

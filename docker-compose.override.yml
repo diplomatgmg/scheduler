@@ -6,6 +6,10 @@ services:
       target: ${ENV_MODE}
     volumes:
       - ./src:/app/src
+    depends_on:
+      - pgbouncer
+      - redis
+      - api
 
   api:
     build:
@@ -19,13 +23,28 @@ services:
     healthcheck:
       test: placeholder
       disable: true
+    depends_on:
+      - pgbouncer
+      - redis
 
   postgres:
     healthcheck:
       test: placeholder
       disable: true
 
+  pgbouncer:
+    depends_on:
+      - postgres
+
   redis:
     healthcheck:
       test: placeholder
       disable: true
+
+  tester:
+    volumes:
+      - ./src:/app/src
+
+  notifier:
+    profiles:
+      - none

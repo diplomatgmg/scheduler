@@ -11,7 +11,7 @@ env:
 jobs:
   test:
     name: Test project
-    runs-on: self-hosted
+    runs-on: ubuntu-latest # Важно. Не self-hosted.
     timeout-minutes: 3
     steps:
       - name: Checkout code

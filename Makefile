@@ -56,6 +56,6 @@ migrate: ## Применяет миграции
 	@docker compose exec bot alembic upgrade head
 .PHONY: migrate
 
-test:
-	@docker compose run --quiet --rm tester pytest src/tests; docker rmi "$(ENV_PROJECT_NAME)-tester"
+test: ## Запускает тесты
+	@docker compose up -d && docker compose run --quiet --rm tester pytest src/tests
 .PHONY: test
