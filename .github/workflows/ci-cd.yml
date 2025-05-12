@@ -12,6 +12,9 @@ concurrency:
   group: ci-cd-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  COMPOSE_BAKE: true
+
 jobs:
   lint:
     uses: ./.github/workflows/lint.yml

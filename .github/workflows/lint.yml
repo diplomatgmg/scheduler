@@ -22,14 +22,14 @@ jobs:
       - name: Install uv
         uses: astral-sh/setup-uv@v5
 
+      - name: Install dependencies
+        run: make venv
+
       - name: Restore mypy cache
         uses: actions/cache@v4
         with:
           path: .mypy_cache
           key: ${{ runner.os }}-mypy-${{ hashFiles('**/uv.lock', '**/pyproject.toml') }}
-
-      - name: Install dependencies
-        run: make venv
 
       - name: Check Linting and Formating
         run: make lint
