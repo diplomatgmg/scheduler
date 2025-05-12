@@ -112,6 +112,8 @@ services:
     restart: unless-stopped
     env_file:
       - .env
+    networks:
+      - app-network
     environment:
       ONLY_WHITELIST: true
     volumes:
