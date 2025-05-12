@@ -1,5 +1,10 @@
-include .env
-export
+ENV_FILE = .env
+
+# Проверка существования .env и export переменных
+ifeq ("$(wildcard $(ENV_FILE))", "$(ENV_FILE)")
+  include $(ENV_FILE)
+  export
+endif
 
 .PHONY: help
 
