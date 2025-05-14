@@ -4,6 +4,7 @@ services:
   bot:
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
     container_name: ${ENV_PROJECT_NAME}-bot
+    restart: unless-stopped
     env_file:
       - .env
     volumes:
