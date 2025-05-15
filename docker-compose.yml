@@ -101,22 +101,22 @@ services:
       start_period: 3s
 
   tester:
-    profiles:
-      - testing
     build:
       context: .
       dockerfile: ./src/tests/Dockerfile
+    profiles:
+      - testing
     env_file:
       - .env
     networks:
       - app-network
 
   notifier:
-    profiles:
-      - monitoring
     image: lorcas/docker-telegram-notifier
     container_name: ${ENV_PROJECT_NAME}-notifier
     restart: unless-stopped
+    profiles:
+      - monitoring
     env_file:
       - .env
     networks:
