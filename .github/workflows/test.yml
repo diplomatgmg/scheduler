@@ -25,7 +25,9 @@ jobs:
           echo "SENTRY_ENABLED=false" >> .env
 
       - name: Run Project
-        run: make up
+        run: |
+          docker compose up -d --wait
+          make migrate
 
       - name: Run tests
         run: make test
