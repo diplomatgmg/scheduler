@@ -34,10 +34,6 @@ jobs:
             docker compose --profile monitoring up --wait -d
             make migrate
 
-      - name: Cleanup Docker images on runner
-        if: always()
-        run: docker image prune -a -f
-
       - name: Notify Telegram on Failure
         if: failure()
         uses: ./.github/actions/telegram-notify
