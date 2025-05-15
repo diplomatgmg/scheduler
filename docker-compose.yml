@@ -102,7 +102,7 @@ services:
 
   tester:
     profiles:
-      - tests
+      - testing
     build:
       context: .
       dockerfile: ./src/tests/Dockerfile

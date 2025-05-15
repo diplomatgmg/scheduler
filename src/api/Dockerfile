@@ -9,6 +9,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
+RUN apk add --no-cache curl
+
 COPY pyproject.toml uv.lock ./
 
 
@@ -40,8 +42,6 @@ CMD ["python", "-m", "api.main"]
 #           PRODUCTION              #
 # ================================= #
 FROM deps-prod AS production
-
-RUN apk add --no-cache curl
 
 COPY . .
 
