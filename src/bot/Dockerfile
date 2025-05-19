@@ -23,7 +23,7 @@ RUN --mount=type=cache,target=/root/.cache/uv \
 FROM base AS deps-prod
 
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --frozen --no-install-project --group bot
+    uv sync --frozen --no-install-project --no-dev --group bot
 
 
 # ================================= #
