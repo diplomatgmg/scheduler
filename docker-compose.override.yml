@@ -18,7 +18,3 @@ services:
   tester:
     volumes:
       - ./src:/app/src
-
-  notifier:
-    profiles:
-      - none
