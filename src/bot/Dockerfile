@@ -1,4 +1,4 @@
-FROM ghcr.io/astral-sh/uv:0.7.3-python3.13-alpine AS base
+FROM python:3.13-alpine AS base
 
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
@@ -8,6 +8,8 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
     PATH="/app/.venv/bin:$PATH"
 
 WORKDIR /app
+
+RUN apk add --no-cache uv
 
 COPY pyproject.toml uv.lock ./
 
