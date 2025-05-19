@@ -15,7 +15,7 @@ COPY pyproject.toml uv.lock ./
 
 
 # ============================ #
-#        DEPS INSTALLING      #
+#         DEPS INSTALLING      #
 # ============================ #
 FROM base AS deps-dev
 
