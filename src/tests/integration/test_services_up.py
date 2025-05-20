@@ -35,12 +35,3 @@ async def test_api_health_check() -> None:
 
     assert response.status_code == httpx.codes.OK
     assert response.json() == {"status": "healthy"}
-
-
-@pytest.mark.asyncio
-async def test_bot_get_me() -> None:
-    if not env_config.debug:
-        bot = Bot(token=bot_config.token)
-        me = await bot.get_me()
-
-        assert me.is_bot

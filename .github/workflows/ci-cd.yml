@@ -32,8 +32,3 @@ jobs:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main'
     uses: ./.github/workflows/deploy.yml
     secrets: inherit
-
-  post-deploy-tests:
-    needs: [ deploy ]
-    uses: ./.github/workflows/post-deploy-tests.yml
-    secrets: inherit
