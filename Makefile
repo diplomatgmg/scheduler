@@ -49,7 +49,10 @@ lint-fix: ## Запуск линтеров с правками
 .PHONY: lint-fix
 
 mm: ## Создает миграцию с переданным описанием
-	@docker compose exec bot alembic revision --autogenerate -m "$(args)"
+	@if [ -z "$(filter-out $@,$(MAKECMDGOALS))" ]; then \
+		echo "Specify migration message"; exit 1; \
+	fi
+	@docker compose exec bot alembic revision --autogenerate -m "$(filter-out $@,$(MAKECMDGOALS))"
 .PHONY: mm
 
 migrate: ## Применяет миграции
