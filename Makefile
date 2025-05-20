@@ -48,7 +48,10 @@ lint-fix: ## Запуск линтеров с правками
 	uv run mypy .
 .PHONY: lint-fix
 
-mm: ## Создает миграцию с переданным описанием
+mm: ## Создает миграцию с переданным описанием.
+	@if [ -z "$(args)" ]; then \
+        echo "Error: migration message is required"; exit 1; \
+    fi
 	@docker compose exec bot alembic revision --autogenerate -m "$(args)"
 .PHONY: mm
 
