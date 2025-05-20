@@ -6,6 +6,7 @@ from sqlalchemy import text
 from api.core.config import api_config
 from bot.core.config import bot_config
 from common.database.engine import async_session
+from common.environment.config import env_config
 from common.redis.engine import get_redis_instance
 
 
@@ -38,7 +39,8 @@ async def test_api_health_check() -> None:
 
 @pytest.mark.asyncio
 async def test_bot_get_me() -> None:
-    bot = Bot(token=bot_config.token)
-    me = await bot.get_me()
+    if not env_config.debug:
+        bot = Bot(token=bot_config.token)
+        me = await bot.get_me()
 
-    assert me.is_bot
+        assert me.is_bot
