@@ -1,5 +1,11 @@
 name: ${ENV_PROJECT_NAME}
 
+x-healthcheck-defaults: &healthcheck_defaults
+  interval: "${ENV_DOCKER_HEALTHCHECK_INTERVAL}"
+  timeout: "${ENV_DOCKER_HEALTHCHECK_TIMEOUT}"
+  retries: ${ENV_DOCKER_HEALTHCHECK_RETRIES}
+  start_period: "${ENV_DOCKER_HEALTHCHECK_START_PERIOD}"
+
 services:
   bot:
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
@@ -15,8 +21,6 @@ services:
       pgbouncer:
         condition: service_started
       redis:
-        condition: service_healthy
-      api:
         condition: service_healthy
 
   api:
@@ -36,11 +40,8 @@ services:
       redis:
         condition: service_healthy
     healthcheck:
+      <<: *healthcheck_defaults
       test: ["CMD", "wget", "-q", "--spider", "http://${API_HOST}:${API_PORT}/api/v1/health"]
-      interval: 10s
-      timeout: 3s
-      retries: 3
-      start_period: 3s
 
   postgres:
     image: postgres:17.4-alpine
@@ -54,11 +55,8 @@ services:
     networks:
       - app-network
     healthcheck:
+      <<: *healthcheck_defaults
       test: [ "CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${POSTGRES_DB}" ]
-      interval: 10s
-      timeout: 3s
-      retries: 3
-      start_period: 3s
 
   pgbouncer:
     image: bitnami/pgbouncer:1.24.0
@@ -86,11 +84,8 @@ services:
     networks:
       - app-network
     healthcheck:
+      <<: *healthcheck_defaults
       test: [ "CMD", "redis-cli", "-p", "${REDIS_PORT}", "ping" ]
-      interval: 10s
-      timeout: 3s
-      retries: 3
-      start_period: 3s
 
   tester:
     build:

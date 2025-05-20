@@ -35,7 +35,7 @@ class RedisQueueClient:
 
     async def pop(self, key: RedisCacheKeyEnum) -> Any | None:
         try:
-            value_bytes = await cast("Any", self._client.lpop)(str(key))
+            value_bytes = await cast("Any", self._client.blpop)(str(key))
             if value_bytes is None:
                 return None
 

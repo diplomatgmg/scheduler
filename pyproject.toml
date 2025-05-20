@@ -39,6 +39,7 @@ bot-dev = [
 api-dev = []
 
 tests = [
+    "httpx>=0.28.1",
     "pytest-asyncio>=0.26.0",
 ]
 

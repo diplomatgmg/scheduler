@@ -23,7 +23,7 @@ venv: ## Создает виртуальное окружение
 .PHONY: venv
 
 up: ## compose up
-	@docker compose up  --wait --build -d
+	@docker compose up  --wait -d
 .PHONY: up
 
 down: ## compose down
@@ -57,5 +57,5 @@ migrate: ## Применяет миграции
 .PHONY: migrate
 
 test: ## Запускает тесты
-	docker compose run --quiet --rm tester pytest src/tests
+	docker compose run --quiet --build --rm tester pytest src/tests
 .PHONY: test
