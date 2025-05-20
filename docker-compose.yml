@@ -22,8 +22,6 @@ services:
         condition: service_started
       redis:
         condition: service_healthy
-      api:
-        condition: service_healthy
 
   api:
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-api:latest
