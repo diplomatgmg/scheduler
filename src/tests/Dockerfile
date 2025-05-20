@@ -19,6 +19,8 @@ RUN --mount=type=cache,target=/root/.cache/uv \
     --dev \
     --group api  \
     --group api-dev \
+    --group bot \
+    --group bot-dev \
     --group tests
 
 COPY . .

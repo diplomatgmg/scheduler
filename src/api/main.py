@@ -3,6 +3,7 @@ import uvicorn
 
 from api.core.config import api_config
 from api.endpoints import v1_router
+from api.endpoints.schemas.root import RootResponse
 from common.environment.config import env_config
 from common.logging.config import log_config
 from common.logging.setup import setup_logging
@@ -15,6 +16,11 @@ app = FastAPI(
 )
 
 app.include_router(v1_router, prefix="/api/v1")
+
+
+@app.get("/", summary="Корневой endpoint")
+async def root() -> RootResponse:
+    return RootResponse(docs=app.docs_url)
 
 
 def main() -> None:

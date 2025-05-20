@@ -22,7 +22,7 @@ async def telegram_webhook(
     x_telegram_bot_api_secret_token: Annotated[str | None, Header()] = None,
 ) -> WebhookResponse:
     if x_telegram_bot_api_secret_token != bot_config.webhook_token:
-        raise HTTPException(403, "Invalid bot token")
+        raise HTTPException(403, "Invalid webhook token")
 
     data = await request.json()
     client = RedisQueueClient()

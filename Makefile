@@ -57,5 +57,5 @@ migrate: ## Применяет миграции
 .PHONY: migrate
 
 test: ## Запускает тесты
-	docker compose run --quiet --rm tester pytest src/tests
+	docker compose run --quiet --build --rm tester pytest src/tests
 .PHONY: test
