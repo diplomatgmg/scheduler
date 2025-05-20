@@ -1,7 +1,6 @@
 from typing import Annotated
 
 from fastapi import APIRouter, Header, HTTPException, Request
-from loguru import logger
 
 from api.endpoints.v1.schemas.webhook import WebhookResponse
 from bot.core.config import bot_config
@@ -23,7 +22,6 @@ async def telegram_webhook(
     x_telegram_bot_api_secret_token: Annotated[str | None, Header()] = None,
 ) -> WebhookResponse:
     if x_telegram_bot_api_secret_token != bot_config.webhook_token:
-        logger.error("Bot token is invalid")
         raise HTTPException(403, "Invalid bot token")
 
     data = await request.json()

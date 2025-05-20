@@ -5,7 +5,7 @@ from api.core.config import api_config
 from api.endpoints import v1_router
 from common.environment.config import env_config
 from common.logging.config import log_config
-from common.logging.logger import setup_logging
+from common.logging.setup import setup_logging
 from common.sentry.setup import setup_sentry
 
 

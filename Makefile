@@ -23,7 +23,7 @@ venv: ## Создает виртуальное окружение
 .PHONY: venv
 
 up: ## compose up
-	@docker compose up  --wait --build -d
+	@docker compose up  --wait -d
 .PHONY: up
 
 down: ## compose down
