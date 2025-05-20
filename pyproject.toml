@@ -56,8 +56,7 @@ extend-exclude = ["migrations"]
 "**/tests/**/*.py" = ["S101"]
 
 [tool.mypy]
-plugins = "pydantic.mypy"
-cache_dir = ".mypy_cache"
+plugins = "pydantic.mypy, sqlalchemy.ext.mypy.plugin"
 incremental = true
 warn_return_any = true
 warn_unused_configs = true
