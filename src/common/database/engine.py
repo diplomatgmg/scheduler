@@ -1,5 +1,9 @@
+from contextlib import asynccontextmanager
+
 from sqlalchemy import log as sqlalchemy_log
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from collections.abc import AsyncGenerator
+from sqlalchemy.exc import SQLAlchemyError
 
 from common.database.config import db_config
 from common.logging.config import log_config
@@ -7,7 +11,7 @@ from common.logging.enums import LogLevelSqlalchemyEnum
 
 
 __all__ = [
-    "async_session",
+    "get_db_session",
 ]
 
 
@@ -22,8 +26,22 @@ echo_level = {
 }
 
 engine = create_async_engine(db_config.url, echo=echo_level[log_config.sqlalchemy_level])
-
-async_session = async_sessionmaker(
+async_session_factory = async_sessionmaker(
     engine,
     class_=AsyncSession,
+    expire_on_commit=False,
 )
+
+
+@asynccontextmanager
+async def get_db_session() -> AsyncGenerator[AsyncSession]:
+    """Менеджер для работы с сессиями БД"""
+    async with async_session_factory() as session:
+        try:
+            yield session
+            await session.commit()
+        except SQLAlchemyError:
+            await session.rollback()
+            raise
+        finally:
+            await session.close()

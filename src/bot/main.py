@@ -44,8 +44,7 @@ async def main() -> None:
             secret_token=bot_config.webhook_token,
         )
         await dp.emit_startup()
-        redis_consumer_task = asyncio.create_task(start_redis_consumer())
-        await redis_consumer_task
+        asyncio.run(start_redis_consumer())  # FIXME. Не проверял. что лучше: create_task или run??
         await dp.emit_shutdown()
     else:
         logger.debug("Start polling")

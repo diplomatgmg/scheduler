@@ -15,6 +15,14 @@ services:
     volumes:
       - ./src:/app/src
 
+  celery-worker:
+    build:
+      context: .
+      dockerfile: ./src/bot/Dockerfile
+      target: ${ENV_MODE}
+    volumes:
+      - ./src:/app/src
+
   tester:
     volumes:
       - ./src:/app/src

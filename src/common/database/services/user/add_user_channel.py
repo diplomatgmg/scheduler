@@ -33,7 +33,7 @@ async def add_user_channel(
     logger.debug(f"Chat_id={channel_model.id} not found for user_id={user_id}. Creating")
 
     session.add(channel_model)
-    await session.commit()
+    await session.flush()
     await session.refresh(channel_model)
 
     return channel_model

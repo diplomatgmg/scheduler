@@ -17,6 +17,8 @@ dependencies = [
 [dependency-groups]
 bot = [
     "aiogram>=3.19.0",
+    "celery>=5.5.2",
+    "eventlet>=0.40.0",
     "uvloop>=0.21.0",
 ]
 

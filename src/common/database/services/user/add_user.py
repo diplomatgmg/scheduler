@@ -9,10 +9,12 @@ __all__ = [
 ]
 
 
-async def add_user(session: AsyncSession, user_model: UserModel) -> None:
+async def add_user(session: AsyncSession, user_model: UserModel) -> UserModel:
     """Добавляет пользователя в БД."""
     logger.debug(f"Adding user id={user_model.id}")
 
     session.add(user_model)
-    await session.commit()
+    await session.flush()
     await session.refresh(user_model)
+
+    return user_model

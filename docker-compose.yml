@@ -43,6 +43,22 @@ services:
       <<: *healthcheck_defaults
       test: ["CMD", "wget", "-q", "--spider", "http://${API_HOST}:${API_PORT}/api/v1/health"]
 
+  celery-worker:
+    image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
+    container_name: ${ENV_PROJECT_NAME}-celery-worker
+    command: celery -A bot.tasks.celery_app worker -P eventlet -l ${LOG_LEVEL}
+    env_file:
+      - .env
+    volumes:
+      - app-logs:/app/logs
+    networks:
+      - app-network
+    depends_on:
+      pgbouncer:
+        condition: service_started
+      redis:
+        condition: service_healthy
+
   postgres:
     image: postgres:17.4-alpine
     container_name: ${ENV_PROJECT_NAME}-postgres

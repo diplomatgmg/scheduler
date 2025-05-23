@@ -10,7 +10,7 @@ __all__ = [
 class RedisConfig(BaseSettings):
     host: str
     port: int = Field(ge=1, le=65535)
-    db: int = Field(ge=0)
+    db: int = Field(ge=0)  # FIXME. Не нравится. Можно разделить, например: RedisCacheConfig, RedisCeleryConfig, или использовать Enum
     cache_time: int
 
     model_config = SettingsConfigDict(env_prefix="REDIS_")
