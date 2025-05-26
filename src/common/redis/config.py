@@ -19,6 +19,10 @@ class RedisConnectionConfig(BaseSettings):
 
     @property
     def dsn(self) -> RedisDsn:
+        if self.db == RedisDbEnum.NOT_SET:
+            msg = "Redis DB not configured"
+            raise ValueError(msg)
+
         return RedisDsn(f"redis://{self.host}:{self.port}/{self.db}")
 
 

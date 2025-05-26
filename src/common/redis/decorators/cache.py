@@ -13,6 +13,7 @@ from common.utils.serializers import AbstractSerializer, PickleSerializer
 
 
 __all__ = [
+    "build_key",
     "cache",
 ]
 
@@ -29,6 +30,7 @@ def build_key(*args: Any, **kwargs: Any) -> str:
 
 
 async def set_redis_value(
+    redis_instance: Redis,
     key: bytes | str,
     value: bytes,
     cache_ttl: int | timedelta | None = None,
@@ -36,9 +38,7 @@ async def set_redis_value(
     is_transaction: bool = False,
 ) -> None:
     """Кеширует значение по ключу в Redis"""
-    client = get_redis_instance(RedisDbEnum.CACHE)
-
-    async with client.pipeline(transaction=is_transaction) as pipeline:
+    async with redis_instance.pipeline(transaction=is_transaction) as pipeline:
         await pipeline.set(key, value)
         logger.debug(f"Закешировано значение. {key=}, {value=}")
         if cache_ttl:
@@ -52,6 +52,7 @@ def cache(
     key_builder: Callable[..., str] = build_key,
     serializer: AbstractSerializer | None = None,
 ) -> Callable[[Callable[..., Awaitable[Func]]], Callable[..., Awaitable[Func]]]:
+    """Кеширует результат функции на основе аргументов функции"""
     cache_ttl = cache_ttl or redis_cache_config.ttl
     serializer = serializer or PickleSerializer()
     redis_instance = redis_instance or get_redis_instance(RedisDbEnum.CACHE)
@@ -71,6 +72,7 @@ def cache(
             result = await fn(*args, **kwargs)
 
             await set_redis_value(
+                redis_instance,
                 key,
                 serializer.serialize(result),
                 cache_ttl,

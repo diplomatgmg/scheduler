@@ -8,7 +8,7 @@ __all__ = [
 
 
 class RedisDbEnum(IntEnum):
-    NOT_SET = 0  # FIXME -1?
+    NOT_SET = -1
     CACHE = 1
     CELERY = 2
 
