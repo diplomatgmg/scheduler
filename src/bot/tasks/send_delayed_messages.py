@@ -2,18 +2,14 @@ from loguru import logger
 
 from bot.celery import celery_app, celery_loop
 from common.database.engine import get_db_session
-from common.database.services.messages.get_delayed_messages_to_send import (
-    get_delayed_messages_to_send,
-)
+from common.database.services.messages import get_delayed_messages_to_send
 
 
-__all__ = [
-    "send_delayed_messages_task",
-]
+__all__ = ()
 
 
-@celery_app.task  # type: ignore[misc]
-def send_delayed_messages_task() -> None:
+@celery_app.task(name="send_delayed_messages")  # type: ignore[misc]
+def send_delayed_messages() -> None:
     celery_loop.run_until_complete(send_messages_from_db())
 
 
@@ -29,3 +25,6 @@ async def send_messages_from_db() -> None:
         return
 
     logger.info(f"Найдено {len(messages_to_send)} отложенных сообщений для отправки.")
+
+    for message in messages_to_send:
+        logger.info(message)

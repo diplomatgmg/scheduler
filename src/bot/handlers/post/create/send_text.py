@@ -9,10 +9,7 @@ from bot.states import PostState
 from bot.utils.messages import make_linked
 from bot.utils.user import get_username
 from common.database.models import DelayedMessageModel
-from common.database.services.messages.get_delayed_messages_to_send import (
-    get_delayed_messages_to_send,
-)
-from common.database.services.messages.save_delayed_message import save_delayed_message
+from common.database.services.messages import get_delayed_messages_to_send, save_delayed_message
 
 
 __all__ = [

@@ -1,6 +1,6 @@
-from bot.tasks.send_delayed_messages_task import send_delayed_messages_task
+from bot.tasks.send_delayed_messages import send_delayed_messages
 
 
 __all__ = [
-    "send_delayed_messages_task",
+    "send_delayed_messages",
 ]
