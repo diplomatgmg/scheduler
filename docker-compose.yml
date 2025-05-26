@@ -1,5 +1,14 @@
 name: ${ENV_PROJECT_NAME}
 
+
+x-project-opts: &project_opts
+  env_file:
+    - .env
+  volumes:
+    - app-logs:/app/logs
+  networks:
+    - app-network
+
 x-healthcheck-defaults: &healthcheck_defaults
   interval: "${ENV_DOCKER_HEALTHCHECK_INTERVAL}"
   timeout: "${ENV_DOCKER_HEALTHCHECK_TIMEOUT}"
@@ -17,26 +26,8 @@ x-celery-opts: &celery_opts
     test: [ "CMD", "celery", "-A", "bot.celery.celery_app", "inspect", "ping" ]
     <<: *healthcheck_defaults
 
-x-project-opts: &project_opts
-  env_file:
-    - .env
-  volumes:
-    - app-logs:/app/logs
-  networks:
-    - app-network
 
 services:
-  bot:
-    image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
-    container_name: ${ENV_PROJECT_NAME}-bot
-    restart: unless-stopped
-    depends_on:
-      pgbouncer:
-        condition: service_started
-      redis:
-        condition: service_healthy
-    <<: *project_opts
-
   api:
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-api:latest
     container_name: ${ENV_PROJECT_NAME}-api
@@ -54,17 +45,28 @@ services:
       <<: *healthcheck_defaults
     <<: *project_opts
 
+  bot:
+    image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
+    container_name: ${ENV_PROJECT_NAME}-bot
+    restart: unless-stopped
+    depends_on:
+      pgbouncer:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    <<: *project_opts
+
   celery-worker:
     container_name: ${ENV_PROJECT_NAME}-celery-worker
     command: celery -A bot.celery.celery_app worker -P eventlet -l ${LOG_LEVEL}
-    <<: [*celery_opts, *project_opts]
+    <<: [ *project_opts, *celery_opts ]
 
   celery-beat:
     container_name: ${ENV_PROJECT_NAME}-celery-beat
     command: celery -A bot.celery.celery_app beat -l ${LOG_LEVEL}
     profiles:
       - celery-beat
-    <<: [*celery_opts, *project_opts]
+    <<: [ *project_opts, *celery_opts ]
 
   postgres:
     image: postgres:17.4-alpine

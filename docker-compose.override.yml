@@ -1,36 +1,35 @@
-services:
-  bot:
-    build:
-      context: .
-      dockerfile: ./src/bot/Dockerfile
-      target: ${ENV_MODE}
-    volumes:
-      - ./src:/app/src
+x-shared-volumes: &shared_volumes
+  volumes:
+    - ./src:/app/src
 
+x-build-defaults: &build_defaults
+  context: .
+  target: ${ENV_MODE}
+
+x-bot-defaults: &bot_defaults
+  build:
+    dockerfile: ./src/bot/Dockerfile
+    <<: *build_defaults
+  <<: *shared_volumes
+
+
+services:
   api:
     build:
-      context: .
       dockerfile: src/api/Dockerfile
-      target: ${ENV_MODE}
-    volumes:
-      - ./src:/app/src
+      <<: *build_defaults
+    <<: *shared_volumes
+
+  bot:
+    <<: *bot_defaults
 
   celery-worker:
-    build:
-      context: .
-      dockerfile: ./src/bot/Dockerfile
-      target: ${ENV_MODE}
-    volumes:
-      - ./src:/app/src
+    command: hupper -q -m celery -A bot.celery.celery_app worker -P eventlet -l ${LOG_LEVEL}
+    <<: *bot_defaults
 
   celery-beat:
-    build:
-      context: .
-      dockerfile: ./src/bot/Dockerfile
-      target: ${ENV_MODE}
-    volumes:
-      - ./src:/app/src
+    command: hupper -q -m celery -A bot.celery.celery_app beat -l ${LOG_LEVEL}
+    <<: *bot_defaults
 
   tester:
-    volumes:
-      - ./src:/app/src
+    <<: *shared_volumes
