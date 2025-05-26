@@ -4,7 +4,9 @@ from typing import cast
 from loguru import logger
 from redis.asyncio import Redis
 
-from common.redis.config import redis_config
+from bot.celery.config import celery_config
+from common.redis.config import redis_cache_config
+from common.redis.enums import RedisDbEnum
 
 
 __all__ = [
@@ -12,13 +14,22 @@ __all__ = [
 ]
 
 
-@lru_cache(maxsize=1)
-def get_redis_instance() -> Redis:
+@lru_cache(maxsize=len(RedisDbEnum))
+def get_redis_instance(db: RedisDbEnum) -> Redis:
+    match db:
+        case RedisDbEnum.CACHE:
+            dsn = redis_cache_config.connection.dsn
+        case RedisDbEnum.CELERY:
+            dsn = celery_config.connection.dsn
+        case _:
+            msg = f"Unexpected redis db: {RedisDbEnum}"
+            raise ValueError(msg)
+
     try:
         return cast(
             "Redis",
             Redis.from_url(
-                str(redis_config.dsn),
+                str(dsn),
                 decode_responses=False,
             ),
         )

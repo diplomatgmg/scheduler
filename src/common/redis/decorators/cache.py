@@ -6,8 +6,9 @@ from typing import Any, TypeVar
 from loguru import logger
 from redis.asyncio import Redis
 
-from common.redis.config import redis_config
+from common.redis.config import redis_cache_config
 from common.redis.engine import get_redis_instance
+from common.redis.enums import RedisDbEnum
 from common.utils.serializers import AbstractSerializer, PickleSerializer
 
 
@@ -30,30 +31,30 @@ def build_key(*args: Any, **kwargs: Any) -> str:
 async def set_redis_value(
     key: bytes | str,
     value: bytes,
-    cache_time: int | timedelta | None = None,
+    cache_ttl: int | timedelta | None = None,
     *,
     is_transaction: bool = False,
 ) -> None:
     """Кеширует значение по ключу в Redis"""
-    client = get_redis_instance()
+    client = get_redis_instance(RedisDbEnum.CACHE)
 
     async with client.pipeline(transaction=is_transaction) as pipeline:
         await pipeline.set(key, value)
         logger.debug(f"Закешировано значение. {key=}, {value=}")
-        if cache_time:
-            await pipeline.expire(key, cache_time)
+        if cache_ttl:
+            await pipeline.expire(key, cache_ttl)
         await pipeline.execute()
 
 
 def cache(
-    cache_time: int | timedelta | None = None,
+    cache_ttl: int | timedelta | None = None,
     redis_instance: Redis | None = None,
     key_builder: Callable[..., str] = build_key,
     serializer: AbstractSerializer | None = None,
 ) -> Callable[[Callable[..., Awaitable[Func]]], Callable[..., Awaitable[Func]]]:
-    cache_time = cache_time or redis_config.cache_time
+    cache_ttl = cache_ttl or redis_cache_config.ttl
     serializer = serializer or PickleSerializer()
-    redis_instance = redis_instance or get_redis_instance()
+    redis_instance = redis_instance or get_redis_instance(RedisDbEnum.CACHE)
 
     def decorator(fn: Callable[..., Awaitable[Func]]) -> Callable[..., Awaitable[Func]]:
         @wraps(fn)
@@ -72,7 +73,7 @@ def cache(
             await set_redis_value(
                 key,
                 serializer.serialize(result),
-                cache_time,
+                cache_ttl,
             )
 
             return result

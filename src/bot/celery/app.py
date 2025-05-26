@@ -2,7 +2,7 @@ import asyncio
 
 from celery import Celery  # type: ignore[import-untyped]
 
-from common.redis.config import redis_config
+from bot.celery.config import celery_config
 
 
 __all__ = [
@@ -12,6 +12,6 @@ __all__ = [
 
 
 celery_loop = asyncio.new_event_loop()
-celery_app = Celery("scheduler_tasks", broker=redis_config.dsn)
+celery_app = Celery("scheduler_tasks", broker=str(celery_config.connection.dsn))
 
 celery_app.autodiscover_tasks(["bot.tasks"])

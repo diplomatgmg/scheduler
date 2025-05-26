@@ -5,11 +5,12 @@ from sqlalchemy import text
 from api.core.config import api_config
 from common.database.engine import get_db_session
 from common.redis.engine import get_redis_instance
+from common.redis.enums import RedisDbEnum
 
 
 @pytest.mark.asyncio
 async def test_redis_connection() -> None:
-    client = await get_redis_instance()
+    client = await get_redis_instance(RedisDbEnum.CACHE)
     pong = await client.ping()
 
     assert pong is True

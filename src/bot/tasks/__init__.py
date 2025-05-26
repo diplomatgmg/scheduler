@@ -1,1 +1,0 @@
-from bot.tasks.send_delayed_messages_task import send_delayed_messages_task

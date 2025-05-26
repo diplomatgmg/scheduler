@@ -46,7 +46,7 @@ services:
   celery-worker:
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
     container_name: ${ENV_PROJECT_NAME}-celery-worker
-    command: celery -A bot.tasks.celery_app worker -P eventlet -l ${LOG_LEVEL}
+    command: celery -A bot.celery.celery_app worker -P eventlet -l ${LOG_LEVEL}
     env_file:
       - .env
     volumes:

@@ -5,7 +5,7 @@ from redis.asyncio import Redis
 from redis.exceptions import RedisError
 
 from common.redis.engine import get_redis_instance
-from common.redis.enums import RedisCacheKeyEnum
+from common.redis.enums import RedisCacheKeyEnum, RedisDbEnum
 from common.utils.serializers import AbstractSerializer, JSONSerializer
 
 
@@ -20,7 +20,7 @@ class RedisQueueClient:
     _client: Redis
 
     def __init__(self, client: Redis | None = None, serializer: AbstractSerializer | None = None) -> None:
-        self._client = client or get_redis_instance()
+        self._client = client or get_redis_instance(RedisDbEnum.CACHE)
         self._serializer = serializer or JSONSerializer()
 
     async def push(self, key: RedisCacheKeyEnum, data: Any) -> None:
