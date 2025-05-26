@@ -32,10 +32,12 @@ def get_redis_instance(db: RedisDbEnum) -> Redis:
 def _get_redis_dsn_by_db(db: RedisDbEnum) -> RedisDsn:
     if db == RedisDbEnum.CACHE:
         from common.redis.config import redis_cache_config  # noqa: PLC0415
+
         return redis_cache_config.connection.dsn
 
     if db == RedisDbEnum.CELERY:
         from bot.celery.config import celery_config  # noqa: PLC0415
+
         return celery_config.connection.dsn
 
     msg = f"Unexpected redis db: {RedisDbEnum}"
