@@ -54,6 +54,8 @@ services:
     networks:
       - app-network
     depends_on:
+      bot:
+        condition: service_started
       pgbouncer:
         condition: service_started
       redis:
@@ -96,7 +98,7 @@ services:
       - "${REDIS_PORT}:${REDIS_PORT}"
     command: [ "redis-server", "--port", "${REDIS_PORT}" ]
     volumes:
-      - redis-data:/data
+      - redis-data:/var/lib/redis/data
     networks:
       - app-network
     healthcheck:
