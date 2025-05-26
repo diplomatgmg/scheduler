@@ -40,7 +40,7 @@ async def set_redis_value(
     """Кеширует значение по ключу в Redis"""
     async with redis_instance.pipeline(transaction=is_transaction) as pipeline:
         await pipeline.set(key, value)
-        logger.debug(f"Закешировано значение. {key=}, {value=}")
+        logger.debug(f"Set cache. {key=}, {value=}")
         if cache_ttl:
             await pipeline.expire(key, cache_ttl)
         await pipeline.execute()
@@ -66,7 +66,7 @@ def cache(
 
             cached_value = await redis_instance.get(key)
             if cached_value is not None:
-                logger.debug(f"Получено кешированное значение. {key=}, {cached_value=}")
+                logger.debug(f"Getting cached. {key=}, {cached_value=}")
                 return serializer.deserialize(cached_value)
 
             result = await fn(*args, **kwargs)

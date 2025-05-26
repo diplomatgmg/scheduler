@@ -13,10 +13,11 @@ async def start_redis_consumer() -> None:
     """Получает updates с очереди Redis и передает их в Dispatcher"""
     queue = RedisQueueClient()
 
-    # FIXME Почему нет задержки? Сколько операций обрабатывается в цикле,
-    #  если нет апдейтов (насколько нагружает сервер)?
     while True:
         update = await queue.pop(RedisCacheKeyEnum.TELEGRAM_UPDATES)
 
-        if update:
-            await dp.feed_raw_update(bot, update)
+        if not isinstance(update, dict):
+            msg = f"Unexpected update  format. type={type(update)}, data={update}"
+            raise TypeError(msg)
+
+        await dp.feed_raw_update(bot, update)

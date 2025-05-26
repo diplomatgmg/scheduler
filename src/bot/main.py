@@ -37,14 +37,15 @@ async def main() -> None:
     dp.shutdown.register(on_shutdown)
 
     if bot_config.use_webhook:
-        logger.debug("Setting webhook")
+        logger.debug("Setup webhook")
         await bot.set_webhook(
             str(bot_config.webhook_url),
             drop_pending_updates=True,
             secret_token=bot_config.webhook_token,
         )
         await dp.emit_startup()
-        asyncio.run(start_redis_consumer())  # FIXME. Не проверял. что лучше: create_task или run??
+        redis_consumer_task = asyncio.create_task(start_redis_consumer())
+        await redis_consumer_task
         await dp.emit_shutdown()
     else:
         logger.debug("Start polling")

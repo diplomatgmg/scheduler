@@ -54,16 +54,14 @@ services:
   celery-worker:
     container_name: ${ENV_PROJECT_NAME}-celery-worker
     command: celery -A bot.celery.celery_app worker -P eventlet -l ${LOG_LEVEL}
-    <<: *celery_opts
-    <<: *project_opts
+    <<: [*celery_opts, *project_opts]
 
   celery-beat:
     container_name: ${ENV_PROJECT_NAME}-celery-beat
     command: celery -A bot.celery.celery_app beat -l ${LOG_LEVEL}
     profiles:
       - celery-beat
-    <<: *celery_opts
-    <<: *project_opts
+    <<: [*celery_opts, *project_opts]
 
   postgres:
     image: postgres:17.4-alpine

@@ -28,21 +28,22 @@ class RedisQueueClient:
 
         try:
             await cast("Any", self._client.rpush)(str(key), value_bytes)
-            logger.debug(f"Redis push: {key}")
+            logger.debug(f"Redis push key={key}")
         except RedisError as e:
-            logger.error(f"Redis push failed for {key}: {e}")
+            logger.error(f"Redis push failed for key={key}: {e}")
             raise
 
     async def pop(self, key: RedisCacheKeyEnum) -> Any | None:
         try:
-            value_bytes = await cast("Any", self._client.blpop)(str(key))
-            if value_bytes is None:
+            result = await cast("Any", self._client.blpop)(str(key))
+            if result is None:
                 return None
 
-            logger.debug(f"Popped update from Redis list {key}")
+            _, data_bytes = result
+            logger.debug(f"Popped update from Redis list key={key}")
 
-            return self._serializer.deserialize(value_bytes)
+            return self._serializer.deserialize(data_bytes)
 
         except RedisError as e:
-            logger.error(f"Redis pop failed for {key}: {e}")
+            logger.error(f"Redis pop failed for key={key}: {e}")
             raise
