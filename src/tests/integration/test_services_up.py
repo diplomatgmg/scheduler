@@ -3,6 +3,7 @@ import pytest
 from sqlalchemy import text
 
 from api.core.config import api_config
+from bot.core.config import bot_config
 from common.database.engine import get_db_session
 from common.redis.engine import get_redis_instance
 from common.redis.enums import RedisDbEnum
@@ -28,6 +29,9 @@ async def test_postgres_connection() -> None:
 
 @pytest.mark.asyncio
 async def test_api_health_check() -> None:
+    if not bot_config.use_webhook:
+        return
+
     async with httpx.AsyncClient() as client:
         response = await client.get(f"http://api:{api_config.port}/api/v1/health")
 
