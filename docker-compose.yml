@@ -8,32 +8,31 @@ x-healthcheck-defaults: &healthcheck_defaults
 
 x-celery-opts: &celery_opts
   image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
-  env_file:
-    - .env
-  volumes:
-    - app-logs:/app/logs
   networks:
     - app-network
   depends_on:
     redis:
       condition: service_started
 
+x-project-opts: &project_opts
+  env_file:
+    - .env
+  volumes:
+    - app-logs:/app/logs
+  networks:
+    - app-network
+
 services:
   bot:
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
     container_name: ${ENV_PROJECT_NAME}-bot
     restart: unless-stopped
-    env_file:
-      - .env
-    volumes:
-      - app-logs:/app/logs
-    networks:
-      - app-network
     depends_on:
       pgbouncer:
         condition: service_started
       redis:
         condition: service_healthy
+    <<: *project_opts
 
   api:
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-api:latest
@@ -42,25 +41,21 @@ services:
       - api
     ports:
       - "${API_PORT}:${API_PORT}"
-    env_file:
-      - .env
-    volumes:
-      - app-logs:/app/logs
-    networks:
-      - app-network
     depends_on:
       pgbouncer:
         condition: service_started
       redis:
         condition: service_healthy
     healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://${API_HOST}:${API_PORT}${API_HEALTHCHECK_PATH}"]
       <<: *healthcheck_defaults
-      test: ["CMD", "wget", "-q", "--spider", "http://${API_HOST}:${API_PORT}/api/v1/health"]
+    <<: *project_opts
 
   celery-worker:
     container_name: ${ENV_PROJECT_NAME}-celery-worker
     command: celery -A bot.celery.celery_app worker -P eventlet -l ${LOG_LEVEL}
     <<: *celery_opts
+    <<: *project_opts
 
   celery-beat:
     container_name: ${ENV_PROJECT_NAME}-celery-beat
@@ -68,6 +63,7 @@ services:
     profiles:
       - celery-beat
     <<: *celery_opts
+    <<: *project_opts
 
   postgres:
     image: postgres:17.4-alpine
@@ -81,8 +77,8 @@ services:
     networks:
       - app-network
     healthcheck:
-      <<: *healthcheck_defaults
       test: [ "CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${POSTGRES_DB}" ]
+      <<: *healthcheck_defaults
 
   pgbouncer:
     image: bitnami/pgbouncer:1.24.0
@@ -110,8 +106,8 @@ services:
     networks:
       - app-network
     healthcheck:
-      <<: *healthcheck_defaults
       test: [ "CMD", "redis-cli", "-p", "${REDIS_PORT}", "ping" ]
+      <<: *healthcheck_defaults
 
   tester:
     build:
