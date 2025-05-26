@@ -6,6 +6,18 @@ x-healthcheck-defaults: &healthcheck_defaults
   retries: ${ENV_DOCKER_HEALTHCHECK_RETRIES}
   start_period: "${ENV_DOCKER_HEALTHCHECK_START_PERIOD}"
 
+x-celery-opts: &celery_opts
+  image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
+  env_file:
+    - .env
+  volumes:
+    - app-logs:/app/logs
+  networks:
+    - app-network
+  depends_on:
+    redis:
+      condition: service_started
+
 services:
   bot:
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
@@ -46,42 +58,16 @@ services:
       test: ["CMD", "wget", "-q", "--spider", "http://${API_HOST}:${API_PORT}/api/v1/health"]
 
   celery-worker:
-    image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
     container_name: ${ENV_PROJECT_NAME}-celery-worker
     command: celery -A bot.celery.celery_app worker -P eventlet -l ${LOG_LEVEL}
-    env_file:
-      - .env
-    volumes:
-      - app-logs:/app/logs
-    networks:
-      - app-network
-    depends_on:
-      bot:
-        condition: service_started
-      pgbouncer:
-        condition: service_started
-      redis:
-        condition: service_healthy
+    <<: *celery_opts
 
   celery-beat:
-    image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
     container_name: ${ENV_PROJECT_NAME}-celery-beat
     command: celery -A bot.celery.celery_app beat -l ${LOG_LEVEL}
     profiles:
       - celery-beat
-    env_file:
-      - .env
-    volumes:
-      - app-logs:/app/logs
-    networks:
-      - app-network
-    depends_on:
-      bot:
-        condition: service_started
-      pgbouncer:
-        condition: service_started
-      redis:
-        condition: service_healthy
+    <<: *celery_opts
 
   postgres:
     image: postgres:17.4-alpine
@@ -137,6 +123,7 @@ services:
       - .env
     networks:
       - app-network
+
 
 networks:
   app-network:
