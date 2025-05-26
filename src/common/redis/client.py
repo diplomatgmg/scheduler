@@ -35,7 +35,7 @@ class RedisQueueClient:
 
     async def pop(self, key: RedisCacheKeyEnum) -> Any | None:
         try:
-            result = await cast("Any", self._client.blpop)(str(key))
+            result = await cast("Any", self._client.blpop)(str(key), timeout=1)
             if result is None:
                 return None
 

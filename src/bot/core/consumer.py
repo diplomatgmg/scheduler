@@ -16,6 +16,9 @@ async def start_redis_consumer() -> None:
     while True:
         update = await queue.pop(RedisCacheKeyEnum.TELEGRAM_UPDATES)
 
+        if not update:
+            continue
+
         if not isinstance(update, dict):
             msg = f"Unexpected update  format. type={type(update)}, data={update}"
             raise TypeError(msg)
