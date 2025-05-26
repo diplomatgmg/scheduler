@@ -1,11 +1,3 @@
-ENV_FILE = .env
-
-# Проверка существования .env и export переменных
-ifeq ("$(wildcard $(ENV_FILE))", "$(ENV_FILE)")
-  include $(ENV_FILE)
-  export
-endif
-
 .PHONY: help
 
 help:
@@ -23,7 +15,7 @@ venv: ## Создает виртуальное окружение
 .PHONY: venv
 
 up: ## compose up
-	@docker compose up  --wait -d
+	@docker compose $(DOCKER_PROFILES) up --wait -d
 .PHONY: up
 
 down: ## compose down
@@ -62,3 +54,21 @@ migrate: ## Применяет миграции
 test: ## Запускает тесты
 	docker compose run --quiet --build --rm tester pytest src/tests
 .PHONY: test
+
+
+ENV_FILE = .env
+DOCKER_PROFILES :=
+
+# Проверка существования .env и export переменных
+ifeq ("$(wildcard $(ENV_FILE))", "$(ENV_FILE)")
+  include $(ENV_FILE)
+  export
+endif
+
+ifeq ($(BOT_USE_WEBHOOK),true)
+	DOCKER_PROFILES += --profile api
+endif
+
+ifeq ($(CELERY_BEAT_ENABLED),true)
+	DOCKER_PROFILES += --profile celery-beat
+endif

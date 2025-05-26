@@ -26,6 +26,8 @@ services:
   api:
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-api:latest
     container_name: ${ENV_PROJECT_NAME}-api
+    profiles:
+      - api
     ports:
       - "${API_PORT}:${API_PORT}"
     env_file:
@@ -47,6 +49,26 @@ services:
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
     container_name: ${ENV_PROJECT_NAME}-celery-worker
     command: celery -A bot.celery.celery_app worker -P eventlet -l ${LOG_LEVEL}
+    env_file:
+      - .env
+    volumes:
+      - app-logs:/app/logs
+    networks:
+      - app-network
+    depends_on:
+      bot:
+        condition: service_started
+      pgbouncer:
+        condition: service_started
+      redis:
+        condition: service_healthy
+
+  celery-beat:
+    image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
+    container_name: ${ENV_PROJECT_NAME}-celery-beat
+    command: celery -A bot.celery.celery_app beat -l ${LOG_LEVEL}
+    profiles:
+      - celery-beat
     env_file:
       - .env
     volumes:
