@@ -3,6 +3,18 @@
 help:
 	@awk 'BEGIN {FS = ":.*##"; printf "\nUsage:\n  make \033[36m<target>\033[0m\n"} /^[a-zA-Z_-]+:.*?##/ { printf "  \033[36m%-15s\033[0m %s\n", $$1, $$2 } /^##@/ { printf "\n\033[1m%s\033[0m\n", substr($$0, 5) } ' $(MAKEFILE_LIST)
 
+up: ## compose up
+	@docker compose $(DOCKER_PROFILES) up --wait -d
+.PHONY: up
+
+down: ## compose down
+	@docker compose $(DOCKER_PROFILES) down
+.PHONY: down
+
+stop: ## compose stop
+	@docker compose $(DOCKER_PROFILES) stop
+.PHONY: stop
+
 venv: ## Создает виртуальное окружение
 	@uv sync \
 	--no-install-project \
@@ -13,18 +25,6 @@ venv: ## Создает виртуальное окружение
 	--group api-dev \
 	--group tests
 .PHONY: venv
-
-up: ## compose up
-	@docker compose $(DOCKER_PROFILES) up --wait -d
-.PHONY: up
-
-down: ## compose down
-	@docker compose down
-.PHONY: down
-
-stop: ## compose stop
-	@docker compose stop
-.PHONY: stop
 
 lint: ## Запуск линтеров без правок
 	@uv run ruff check . && \
