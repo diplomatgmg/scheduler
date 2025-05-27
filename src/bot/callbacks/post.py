@@ -15,6 +15,9 @@ class PostActionEnum(StrEnum):
     EDIT = "edit"
     BACK = "back"
 
+    ADD_BUTTONS = "add_buttons"
+    CANCEL_ADD_BUTTONS = "cancel_add_buttons"
+
 
 class PostCallback(CallbackData, prefix="post"):
     action: PostActionEnum

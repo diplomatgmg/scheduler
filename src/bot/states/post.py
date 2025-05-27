@@ -9,3 +9,4 @@ __all__ = [
 class PostState(StatesGroup):
     waiting_for_channel = State()
     waiting_for_post = State()
+    waiting_for_buttons = State()

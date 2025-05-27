@@ -9,6 +9,8 @@ from common.database.models import ChannelModel
 
 
 __all__ = [
+    "post_additional_configuration",
+    "post_cancel_buttons",
     "select_another_channel_keyboard",
     "select_channel_keyboard",
 ]
@@ -51,6 +53,37 @@ def select_another_channel_keyboard() -> InlineKeyboardMarkup:
         ]
     ]
 
-    keyboard = InlineKeyboardBuilder(markup=buttons)
+    return InlineKeyboardBuilder(buttons).as_markup()
 
-    return keyboard.as_markup()
+
+def post_additional_configuration() -> InlineKeyboardMarkup:
+    """Дополнительная настройка поста перед отложкой"""
+    buttons = [
+        [
+            InlineKeyboardButton(
+                text="-----------------------",
+                callback_data="noop",
+            ),
+        ],
+        [
+            InlineKeyboardButton(
+                text="Добавить URL-кнопки", callback_data=PostCallback(action=PostActionEnum.ADD_BUTTONS).pack()
+            ),
+        ],
+    ]
+
+    return InlineKeyboardBuilder(buttons).as_markup()
+
+
+def post_cancel_buttons() -> InlineKeyboardMarkup:
+    """Отменяет создание URL кнопок"""
+    buttons = [
+        [
+            InlineKeyboardButton(
+                text="Отменить создание кнопок",
+                callback_data=PostCallback(action=PostActionEnum.CANCEL_ADD_BUTTONS).pack(),  # FIXME для чего .pack()?
+            )
+        ]
+    ]
+
+    return InlineKeyboardBuilder(buttons).as_markup()

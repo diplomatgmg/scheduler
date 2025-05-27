@@ -1,4 +1,5 @@
 from aiogram import F, Router
+from aiogram.enums import ParseMode
 from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 from loguru import logger
@@ -37,7 +38,6 @@ async def handle_wait_text(query: CallbackQuery, callback_data: SelectChannelCal
             selected_channel_username=selected_channel_username,
         ).model_dump()
     )
-    await state.set_state(PostState.waiting_for_post)
 
     linked_channel = make_linked(selected_channel_title, selected_channel_username)
     message_text = f"Вы выбрали канал: {linked_channel}.\n\nТеперь отправьте мне текст для публикации."
@@ -46,8 +46,9 @@ async def handle_wait_text(query: CallbackQuery, callback_data: SelectChannelCal
     await message.edit_text(
         message_text,
         reply_markup=select_another_channel_keyboard(),
-        parse_mode="HTML",
+        parse_mode=ParseMode.HTML,
     )
+    await state.set_state(PostState.waiting_for_post)
 
 
 # noinspection PyTypeChecker
