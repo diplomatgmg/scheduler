@@ -6,7 +6,7 @@ from api.endpoints import v1_router
 from api.endpoints.schemas.root import RootResponse
 from common.environment.config import env_config
 from common.logging.config import log_config
-from common.logging.setup import setup_logging
+from common.logging.setup import setup_module_logging
 from common.sentry.setup import setup_sentry
 
 
@@ -24,7 +24,7 @@ async def root() -> RootResponse:
 
 
 def main() -> None:
-    setup_logging("api")
+    setup_module_logging("api")
     setup_sentry()
 
     uvicorn.run(

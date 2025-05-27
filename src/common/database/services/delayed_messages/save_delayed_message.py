@@ -11,8 +11,7 @@ __all__ = [
 
 async def save_delayed_message(session: AsyncSession, message_model: DelayedMessageModel) -> None:
     """Добавляет сообщение для отложки в БД."""
-    logger.debug(f"Adding delayed message id={message_model.id}")
-
     session.add(message_model)
     await session.flush()
-    await session.refresh(message_model)
+
+    logger.debug(f"Adding delayed message update_id={message_model.id}")

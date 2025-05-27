@@ -7,5 +7,6 @@ __all__ = [
 
 
 class SelectChannelCallback(CallbackData, prefix="select_channel"):
+    chat_id: int
     channel_title: str
     channel_username: str | None

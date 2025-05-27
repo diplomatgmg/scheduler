@@ -6,7 +6,7 @@ from celery.signals import setup_logging as celery_logging  # type: ignore[impor
 
 from bot.celery import beat_schedule
 from bot.celery.config import celery_config
-from common.logging.setup import setup_logging
+from common.logging.setup import setup_module_logging
 
 
 __all__ = [
@@ -17,7 +17,7 @@ __all__ = [
 
 @celery_logging.connect  # type: ignore[misc]
 def setup_celery_logging(**_: Any) -> None:
-    setup_logging("celery")
+    setup_module_logging("celery")
 
 
 celery_loop = asyncio.new_event_loop()

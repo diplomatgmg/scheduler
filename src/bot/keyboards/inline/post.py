@@ -21,7 +21,9 @@ def select_channel_keyboard(channels: Sequence[ChannelModel]) -> InlineKeyboardM
     buttons = [
         InlineKeyboardButton(
             text=channel.title,
-            callback_data=SelectChannelCallback(channel_title=channel.title, channel_username=channel.username).pack(),
+            callback_data=SelectChannelCallback(
+                chat_id=channel.chat_id, channel_title=channel.title, channel_username=channel.username
+            ).pack(),
         )
         for channel in channels
     ]

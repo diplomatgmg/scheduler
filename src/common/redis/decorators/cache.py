@@ -66,7 +66,7 @@ def cache(
 
             cached_value = await redis_instance.get(key)
             if cached_value is not None:
-                logger.debug(f"Getting cached. {key=}, {cached_value=}")
+                logger.debug(f"Getting cache. {key=}")
                 return serializer.deserialize(cached_value)
 
             result = await fn(*args, **kwargs)

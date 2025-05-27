@@ -9,6 +9,7 @@ __all__ = [
 
 
 class LogConfig(BaseSettings):
+    write_to_file: bool
     level: LogLevelEnum
     sqlalchemy_level: LogLevelSqlalchemyEnum
 

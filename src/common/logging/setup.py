@@ -10,7 +10,7 @@ from common.logging.config import log_config
 
 
 __all__ = [
-    "setup_logging",
+    "setup_module_logging",
 ]
 
 
@@ -26,7 +26,7 @@ class InterceptHandler(logging.Handler):
         logger.opt(depth=6, exception=record.exc_info).log(level, record.getMessage())
 
 
-def setup_logging(module_name: str) -> None:
+def setup_module_logging(module_name: str) -> None:
     """Инициализирует logger для модуля"""
 
     if module_name in _LOGGING_INITIALIZED:
@@ -50,7 +50,7 @@ def setup_logging(module_name: str) -> None:
 
     module_logger = logger.bind(name=module_name)
 
-    if not env_config.debug:
+    if log_config.write_to_file:
         module_logger.add(
             make_log_path(module_name),
             rotation="1 MB",

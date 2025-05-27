@@ -54,5 +54,6 @@ class DelayedMessageModel(Base):
     __tablename__ = "delayed_messages"
 
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    to_chat_id: Mapped[int] = mapped_column(BigInteger)
     is_sent: Mapped[bool] = mapped_column(default=False)
     message_json: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False)

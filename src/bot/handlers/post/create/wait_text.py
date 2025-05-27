@@ -24,6 +24,7 @@ router = Router(name="wait_text")
 @router.callback_query(SelectChannelCallback.filter(), PostState.waiting_for_channel)
 async def handle_wait_text(query: CallbackQuery, callback_data: SelectChannelCallback, state: FSMContext) -> None:
     """Обработчик для получения поста, который необходимо создать на канале"""
+    selected_channel_chat_id = callback_data.chat_id
     selected_channel_title = callback_data.channel_title
     selected_channel_username = callback_data.channel_username
 
@@ -31,6 +32,7 @@ async def handle_wait_text(query: CallbackQuery, callback_data: SelectChannelCal
 
     await state.update_data(
         PostContext(
+            selected_channel_chat_id=selected_channel_chat_id,
             selected_channel_title=selected_channel_title,
             selected_channel_username=selected_channel_username,
         ).model_dump()

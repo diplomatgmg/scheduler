@@ -9,7 +9,7 @@ from bot.states import PostState
 from bot.utils.messages import make_linked
 from bot.utils.user import get_username
 from common.database.models import DelayedMessageModel
-from common.database.services.messages import get_delayed_messages_to_send, save_delayed_message
+from common.database.services.delayed_messages import save_delayed_message
 
 
 __all__ = [
@@ -31,15 +31,11 @@ async def handle_send_text(message: Message, state: FSMContext, session: AsyncSe
 
     message_data = message.model_dump(exclude_none=True)
     delayed_message_model = DelayedMessageModel(
+        to_chat_id=post_state.selected_channel_chat_id,
         message_json=message_data,
     )
 
     await save_delayed_message(session, delayed_message_model)
-
-    logger.error(message_data)
-
-    messages = await get_delayed_messages_to_send(session)
-    logger.critical(messages)
 
     await message.answer(
         f"Получен текст для публикации в канал {linked_channel}:\n\n"
