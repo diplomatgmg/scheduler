@@ -56,23 +56,37 @@ def select_another_channel_keyboard() -> InlineKeyboardMarkup:
     return InlineKeyboardBuilder(buttons).as_markup()
 
 
-def post_additional_configuration() -> InlineKeyboardMarkup:
+def post_additional_configuration(
+    saved_buttons: list[list[InlineKeyboardButton]] | None = None,
+) -> InlineKeyboardMarkup:
     """Дополнительная настройка поста перед отложкой"""
-    buttons = [
-        [
+    builder = InlineKeyboardBuilder()
+
+    if saved_buttons is not None:
+        for row in saved_buttons:
+            builder.row(*row)
+
+    builder.row(
+        InlineKeyboardButton(
+            text="-----------------------",
+            callback_data="noop",
+        )
+    )
+
+    if saved_buttons is not None:
+        builder.row(
             InlineKeyboardButton(
-                text="-----------------------",
-                callback_data="noop",
-            ),
-        ],
-        [
+                text="Удалить URL-кнопки", callback_data=PostCallback(action=PostActionEnum.REMOVE_BUTTONS).pack()
+            )
+        )
+    else:
+        builder.row(
             InlineKeyboardButton(
                 text="Добавить URL-кнопки", callback_data=PostCallback(action=PostActionEnum.ADD_BUTTONS).pack()
-            ),
-        ],
-    ]
+            )
+        )
 
-    return InlineKeyboardBuilder(buttons).as_markup()
+    return builder.as_markup()
 
 
 def post_cancel_buttons() -> InlineKeyboardMarkup:

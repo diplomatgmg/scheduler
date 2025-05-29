@@ -18,14 +18,14 @@ __all__ = [
 ]
 
 
-router = Router(name="add_buttons")
+router = Router(name="remove_buttons")
 
 
 # noinspection PyTypeChecker
-@router.callback_query(PostCallback.filter(F.action == PostActionEnum.CANCEL_ADD_BUTTONS))
-async def handle_cancel_add_buttons(query: CallbackQuery, state: FSMContext) -> None:
-    """Обрабатывает отмену добавления кнопок и возвращает предпросмотр сообщения."""
-    logger.debug(f"Cancel add buttons callback from {get_username(query)}")
+@router.callback_query(PostCallback.filter(F.action == PostActionEnum.REMOVE_BUTTONS))
+async def handle_remove_add_buttons(query: CallbackQuery, state: FSMContext) -> None:
+    """Удаляет кнопки и возвращает предпросмотр сообщения."""
+    logger.debug(f"Remove buttons callback from {get_username(query)}")
 
     message = await get_message(query)
 

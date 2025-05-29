@@ -6,6 +6,7 @@ from loguru import logger
 
 from bot.callbacks import PostCallback
 from bot.callbacks.post import PostActionEnum
+from bot.core.loader import bot
 from bot.keyboards.inline.post import post_cancel_buttons
 from bot.states import PostState
 from bot.utils.messages import get_message
@@ -39,5 +40,12 @@ async def handle_add_buttons(query: CallbackQuery, state: FSMContext) -> None:
     logger.debug(f"Add buttons callback from {get_username(query)}")
 
     message = await get_message(query)
-    await message.edit_text(BUTTONS_FORMAT_TEXT, reply_markup=post_cancel_buttons(), parse_mode=ParseMode.HTML)
+
+    await message.delete()
+    await bot.send_message(
+        text=BUTTONS_FORMAT_TEXT,
+        chat_id=message.chat.id,
+        reply_markup=post_cancel_buttons(),
+        parse_mode=ParseMode.HTML,
+    )
     await state.set_state(PostState.waiting_for_buttons)
