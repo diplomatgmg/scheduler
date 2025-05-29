@@ -8,7 +8,6 @@ from bot.callbacks.post import PostActionEnum
 from bot.core.loader import bot
 from bot.keyboards.inline.post import post_additional_configuration
 from bot.schemas import PostContext
-from bot.states import PostState
 from bot.utils.messages import get_message
 from bot.utils.user import get_username
 
@@ -18,22 +17,22 @@ __all__ = [
 ]
 
 
-router = Router(name="remove_buttons")
+router = Router(name="cancel_or_remove_buttons")
 
 
 # noinspection PyTypeChecker
-@router.callback_query(PostCallback.filter(F.action == PostActionEnum.REMOVE_BUTTONS))
-async def handle_remove_add_buttons(query: CallbackQuery, state: FSMContext) -> None:
-    """Удаляет кнопки и возвращает предпросмотр сообщения."""
-    logger.debug(f"Remove buttons callback from {get_username(query)}")
-
+@router.callback_query(PostCallback.filter(F.action.in_([
+    PostActionEnum.CANCEL_ADD_BUTTONS,
+    PostActionEnum.REMOVE_BUTTONS,
+])))
+async def handle_cancel_or_remove_buttons(query: CallbackQuery, state: FSMContext) -> None:
+    logger.debug(f"{query.data} callback from {get_username(query)}")
     message = await get_message(query)
-
     post_state_data = await state.get_data()
     post_context = PostContext(**post_state_data)
 
     if post_context.preview_message is None:
-        logger.error(f"Preview message is empty.\npreview_message={post_context.preview_message}")
+        logger.error("Preview message is empty")
         await message.answer("Не удалось отменить создание кнопок")
         return
 
@@ -44,5 +43,3 @@ async def handle_remove_add_buttons(query: CallbackQuery, state: FSMContext) -> 
         message_id=post_context.preview_message.message.message_id,
         reply_markup=post_additional_configuration(),
     )
-
-    await state.set_state(PostState.waiting_for_post)
