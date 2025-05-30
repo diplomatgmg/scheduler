@@ -20,7 +20,7 @@ async def start_redis_consumer() -> None:
             continue
 
         if not isinstance(update, dict):
-            msg = f"Unexpected update  format. type={type(update)}, data={update}"
+            msg = f"Unexpected update format. type={type(update)}, data={update}"
             raise TypeError(msg)
 
         await dp.feed_raw_update(bot, update)

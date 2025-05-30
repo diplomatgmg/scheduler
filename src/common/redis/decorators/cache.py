@@ -1,5 +1,4 @@
 from collections.abc import Awaitable, Callable
-from datetime import timedelta
 from functools import wraps
 from typing import Any, TypeVar
 
@@ -8,7 +7,6 @@ from redis.asyncio import Redis
 
 from common.redis.config import redis_cache_config
 from common.redis.engine import get_redis_instance
-from common.redis.enums import RedisDbEnum
 from common.utils.serializers import AbstractSerializer, PickleSerializer
 
 
@@ -33,7 +31,7 @@ async def set_redis_value(
     redis_instance: Redis,
     key: bytes | str,
     value: bytes,
-    cache_ttl: int | timedelta | None = None,
+    cache_ttl: int | None = None,
     *,
     is_transaction: bool = False,
 ) -> None:
@@ -47,7 +45,7 @@ async def set_redis_value(
 
 
 def cache(
-    cache_ttl: int | timedelta | None = None,
+    cache_ttl: int | None = None,
     redis_instance: Redis | None = None,
     key_builder: Callable[..., str] = build_key,
     serializer: AbstractSerializer | None = None,
@@ -55,7 +53,7 @@ def cache(
     """Кеширует результат функции на основе аргументов функции"""
     cache_ttl = cache_ttl or redis_cache_config.ttl
     serializer = serializer or PickleSerializer()
-    redis_instance = redis_instance or get_redis_instance(RedisDbEnum.CACHE)
+    redis_instance = redis_instance or get_redis_instance(redis_cache_config.connection.dsn)
 
     def decorator(fn: Callable[..., Awaitable[Func]]) -> Callable[..., Awaitable[Func]]:
         @wraps(fn)
