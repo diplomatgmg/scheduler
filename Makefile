@@ -15,6 +15,10 @@ stop: ## compose stop
 	@docker compose $(DOCKER_PROFILES) stop
 .PHONY: stop
 
+redis-flush: ## Очищает весь кеш Redis
+	@docker compose exec redis redis-cli FLUSHALL
+.PHONY: redis-flush
+
 venv: ## Создает виртуальное окружение
 	@uv sync \
 	--no-install-project \
@@ -40,7 +44,7 @@ lint-fix: ## Запуск линтеров с правками
 	uv run mypy .
 .PHONY: lint-fix
 
-mm: ## Создает миграцию с переданным описанием.
+mm: ## Создание миграции (make mm args="описание")
 	@if [ -z "$(args)" ]; then \
         echo "Error: migration message is required"; exit 1; \
     fi
@@ -59,7 +63,7 @@ test: ## Запускает тесты
 ENV_FILE = .env
 DOCKER_PROFILES :=
 
-# Проверка существования .env и export переменных
+# Проверка и загрузка .env файла
 ifeq ("$(wildcard $(ENV_FILE))", "$(ENV_FILE)")
   include $(ENV_FILE)
   export
