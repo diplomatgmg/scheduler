@@ -21,10 +21,16 @@ router = Router(name="cancel_or_remove_buttons")
 
 
 # noinspection PyTypeChecker
-@router.callback_query(PostCallback.filter(F.action.in_([
-    PostActionEnum.CANCEL_ADD_BUTTONS,
-    PostActionEnum.REMOVE_BUTTONS,
-])))
+@router.callback_query(
+    PostCallback.filter(
+        F.action.in_(
+            [
+                PostActionEnum.CANCEL_ADD_BUTTONS,
+                PostActionEnum.REMOVE_BUTTONS,
+            ]
+        )
+    )
+)
 async def handle_cancel_or_remove_buttons(query: CallbackQuery, state: FSMContext) -> None:
     logger.debug(f"{query.data} callback from {get_username(query)}")
     message = await get_message(query)
