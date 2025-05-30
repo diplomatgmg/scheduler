@@ -17,8 +17,6 @@ x-healthcheck-defaults: &healthcheck_defaults
 
 x-celery-opts: &celery_opts
   image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
-  networks:
-    - app-network
   depends_on:
     redis:
       condition: service_healthy
