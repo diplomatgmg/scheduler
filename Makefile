@@ -16,7 +16,7 @@ stop: ## compose stop
 .PHONY: stop
 
 redis-flush: ## Очищает весь кеш Redis
-	@docker compose exec redis redis-cli FLUSHALL
+	@docker compose exec redis redis-cli -p $(REDIS_PORT) -h $(REDIS_HOST) FLUSHALL
 .PHONY: redis-flush
 
 venv: ## Создает виртуальное окружение

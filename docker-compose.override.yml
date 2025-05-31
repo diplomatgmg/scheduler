@@ -1,4 +1,4 @@
-x-project-opts: &project_opts
+x-app-defaults: &app_defaults
   image: "" # Для dev разработки не нужен image
 
 x-shared-volumes: &shared_volumes
@@ -13,7 +13,7 @@ x-bot-defaults: &bot_defaults
   build:
     dockerfile: ./src/bot/Dockerfile
     <<: *build_defaults
-  <<: [ *project_opts, *shared_volumes ]
+  <<: [ *app_defaults, *shared_volumes ]
 
 
 services:
@@ -21,7 +21,7 @@ services:
     build:
       dockerfile: src/api/Dockerfile
       <<: *build_defaults
-    <<: [ *project_opts, *shared_volumes ]
+    <<: [ *app_defaults, *shared_volumes ]
 
   bot:
     <<: *bot_defaults

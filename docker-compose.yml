@@ -1,13 +1,15 @@
 name: ${ENV_PROJECT_NAME}
 
-
-x-project-opts: &project_opts
+x-service-defaults: &service_defaults
   env_file:
     - .env
-  volumes:
-    - app-logs:/app/logs
   networks:
     - app-network
+
+x-app-logs-defaults: &app_logs_defaults
+  volumes:
+    - app-logs:/app/logs
+
 
 x-healthcheck-defaults: &healthcheck_defaults
   interval: "${ENV_DOCKER_HEALTHCHECK_INTERVAL}"
@@ -41,7 +43,7 @@ services:
     healthcheck:
       test: [ "CMD", "wget", "-q", "--spider", "http://${API_HOST}:${API_PORT}${API_HEALTHCHECK_PATH}" ]
       <<: *healthcheck_defaults
-    <<: *project_opts
+    <<: [ *service_defaults, *app_logs_defaults]
 
   bot:
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
@@ -52,34 +54,31 @@ services:
         condition: service_started
       redis:
         condition: service_healthy
-    <<: *project_opts
+    <<: [ *service_defaults, *app_logs_defaults]
 
   celery-worker:
     container_name: ${ENV_PROJECT_NAME}-celery-worker
     command: celery -A bot.celery.celery_app worker -P eventlet -l ${LOG_LEVEL}
-    <<: [ *project_opts, *celery_opts ]
+    <<: [ *service_defaults, *app_logs_defaults, *celery_opts ]
 
   celery-beat:
     container_name: ${ENV_PROJECT_NAME}-celery-beat
     command: celery -A bot.celery.celery_app beat -l ${LOG_LEVEL}
     profiles:
       - celery-beat
-    <<: [ *project_opts, *celery_opts ]
+    <<: [ *service_defaults, *app_logs_defaults, *celery_opts ]
 
   postgres:
     image: postgres:17.4-alpine
     container_name: ${ENV_PROJECT_NAME}-postgres
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
-    env_file:
-      - .env
     volumes:
       - postgres-data:/var/lib/postgresql/data
-    networks:
-      - app-network
     healthcheck:
       test: [ "CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${POSTGRES_DB}" ]
       <<: *healthcheck_defaults
+    <<: *service_defaults
 
   pgbouncer:
     image: bitnami/pgbouncer:1.24.0
@@ -88,13 +87,10 @@ services:
       - "${PGBOUNCER_PORT}:${PGBOUNCER_PORT}"
     environment:
       - POSTGRESQL_HOST=postgres
-    env_file:
-      - .env
-    networks:
-      - app-network
     depends_on:
       postgres:
         condition: service_started
+    <<: *service_defaults
 
   redis:
     image: redis:8.0.0-alpine
@@ -109,6 +105,7 @@ services:
     healthcheck:
       test: [ "CMD", "redis-cli", "-p", "${REDIS_PORT}", "ping" ]
       <<: *healthcheck_defaults
+    <<: *service_defaults
 
   tester:
     build:
@@ -116,10 +113,7 @@ services:
       dockerfile: ./src/tests/Dockerfile
     profiles:
       - testing
-    env_file:
-      - .env
-    networks:
-      - app-network
+    <<: *service_defaults
 
 
 networks:
