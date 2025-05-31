@@ -5,31 +5,29 @@ from aiogram.types import CallbackQuery
 from loguru import logger
 
 from bot.callbacks import SelectChannelCallback
-from bot.callbacks.post import PostActionEnum, PostCallback
+from bot.callbacks.post import PostCreateActionEnum, PostMenuCallback
 from bot.handlers.menu import show_main_menu
 from bot.keyboards.inline.post import select_another_channel_keyboard
 from bot.schemas import PostContext
-from bot.states import PostCreateState
+from bot.states.post import PostCreateState
 from bot.utils.messages import get_message, make_linked
 from bot.utils.user import get_username
 
 
-__all__ = [
-    "router",
-]
+__all__ = ["router"]
 
 
-router = Router(name="wait_text")
+router = Router(name="channel_selection")
 
 
-@router.callback_query(SelectChannelCallback.filter(), PostCreateState.waiting_for_channel)
-async def handle_wait_text(query: CallbackQuery, callback_data: SelectChannelCallback, state: FSMContext) -> None:
-    """Обработчик для получения поста, который необходимо создать на канале"""
+@router.callback_query(SelectChannelCallback.filter(), PostCreateState.channel_selection)
+async def channel_selection(query: CallbackQuery, callback_data: SelectChannelCallback, state: FSMContext) -> None:
+    """Обрабатывает выбранный канал и переходит к ожиданию поста."""
+    logger.debug(f"{query.data} callback from {get_username(query)}")
+
     selected_channel_chat_id = callback_data.chat_id
     selected_channel_title = callback_data.channel_title
     selected_channel_username = callback_data.channel_username
-
-    logger.debug(f'Waiting text for channel "{selected_channel_title}" from {get_username(query)}')
 
     await state.update_data(
         PostContext(
@@ -48,11 +46,11 @@ async def handle_wait_text(query: CallbackQuery, callback_data: SelectChannelCal
         reply_markup=select_another_channel_keyboard(),
         parse_mode=ParseMode.HTML,
     )
-    await state.set_state(PostCreateState.waiting_for_post)
+    await state.set_state(PostCreateState.process_post)
 
 
 # noinspection PyTypeChecker
-@router.callback_query(PostCallback.filter(F.action == PostActionEnum.BACK))
+@router.callback_query(PostMenuCallback.filter(F.action == PostCreateActionEnum.BACK))
 async def handle_select_another_channel_callback(query: CallbackQuery, state: FSMContext) -> None:
     """Обработчик для выбора другого канала"""
     logger.debug(f"[handle_back_callback] callback from {get_username(query)}")

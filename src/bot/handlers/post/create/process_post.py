@@ -7,25 +7,23 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from bot.keyboards.inline.post import post_additional_configuration_keyboard
 from bot.schemas import PostContext
 from bot.schemas.post import PreviewMessageContext
-from bot.states import PostCreateState
+from bot.states.post import PostCreateState
 from bot.utils.messages import make_linked
 from bot.utils.user import get_username
 from common.database.models import DelayedMessageModel
 from common.database.services.delayed_messages import save_delayed_message
 
 
-__all__ = [
-    "router",
-]
+__all__ = ["router"]
 
 
-router = Router(name="send_text")
+router = Router(name="process_post")
 
 
-@router.message(PostCreateState.waiting_for_post)
-async def handle_send_text(message: Message, state: FSMContext, session: AsyncSession) -> None:
-    """Обрабатывает полученный текст для публикации."""
-    logger.debug(f"Sending text callback from {get_username(message)}")
+@router.message(PostCreateState.process_post)
+async def process_post(message: Message, state: FSMContext, session: AsyncSession) -> None:
+    """Обрабатывает полученный пост для публикации."""
+    logger.debug(f"Process post message from {get_username(message)}")
 
     post_state = PostContext(**(await state.get_data()))
     post_state.preview_message = PreviewMessageContext(message=message)
@@ -43,5 +41,5 @@ async def handle_send_text(message: Message, state: FSMContext, session: AsyncSe
         chat_id=message.chat.id,
         reply_markup=post_additional_configuration_keyboard(saved_buttons=post_state.preview_message.buttons),
     )
-    await state.set_state(PostCreateState.waiting_for_post)
     await state.set_data(post_state.model_dump())
+    await state.set_state(PostCreateState.process_post)

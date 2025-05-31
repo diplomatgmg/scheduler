@@ -1,16 +1,7 @@
 from aiogram.fsm.state import State, StatesGroup
 
 
-__all__ = [
-    "PostCreateState",
-    "PostScheduleState",
-]
-
-
-class PostCreateState(StatesGroup):
-    waiting_for_channel = State()
-    waiting_for_post = State()
-    waiting_for_buttons = State()
+__all__ = ["PostScheduleState"]
 
 
 class PostScheduleState(StatesGroup):

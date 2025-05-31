@@ -3,15 +3,22 @@ from collections.abc import Sequence
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from bot.callbacks import PostCallback, SelectChannelCallback
-from bot.callbacks.post import PostActionEnum, PostScheduleCallback, PostScheduleEnum
+from bot.callbacks import SelectChannelCallback
+from bot.callbacks.post import (
+    PostCreateActionEnum,
+    PostCreateCallback,
+    PostMenuActionEnum,
+    PostMenuCallback,
+    PostScheduleActionEnum,
+    PostScheduleCallback,
+)
 from common.database.models import ChannelModel
 
 
 __all__ = [
     "post_additional_configuration_keyboard",
     "post_cancel_buttons",
-    "post_schedule_keyboard",
+    "scheduling_options_keyboard",
     "select_another_channel_keyboard",
     "select_channel_keyboard",
 ]
@@ -35,7 +42,7 @@ def select_channel_keyboard(channels: Sequence[ChannelModel]) -> InlineKeyboardM
     keyboard.add(
         InlineKeyboardButton(
             text="← Назад",
-            callback_data=PostCallback(action=PostActionEnum.BACK).pack(),
+            callback_data=PostCreateCallback(action=PostCreateActionEnum.BACK).pack(),
         )
     )
 
@@ -49,7 +56,8 @@ def select_another_channel_keyboard() -> InlineKeyboardMarkup:
     buttons = [
         [
             InlineKeyboardButton(
-                text="Выбрать другой канал", callback_data=PostCallback(action=PostActionEnum.CREATE).pack()
+                text="Выбрать другой канал",
+                callback_data=PostMenuCallback(action=PostMenuActionEnum.CREATE).pack(),
             )
         ]
     ]
@@ -77,13 +85,15 @@ def post_additional_configuration_keyboard(
     if saved_buttons is not None:
         builder.row(
             InlineKeyboardButton(
-                text="Удалить URL-кнопки", callback_data=PostCallback(action=PostActionEnum.REMOVE_BUTTONS).pack()
+                text="Удалить URL-кнопки",
+                callback_data=PostCreateCallback(action=PostCreateActionEnum.REMOVE_BUTTONS).pack(),
             )
         )
     else:
         builder.row(
             InlineKeyboardButton(
-                text="Добавить URL-кнопки", callback_data=PostCallback(action=PostActionEnum.ADD_BUTTONS).pack()
+                text="Добавить URL-кнопки",
+                callback_data=PostCreateCallback(action=PostCreateActionEnum.ADD_BUTTONS).pack(),
             )
         )
 
@@ -95,7 +105,9 @@ def post_additional_configuration_keyboard(
     )
 
     builder.row(
-        InlineKeyboardButton(text="Далее", callback_data=PostCallback(action=PostActionEnum.SCHEDULE_POST).pack())
+        InlineKeyboardButton(
+            text="Далее", callback_data=PostCreateCallback(action=PostCreateActionEnum.SCHEDULE).pack()
+        )
     )
 
     return builder.as_markup()
@@ -107,7 +119,7 @@ def post_cancel_buttons() -> InlineKeyboardMarkup:
         [
             InlineKeyboardButton(
                 text="Отменить создание кнопок",
-                callback_data=PostCallback(action=PostActionEnum.CANCEL_ADD_BUTTONS).pack(),  # FIXME для чего .pack()?
+                callback_data=PostCreateCallback(action=PostCreateActionEnum.CANCEL_ADD_BUTTONS).pack(),
             )
         ]
     ]
@@ -115,23 +127,25 @@ def post_cancel_buttons() -> InlineKeyboardMarkup:
     return InlineKeyboardBuilder(buttons).as_markup()
 
 
-def post_schedule_keyboard() -> InlineKeyboardMarkup:
+def scheduling_options_keyboard() -> InlineKeyboardMarkup:
     """"""
     buttons = [
         [
             InlineKeyboardButton(
-                text="Опубликовать", callback_data=PostScheduleCallback(action=PostScheduleEnum.PUBLISH_NOW).pack()
+                text="Опубликовать",
+                callback_data=PostScheduleCallback(action=PostScheduleActionEnum.PUBLISH_NOW).pack(),
             )
         ],
         [
             InlineKeyboardButton(
-                text="Отложить", callback_data=PostScheduleCallback(action=PostScheduleEnum.SCHEDULE).pack()
+                text="Отложить",
+                callback_data=PostScheduleCallback(action=PostScheduleActionEnum.SCHEDULE).pack(),
             )
         ],
         [
             InlineKeyboardButton(
                 text="Задать таймер для удаления",
-                callback_data=PostScheduleCallback(action=PostScheduleEnum.SET_DELETE_TIMER).pack(),
+                callback_data=PostScheduleCallback(action=PostScheduleActionEnum.SET_DELETE_TIMER).pack(),
             )
         ],
     ]

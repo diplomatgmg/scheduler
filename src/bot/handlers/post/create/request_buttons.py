@@ -4,21 +4,18 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 from loguru import logger
 
-from bot.callbacks import PostCallback
-from bot.callbacks.post import PostActionEnum
+from bot.callbacks.post import PostCreateActionEnum, PostCreateCallback
 from bot.core.loader import bot
 from bot.keyboards.inline.post import post_cancel_buttons
-from bot.states import PostCreateState
+from bot.states.post import PostCreateState
 from bot.utils.messages import get_message
 from bot.utils.user import get_username
 
 
-__all__ = [
-    "router",
-]
+__all__ = ["router"]
 
 
-router = Router(name="add_buttons")
+router = Router(name="request_buttons")
 
 
 BUTTONS_FORMAT_TEXT = """
@@ -34,18 +31,18 @@ BUTTONS_FORMAT_TEXT = """
 
 
 # noinspection PyTypeChecker
-@router.callback_query(PostCallback.filter(F.action == PostActionEnum.ADD_BUTTONS))
-async def handle_add_buttons(query: CallbackQuery, state: FSMContext) -> None:
-    """Обрабатывает полученный текст для публикации."""
-    logger.debug(f"Add buttons callback from {get_username(query)}")
+@router.callback_query(PostCreateCallback.filter(F.action == PostCreateActionEnum.ADD_BUTTONS))
+async def request_buttons(query: CallbackQuery, state: FSMContext) -> None:
+    """Запрашивает кнопки для поста в необходимом формате."""
+    logger.debug(f"{query.data} callback from {get_username(query)}")
 
     message = await get_message(query)
-
     await message.delete()
+
     await bot.send_message(
         text=BUTTONS_FORMAT_TEXT,
         chat_id=message.chat.id,
         reply_markup=post_cancel_buttons(),
         parse_mode=ParseMode.HTML,
     )
-    await state.set_state(PostCreateState.waiting_for_buttons)
+    await state.set_state(PostCreateState.process_buttons)

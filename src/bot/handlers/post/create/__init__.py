@@ -1,28 +1,34 @@
 from aiogram import Router
 
 from bot.handlers.post.create import (
-    add_buttons,
-    cancel_or_remove_buttons,
+    channel_selection,
+    manage_post_buttons,
+    post_creation,
+    process_buttons,
+    process_post,
+    request_buttons,
     schedule_post,
-    select_channel,
-    send_buttons,
-    send_text,
-    wait_text,
 )
 
 
 __all__ = [
-    "router",
+    "channel_selection",
+    "manage_post_buttons",
+    "post_creation",
+    "process_buttons",
+    "process_post",
+    "request_buttons",
+    "schedule_post",
 ]
 
 
 router = Router(name="create")
 router.include_routers(
-    select_channel.router,
-    send_text.router,
-    wait_text.router,
-    add_buttons.router,
-    send_buttons.router,
-    cancel_or_remove_buttons.router,
+    post_creation.router,
+    channel_selection.router,
+    process_post.router,
+    request_buttons.router,
+    process_buttons.router,
+    manage_post_buttons.router,
     schedule_post.router,
 )

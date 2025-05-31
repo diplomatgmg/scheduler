@@ -3,8 +3,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 from loguru import logger
 
-from bot.callbacks import PostCallback
-from bot.callbacks.post import PostActionEnum
+from bot.callbacks.post import PostCreateActionEnum, PostCreateCallback
 from bot.core.loader import bot
 from bot.keyboards.inline.post import post_additional_configuration_keyboard
 from bot.schemas import PostContext
@@ -12,27 +11,27 @@ from bot.utils.messages import get_message
 from bot.utils.user import get_username
 
 
-__all__ = [
-    "router",
-]
+__all__ = ["router"]
 
 
-router = Router(name="cancel_or_remove_buttons")
+router = Router(name="manage_post_buttons")
 
 
 # noinspection PyTypeChecker
 @router.callback_query(
-    PostCallback.filter(
+    PostCreateCallback.filter(
         F.action.in_(
             [
-                PostActionEnum.CANCEL_ADD_BUTTONS,
-                PostActionEnum.REMOVE_BUTTONS,
+                PostCreateActionEnum.CANCEL_ADD_BUTTONS,
+                PostCreateActionEnum.REMOVE_BUTTONS,
             ]
         )
     )
 )
-async def handle_cancel_or_remove_buttons(query: CallbackQuery, state: FSMContext) -> None:
+async def post_buttons(query: CallbackQuery, state: FSMContext) -> None:
+    """Обрабатывает действия с кнопками (удаление/отмена)"""
     logger.debug(f"{query.data} callback from {get_username(query)}")
+
     message = await get_message(query)
     post_state_data = await state.get_data()
     post_context = PostContext(**post_state_data)

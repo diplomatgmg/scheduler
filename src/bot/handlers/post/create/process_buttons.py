@@ -6,17 +6,15 @@ from loguru import logger
 from bot.core.loader import bot
 from bot.keyboards.inline.post import post_additional_configuration_keyboard, post_cancel_buttons
 from bot.schemas import PostContext
-from bot.states import PostCreateState
+from bot.states.post import PostCreateState
 from bot.utils.user import get_username
 from common.schemas.url import HttpsUrl
 
 
-__all__ = [
-    "router",
-]
+__all__ = ["router"]
 
 
-router = Router(name="wait_buttons")
+router = Router(name="process_buttons")
 
 
 def parse_buttons(buttons_str: str) -> list[list[InlineKeyboardButton]]:
@@ -47,12 +45,12 @@ async def try_again(message: Message, state: FSMContext) -> None:
         "Прислан некорректный формат кнопок. Попробуйте еще раз",
         reply_markup=post_cancel_buttons(),
     )
-    await state.set_state(PostCreateState.waiting_for_buttons)
+    await state.set_state(PostCreateState.process_buttons)
 
 
-@router.message(PostCreateState.waiting_for_buttons)
-async def handle_send_buttons(message: Message, state: FSMContext) -> None:
-    """Обработчик для получения поста, который необходимо создать на канале"""
+@router.message(PostCreateState.process_buttons)
+async def handle_process_buttons(message: Message, state: FSMContext) -> None:
+    """Обрабатывает кнопки, которые необходимо прикрепить к посту."""
     logger.debug(f"Send buttons callback from {get_username(message)}")
 
     post_context = PostContext(**await state.get_data())
@@ -76,4 +74,4 @@ async def handle_send_buttons(message: Message, state: FSMContext) -> None:
         reply_markup=post_additional_configuration_keyboard(buttons),
     )
 
-    await state.set_state(PostCreateState.waiting_for_post)
+    await state.set_state(PostCreateState.process_post)
