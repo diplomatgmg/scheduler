@@ -14,8 +14,8 @@ __all__ = ["router"]
 router = Router(name="unhandled_event")
 
 
-@router.message
-@router.callback_query
+@router.message()
+@router.callback_query()
 async def unhandled_event(event: Message | CallbackQuery, state: FSMContext) -> None:
     """Обработчик для необработанных сообщений"""
     logger.warning(f"Unhandled message from {get_username(event)}")
