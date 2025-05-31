@@ -31,7 +31,7 @@ jobs:
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /srv/${{ vars.ENV_PROJECT_NAME }}
-            docker compose up --wait -d
+            make up
             make migrate
 
       - name: Notify Telegram on Failure
