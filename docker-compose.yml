@@ -1,47 +1,70 @@
 name: ${ENV_PROJECT_NAME}
 
+
+x-project-opts: &project_opts
+  env_file:
+    - .env
+  volumes:
+    - app-logs:/app/logs
+  networks:
+    - app-network
+
 x-healthcheck-defaults: &healthcheck_defaults
   interval: "${ENV_DOCKER_HEALTHCHECK_INTERVAL}"
   timeout: "${ENV_DOCKER_HEALTHCHECK_TIMEOUT}"
   retries: ${ENV_DOCKER_HEALTHCHECK_RETRIES}
   start_period: "${ENV_DOCKER_HEALTHCHECK_START_PERIOD}"
 
-services:
-  bot:
-    image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
-    container_name: ${ENV_PROJECT_NAME}-bot
-    restart: unless-stopped
-    env_file:
-      - .env
-    volumes:
-      - app-logs:/app/logs
-    networks:
-      - app-network
-    depends_on:
-      pgbouncer:
-        condition: service_started
-      redis:
-        condition: service_healthy
+x-celery-opts: &celery_opts
+  image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
+  depends_on:
+    redis:
+      condition: service_healthy
+  healthcheck:
+    test: [ "CMD", "celery", "-A", "bot.celery.celery_app", "inspect", "ping" ]
+    <<: *healthcheck_defaults
 
+
+services:
   api:
     image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-api:latest
     container_name: ${ENV_PROJECT_NAME}-api
+    profiles:
+      - api
     ports:
       - "${API_PORT}:${API_PORT}"
-    env_file:
-      - .env
-    volumes:
-      - app-logs:/app/logs
-    networks:
-      - app-network
     depends_on:
       pgbouncer:
         condition: service_started
       redis:
         condition: service_healthy
     healthcheck:
+      test: [ "CMD", "wget", "-q", "--spider", "http://${API_HOST}:${API_PORT}${API_HEALTHCHECK_PATH}" ]
       <<: *healthcheck_defaults
-      test: ["CMD", "wget", "-q", "--spider", "http://${API_HOST}:${API_PORT}/api/v1/health"]
+    <<: *project_opts
+
+  bot:
+    image: ${ENV_DOCKER_USERNAME}/${ENV_PROJECT_NAME}-bot:latest
+    container_name: ${ENV_PROJECT_NAME}-bot
+    restart: unless-stopped
+    depends_on:
+      pgbouncer:
+        condition: service_started
+      redis:
+        condition: service_healthy
+    <<: *project_opts
+
+  celery-worker:
+    container_name: ${ENV_PROJECT_NAME}-celery-worker
+    command: celery -A bot.celery.celery_app worker -P eventlet -l ${LOG_LEVEL}
+    <<: [ *project_opts, *celery_opts ]
+
+  celery-beat:
+    container_name: ${ENV_PROJECT_NAME}-celery-beat
+    command: celery -A bot.celery.celery_app beat -l ${LOG_LEVEL}
+    profiles:
+      - celery-beat
+    <<: [ *project_opts, *celery_opts ]
 
   postgres:
     image: postgres:17.4-alpine
@@ -55,8 +78,8 @@ services:
     networks:
       - app-network
     healthcheck:
-      <<: *healthcheck_defaults
       test: [ "CMD", "pg_isready", "-U", "${DB_USER}", "-d", "${POSTGRES_DB}" ]
+      <<: *healthcheck_defaults
 
   pgbouncer:
     image: bitnami/pgbouncer:1.24.0
@@ -71,7 +94,7 @@ services:
       - app-network
     depends_on:
       postgres:
-        condition: service_healthy
+        condition: service_started
 
   redis:
     image: redis:8.0.0-alpine
@@ -80,12 +103,12 @@ services:
       - "${REDIS_PORT}:${REDIS_PORT}"
     command: [ "redis-server", "--port", "${REDIS_PORT}" ]
     volumes:
-      - redis-data:/data
+      - redis-data:/var/lib/redis/data
     networks:
       - app-network
     healthcheck:
-      <<: *healthcheck_defaults
       test: [ "CMD", "redis-cli", "-p", "${REDIS_PORT}", "ping" ]
+      <<: *healthcheck_defaults
 
   tester:
     build:
@@ -97,6 +120,7 @@ services:
       - .env
     networks:
       - app-network
+
 
 networks:
   app-network:

@@ -1,8 +1,7 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from bot.callbacks import PostCallback
-from bot.callbacks.post import PostActionEnum
+from bot.callbacks.post import PostMenuActionEnum, PostMenuCallback
 
 
 __all__ = [
@@ -16,21 +15,19 @@ def main_keyboard() -> InlineKeyboardMarkup:
         [
             InlineKeyboardButton(
                 text="Создать пост",
-                callback_data=PostCallback(action=PostActionEnum.CREATE).pack(),
+                callback_data=PostMenuCallback(action=PostMenuActionEnum.CREATE).pack(),
             ),
         ],
         [
             InlineKeyboardButton(
                 text="Настройки",
-                callback_data=PostCallback(action=PostActionEnum.SETTINGS).pack(),
+                callback_data=PostMenuCallback(action=PostMenuActionEnum.SETTINGS).pack(),
             ),
             InlineKeyboardButton(
                 text="Редактировать",
-                callback_data=PostCallback(action=PostActionEnum.EDIT).pack(),
+                callback_data=PostMenuCallback(action=PostMenuActionEnum.EDIT).pack(),
             ),
         ],
     ]
 
-    keyboard = InlineKeyboardBuilder(markup=buttons)
-
-    return keyboard.as_markup()
+    return InlineKeyboardBuilder(markup=buttons).as_markup()

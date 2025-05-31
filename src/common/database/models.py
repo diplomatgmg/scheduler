@@ -1,13 +1,25 @@
-from sqlalchemy import BigInteger, ForeignKey, UniqueConstraint
+from typing import Any
+
+from sqlalchemy import JSON, BigInteger, ForeignKey, UniqueConstraint
 from sqlalchemy.ext.asyncio import AsyncAttrs
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column, relationship
+from sqlalchemy.orm import (
+    DeclarativeBase,
+    Mapped,
+    mapped_column,
+    registry,
+    relationship,
+)
 
 
 __all__ = [
     "Base",
     "ChannelModel",
+    "DelayedMessageModel",
     "UserModel",
 ]
+
+
+mapper_registry = registry()
 
 
 class Base(DeclarativeBase, AsyncAttrs):
@@ -36,3 +48,12 @@ class ChannelModel(Base):
     username: Mapped[str | None]
 
     user = relationship("UserModel", back_populates="channels")
+
+
+class DelayedMessageModel(Base):
+    __tablename__ = "delayed_messages"
+
+    id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True)
+    to_chat_id: Mapped[int] = mapped_column(BigInteger)
+    is_sent: Mapped[bool] = mapped_column(default=False)
+    message_json: Mapped[dict[str, Any]] = mapped_column(JSON, nullable=False)

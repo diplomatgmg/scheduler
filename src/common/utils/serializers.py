@@ -27,7 +27,7 @@ class JSONSerializer(AbstractSerializer):
         return orjson.dumps(obj)
 
     def deserialize(self, obj: bytes) -> Any:  # noqa: PLR6301
-        return orjson.loads(bytes(obj))
+        return orjson.loads(obj)
 
 
 class PickleSerializer(AbstractSerializer):

@@ -3,8 +3,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.types import CallbackQuery
 from loguru import logger
 
-from bot.callbacks import PostCallback
-from bot.callbacks.post import PostActionEnum
+from bot.callbacks.post import PostMenuActionEnum, PostMenuCallback
 from bot.utils.messages import get_message
 from bot.utils.user import get_username
 
@@ -18,7 +17,7 @@ router = Router(name="settings")
 
 
 # noinspection PyTypeChecker
-@router.callback_query(PostCallback.filter(F.action == PostActionEnum.SETTINGS))
+@router.callback_query(PostMenuCallback.filter(F.action == PostMenuActionEnum.SETTINGS))
 async def handle_settings_callback(
     query: CallbackQuery,
     state: FSMContext,

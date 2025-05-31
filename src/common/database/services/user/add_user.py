@@ -14,5 +14,4 @@ async def add_user(session: AsyncSession, user_model: UserModel) -> None:
     logger.debug(f"Adding user id={user_model.id}")
 
     session.add(user_model)
-    await session.commit()
-    await session.refresh(user_model)
+    await session.flush()
