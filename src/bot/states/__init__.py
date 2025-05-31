@@ -1,6 +1,6 @@
-from bot.states.post import PostState
+from bot.states.post import PostCreateState
 
 
 __all__ = [
-    "PostState",
+    "PostCreateState",
 ]

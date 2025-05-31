@@ -4,10 +4,10 @@ from aiogram.types import Message
 from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
-from bot.keyboards.inline.post import post_additional_configuration
+from bot.keyboards.inline.post import post_additional_configuration_keyboard
 from bot.schemas import PostContext
 from bot.schemas.post import PreviewMessageContext
-from bot.states import PostState
+from bot.states import PostCreateState
 from bot.utils.messages import make_linked
 from bot.utils.user import get_username
 from common.database.models import DelayedMessageModel
@@ -22,7 +22,7 @@ __all__ = [
 router = Router(name="send_text")
 
 
-@router.message(PostState.waiting_for_post)
+@router.message(PostCreateState.waiting_for_post)
 async def handle_send_text(message: Message, state: FSMContext, session: AsyncSession) -> None:
     """Обрабатывает полученный текст для публикации."""
     logger.debug(f"Sending text callback from {get_username(message)}")
@@ -41,7 +41,7 @@ async def handle_send_text(message: Message, state: FSMContext, session: AsyncSe
 
     await message.send_copy(
         chat_id=message.chat.id,
-        reply_markup=post_additional_configuration(saved_buttons=post_state.preview_message.buttons),
+        reply_markup=post_additional_configuration_keyboard(saved_buttons=post_state.preview_message.buttons),
     )
-    await state.set_state(PostState.waiting_for_post)
+    await state.set_state(PostCreateState.waiting_for_post)
     await state.set_data(post_state.model_dump())

@@ -7,7 +7,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from bot.callbacks import PostCallback
 from bot.callbacks.post import PostActionEnum
 from bot.keyboards.inline.post import select_channel_keyboard
-from bot.states import PostState
+from bot.states import PostCreateState
 from bot.utils.messages import get_message, safe_reply
 from bot.utils.user import get_username
 from common.database.services.user import find_user_channels
@@ -33,7 +33,7 @@ async def handle_select_channel_callback(query: CallbackQuery, state: FSMContext
         return
 
     await state.clear()
-    await state.set_state(PostState.waiting_for_channel)
+    await state.set_state(PostCreateState.waiting_for_channel)
 
     message = await get_message(query)
     await message.edit_text(

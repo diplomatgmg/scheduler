@@ -4,9 +4,9 @@ from aiogram.types import InlineKeyboardButton, Message
 from loguru import logger
 
 from bot.core.loader import bot
-from bot.keyboards.inline.post import post_additional_configuration, post_cancel_buttons
+from bot.keyboards.inline.post import post_additional_configuration_keyboard, post_cancel_buttons
 from bot.schemas import PostContext
-from bot.states import PostState
+from bot.states import PostCreateState
 from bot.utils.user import get_username
 from common.schemas.url import HttpsUrl
 
@@ -47,10 +47,10 @@ async def try_again(message: Message, state: FSMContext) -> None:
         "Прислан некорректный формат кнопок. Попробуйте еще раз",
         reply_markup=post_cancel_buttons(),
     )
-    await state.set_state(PostState.waiting_for_buttons)
+    await state.set_state(PostCreateState.waiting_for_buttons)
 
 
-@router.message(PostState.waiting_for_buttons)
+@router.message(PostCreateState.waiting_for_buttons)
 async def handle_send_buttons(message: Message, state: FSMContext) -> None:
     """Обработчик для получения поста, который необходимо создать на канале"""
     logger.debug(f"Send buttons callback from {get_username(message)}")
@@ -73,7 +73,7 @@ async def handle_send_buttons(message: Message, state: FSMContext) -> None:
         chat_id=message.chat.id,
         from_chat_id=post_context.preview_message.message.chat.id,
         message_id=post_context.preview_message.message.message_id,
-        reply_markup=post_additional_configuration(buttons),
+        reply_markup=post_additional_configuration_keyboard(buttons),
     )
 
-    await state.set_state(PostState.waiting_for_post)
+    await state.set_state(PostCreateState.waiting_for_post)

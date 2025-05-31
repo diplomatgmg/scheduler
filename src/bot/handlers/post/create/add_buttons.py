@@ -8,7 +8,7 @@ from bot.callbacks import PostCallback
 from bot.callbacks.post import PostActionEnum
 from bot.core.loader import bot
 from bot.keyboards.inline.post import post_cancel_buttons
-from bot.states import PostState
+from bot.states import PostCreateState
 from bot.utils.messages import get_message
 from bot.utils.user import get_username
 
@@ -48,4 +48,4 @@ async def handle_add_buttons(query: CallbackQuery, state: FSMContext) -> None:
         reply_markup=post_cancel_buttons(),
         parse_mode=ParseMode.HTML,
     )
-    await state.set_state(PostState.waiting_for_buttons)
+    await state.set_state(PostCreateState.waiting_for_buttons)

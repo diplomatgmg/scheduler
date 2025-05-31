@@ -9,7 +9,7 @@ from bot.callbacks.post import PostActionEnum, PostCallback
 from bot.handlers.menu import show_main_menu
 from bot.keyboards.inline.post import select_another_channel_keyboard
 from bot.schemas import PostContext
-from bot.states import PostState
+from bot.states import PostCreateState
 from bot.utils.messages import get_message, make_linked
 from bot.utils.user import get_username
 
@@ -22,7 +22,7 @@ __all__ = [
 router = Router(name="wait_text")
 
 
-@router.callback_query(SelectChannelCallback.filter(), PostState.waiting_for_channel)
+@router.callback_query(SelectChannelCallback.filter(), PostCreateState.waiting_for_channel)
 async def handle_wait_text(query: CallbackQuery, callback_data: SelectChannelCallback, state: FSMContext) -> None:
     """Обработчик для получения поста, который необходимо создать на канале"""
     selected_channel_chat_id = callback_data.chat_id
@@ -48,7 +48,7 @@ async def handle_wait_text(query: CallbackQuery, callback_data: SelectChannelCal
         reply_markup=select_another_channel_keyboard(),
         parse_mode=ParseMode.HTML,
     )
-    await state.set_state(PostState.waiting_for_post)
+    await state.set_state(PostCreateState.waiting_for_post)
 
 
 # noinspection PyTypeChecker

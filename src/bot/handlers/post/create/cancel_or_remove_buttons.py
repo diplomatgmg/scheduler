@@ -6,7 +6,7 @@ from loguru import logger
 from bot.callbacks import PostCallback
 from bot.callbacks.post import PostActionEnum
 from bot.core.loader import bot
-from bot.keyboards.inline.post import post_additional_configuration
+from bot.keyboards.inline.post import post_additional_configuration_keyboard
 from bot.schemas import PostContext
 from bot.utils.messages import get_message
 from bot.utils.user import get_username
@@ -47,5 +47,5 @@ async def handle_cancel_or_remove_buttons(query: CallbackQuery, state: FSMContex
         chat_id=message.chat.id,
         from_chat_id=post_context.preview_message.message.chat.id,
         message_id=post_context.preview_message.message.message_id,
-        reply_markup=post_additional_configuration(),
+        reply_markup=post_additional_configuration_keyboard(),
     )
