@@ -69,7 +69,7 @@ services:
     <<: [ *service_defaults, *app_logs_defaults, *celery_opts ]
 
   postgres:
-    image: postgres:17.4-alpine
+    image: postgres:17.5-alpine
     container_name: ${ENV_PROJECT_NAME}-postgres
     ports:
       - "${POSTGRES_PORT}:${POSTGRES_PORT}"
@@ -81,7 +81,7 @@ services:
     <<: *service_defaults
 
   pgbouncer:
-    image: bitnami/pgbouncer:1.24.0
+    image: bitnami/pgbouncer:1.24.1
     container_name: ${ENV_PROJECT_NAME}-pgbouncer
     ports:
       - "${PGBOUNCER_PORT}:${PGBOUNCER_PORT}"
@@ -93,7 +93,7 @@ services:
     <<: *service_defaults
 
   redis:
-    image: redis:8.0.0-alpine
+    image: redis:8.0.2-alpine
     container_name: ${ENV_PROJECT_NAME}-redis
     ports:
       - "${REDIS_PORT}:${REDIS_PORT}"
