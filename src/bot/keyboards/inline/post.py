@@ -4,6 +4,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from bot.callbacks import SelectChannelCallback
+from bot.callbacks.noop import NoopCallback
 from bot.callbacks.post import (
     PostCreateActionEnum,
     PostCreateCallback,
@@ -74,13 +75,12 @@ def post_additional_configuration_keyboard(
     if saved_buttons is not None:
         for row in saved_buttons:
             builder.row(*row)
-
-    builder.row(
-        InlineKeyboardButton(
-            text="-----------------------",
-            callback_data="noop",
+        builder.row(
+            InlineKeyboardButton(
+                text=" ",
+                callback_data=NoopCallback().pack(),
+            )
         )
-    )
 
     if saved_buttons is not None:
         builder.row(
@@ -99,8 +99,8 @@ def post_additional_configuration_keyboard(
 
     builder.row(
         InlineKeyboardButton(
-            text="-----------------------",
-            callback_data="noop",
+            text=" ",
+            callback_data=NoopCallback().pack(),
         )
     )
 
