@@ -30,5 +30,5 @@ class PostContext(BaseModel):
 
 
 class PostScheduleContext(BaseModel):
-    date: int  # timestamp
-    time: int  # timestamp
+    date: int | None = None  # timestamp
+    time: int | None = None  # timestamp

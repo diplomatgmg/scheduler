@@ -53,7 +53,7 @@ unsafe-fixes = true
 line-length = 120
 lint.preview = true
 lint.select = ["ALL"]
-lint.ignore = ["I", "D", "DOC", "TD", "FIX", "CPY001", "COM812",  "ANN401", "RUF001", "RUF002", "RUF003", "DTZ005"]
+lint.ignore = ["I", "D", "DOC", "TD", "FIX", "CPY001", "COM812",  "ANN401", "RUF001", "RUF002", "RUF003", "DTZ005", "DTZ006"]
 extend-exclude = ["migrations"]
 
 [tool.ruff.lint.extend-per-file-ignores]
