@@ -29,10 +29,12 @@ class Base(DeclarativeBase, AsyncAttrs):
 class UserModel(Base):
     __tablename__ = "users"
 
-    id: Mapped[int] = mapped_column(primary_key=True)
+    id: Mapped[int] = mapped_column(BigInteger, primary_key=True)
     first_name: Mapped[str]
     last_name: Mapped[str | None]
     username: Mapped[str | None]
+
+    timezone_offset: Mapped[int | None] = mapped_column(nullable=True)
 
     channels = relationship("ChannelModel", back_populates="user", cascade="all, delete")
 

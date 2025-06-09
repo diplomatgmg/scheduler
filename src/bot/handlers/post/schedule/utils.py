@@ -1,6 +1,6 @@
 import calendar
-import re
 from datetime import datetime, time
+import re
 from typing import Any
 
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
@@ -151,10 +151,7 @@ class CustomCalendar(SimpleCalendar):  # type: ignore[misc]
                     InlineKeyboardButton(
                         text=highlight(day) if is_current_day(day) else str(day),
                         callback_data=SimpleCalendarCallback(
-                            act=SimpleCalAct.day,
-                            year=year,
-                            month=month,
-                            day=day
+                            act=SimpleCalAct.day, year=year, month=month, day=day
                         ).pack(),
                     )
                 )
@@ -162,14 +159,15 @@ class CustomCalendar(SimpleCalendar):  # type: ignore[misc]
 
         cancel_row = [
             InlineKeyboardButton(
-            text=self._labels.cancel_caption,
-            callback_data=SimpleCalendarCallback(act=SimpleCalAct.cancel, year=year, month=month, day=day).pack(),
-        ),
+                text=self._labels.cancel_caption,
+                callback_data=SimpleCalendarCallback(act=SimpleCalAct.cancel, year=year, month=month, day=day).pack(),
+            ),
             InlineKeyboardButton(text=" ", callback_data=self.ignore_callback),
             InlineKeyboardButton(
-            text=self._labels.today_caption,
-            callback_data=SimpleCalendarCallback(act=SimpleCalAct.today, year=year, month=month, day=day).pack(),
-        )]
+                text=self._labels.today_caption,
+                callback_data=SimpleCalendarCallback(act=SimpleCalAct.today, year=year, month=month, day=day).pack(),
+            ),
+        ]
         kb.append(cancel_row)
 
         return InlineKeyboardMarkup(row_width=7, inline_keyboard=kb)

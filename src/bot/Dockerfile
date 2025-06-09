@@ -9,7 +9,7 @@ ENV PYTHONDONTWRITEBYTECODE=1 \
 
 WORKDIR /app
 
-RUN apk add --no-cache uv
+RUN apk add --no-cache uv build-base
 
 COPY pyproject.toml uv.lock ./
 

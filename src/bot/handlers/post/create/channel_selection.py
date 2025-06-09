@@ -6,7 +6,7 @@ from loguru import logger
 
 from bot.callbacks import SelectChannelCallback
 from bot.callbacks.post import PostCreateActionEnum, PostMenuCallback
-from bot.handlers.menu import show_main_menu
+from bot.handlers.utils import show_main_menu
 from bot.keyboards.inline.post import select_another_channel_keyboard
 from bot.schemas import PostContext
 from bot.states.post import PostCreateState

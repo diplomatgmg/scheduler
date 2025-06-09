@@ -2,7 +2,7 @@ from aiogram import Router
 from aiogram.filters import CommandStart
 from aiogram.types import Message
 
-from bot.handlers.menu import show_main_menu
+from bot.handlers.utils import show_main_menu
 
 
 __all__ = ()

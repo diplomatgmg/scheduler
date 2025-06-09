@@ -5,9 +5,7 @@ from bot.keyboards.inline.menu import main_keyboard
 from bot.utils.user import get_username
 
 
-__all__ = [
-    "show_main_menu",
-]
+__all__ = ["show_main_menu"]
 
 
 async def show_main_menu(message: Message, *, edit_previous_text: bool = False) -> None:

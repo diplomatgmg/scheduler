@@ -10,21 +10,23 @@ from common.redis.engine import get_redis_instance
 from common.utils.serializers import AbstractSerializer, PickleSerializer
 
 
-__all__ = [
-    "build_key",
-    "cache",
-]
+__all__ = ["build_key", "cache", "invalidate_cache"]
 
 
 Func = TypeVar("Func")
 
 
 def build_key(*args: Any, **kwargs: Any) -> str:
-    """Создает ключ для кеширования в Redis"""
+    """Создает ключ для кеширования в Redis."""
     args_str = ":".join(map(str, args))
     kwargs_str = ":".join(f"{key}={value}" for key, value in sorted(kwargs.items()))
 
     return f"{args_str}:{kwargs_str}"
+
+
+def get_key_prefix(fn: Callable[..., Any]) -> str:
+    """Создает префикс для кешируемого ключа."""
+    return f"{fn.__module__}:{fn.__name__}"
 
 
 async def set_redis_value(
@@ -35,7 +37,7 @@ async def set_redis_value(
     *,
     is_transaction: bool = False,
 ) -> None:
-    """Кеширует значение по ключу в Redis"""
+    """Кеширует значение по ключу в Redis."""
     async with redis_instance.pipeline(transaction=is_transaction) as pipeline:
         await pipeline.set(key, value)
         logger.debug(f"Set cache. {key=}, {value=}")
@@ -45,9 +47,9 @@ async def set_redis_value(
 
 
 def cache(
+    key_builder: Callable[..., str],
     cache_ttl: int | None = None,
     redis_instance: Redis | None = None,
-    key_builder: Callable[..., str] = build_key,
     serializer: AbstractSerializer | None = None,
 ) -> Callable[[Callable[..., Awaitable[Func]]], Callable[..., Awaitable[Func]]]:
     """Кеширует результат функции на основе аргументов функции"""
@@ -59,8 +61,8 @@ def cache(
         @wraps(fn)
         async def wrapper(*args: Any, **kwargs: Any) -> Any:
             key_build = key_builder(*args, **kwargs)
-            key_module = f"{fn.__module__}:{fn.__name__}"
-            key = f"{key_module}:{key_build}"
+            key_prefix = get_key_prefix(fn)
+            key = f"{key_prefix}:{key_build}"
 
             cached_value = await redis_instance.get(key)
             if cached_value is not None:
@@ -77,6 +79,35 @@ def cache(
             )
 
             return result
+
+        return wrapper
+
+    return decorator
+
+
+def invalidate_cache[Func](
+    cached_function: Callable[..., Awaitable[Func]],
+    key_builder: Callable[..., str],
+    *,
+    redis_instance: Redis | None = None,
+) -> Callable[[Callable[..., Awaitable[Func]]], Callable[..., Awaitable[Func]]]:
+    """Декоратор для инвалидации кеша."""
+    redis_instance = redis_instance or get_redis_instance(redis_cache_config.connection.dsn)
+
+    def decorator(fn: Callable[..., Awaitable[Func]]) -> Callable[..., Awaitable[Func]]:
+        @wraps(fn)
+        async def wrapper(*args: Any, **kwargs: Any) -> Any:
+            key_build = key_builder(*args, **kwargs)
+            key_prefix = get_key_prefix(cached_function)
+            key = f"{key_prefix}:{key_build}"
+
+            deleted = await redis_instance.delete(key)
+            if deleted:
+                logger.debug(f"Invalidated cache for key: {key}")
+            else:
+                logger.debug(f"No cache to invalidate for key: {key}")
+
+            return await fn(*args, **kwargs)
 
         return wrapper
 

@@ -2,7 +2,7 @@ from collections.abc import Awaitable, Callable
 from typing import TYPE_CHECKING, Any
 
 from aiogram import BaseMiddleware
-from aiogram.types import Message, TelegramObject
+from aiogram.types import CallbackQuery, Message, TelegramObject
 
 from common.database.models import UserModel
 from common.database.services.user import add_user, find_user
@@ -25,7 +25,7 @@ class AuthMiddleware(BaseMiddleware):
         event: TelegramObject,
         data: dict[str, Any],
     ) -> Any:
-        if not isinstance(event, Message):
+        if not isinstance(event, (Message, CallbackQuery)):
             return await handler(event, data)
 
         session: AsyncSession = data["session"]
@@ -34,15 +34,17 @@ class AuthMiddleware(BaseMiddleware):
         if user is None:
             return await handler(event, data)
 
-        if await find_user(session, user.id):
-            return await handler(event, data)
+        db_user = await find_user(session, user.id)
 
-        user_model = UserModel(
-            id=user.id,
-            first_name=user.first_name,
-            last_name=user.last_name,
-            username=user.username,
-        )
-        await add_user(session=session, user_model=user_model)
+        if not db_user:
+            db_user = UserModel(
+                id=user.id,
+                first_name=user.first_name,
+                last_name=user.last_name,
+                username=user.username,
+            )
+            await add_user(session, db_user)
+
+        data["user"] = db_user
 
         return await handler(event, data)
