@@ -3,6 +3,9 @@ from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from common.database.models import ChannelModel
+from common.database.services.user.find_user_channels import find_user_channels
+from common.redis.decorators import invalidate_cache
+from common.redis.decorators.cache import build_key
 
 
 __all__ = [
@@ -10,6 +13,11 @@ __all__ = [
 ]
 
 
+def key_builder(_session: AsyncSession, user_id: int, _channel_model: ChannelModel) -> str:
+    return build_key(user_id)
+
+
+@invalidate_cache(find_user_channels, key_builder)
 async def add_user_channel(
     session: AsyncSession,
     user_id: int,
