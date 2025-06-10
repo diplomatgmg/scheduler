@@ -8,7 +8,7 @@ from bot.callbacks.location import LocationCallback
 from bot.handlers.location.utils import update_user_offset
 from bot.states.location import LocationState
 from bot.utils.messages import get_message
-from bot.utils.user import get_user
+from common.database.models import UserModel
 
 
 __all__ = ["router"]
@@ -19,9 +19,10 @@ router = Router(name="offset_selected")
 
 # noinspection PyTypeChecker
 @router.callback_query(LocationCallback.filter(F.offset.is_not(None)), LocationState.waiting_for_manual_choose)
-async def handle_offset_selected(query: CallbackQuery, callback_data: LocationCallback, session: AsyncSession) -> None:
+async def handle_offset_selected(
+    query: CallbackQuery, callback_data: LocationCallback, session: AsyncSession, user: UserModel
+) -> None:
     message = await get_message(query)
-    user = await get_user(query)
     offset = cast("int", callback_data.offset)
 
-    await update_user_offset(message, session, user.id, offset)
+    await update_user_offset(message, session, user.id, offset, edit_message=True)

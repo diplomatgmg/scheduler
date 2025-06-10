@@ -5,6 +5,7 @@ from loguru import logger
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bot.core.loader import bot
+from bot.keyboards.inline.menu import main_keyboard
 from bot.utils.messages import make_linked
 from bot.utils.user import get_username
 from common.database.models import ChannelModel
@@ -82,6 +83,7 @@ async def on_bot_permissions_changed(event: ChatMemberUpdated, session: AsyncSes
             all_granted = False
 
     if not all_granted:
+        await remove_user_channel(session, event.from_user.id, event.chat.id)
         await bot.send_message(
             event.from_user.id,
             f"ℹ️  Мои права доступа в канале {linked_channel} были изменены.\n\n"
@@ -91,8 +93,17 @@ async def on_bot_permissions_changed(event: ChatMemberUpdated, session: AsyncSes
             f"Пожалуйста, дайте необходимый доступ в настройках канала</b>",
             parse_mode="HTML",
         )
-        await remove_user_channel(session, event.from_user.id, event.chat.id)
         return
+
+    channel = ChannelModel(
+        id=event.chat.id,
+        user_id=event.from_user.id,
+        chat_id=event.chat.id,
+        title=event.chat.title or "Неизвестно",
+        username=event.chat.username or "Неизвестно",
+    )
+
+    await add_user_channel(session, channel.user_id, channel)
 
     await bot.send_message(
         event.from_user.id,
@@ -101,13 +112,5 @@ async def on_bot_permissions_changed(event: ChatMemberUpdated, session: AsyncSes
         f"{message_permissions}\n"
         "🎉  <b>Все необходимые права выданы!</b>",
         parse_mode="HTML",
+        reply_markup=main_keyboard(),
     )
-
-    channel = ChannelModel(
-        user_id=event.from_user.id,
-        chat_id=event.chat.id,
-        title=event.chat.title or "Неизвестно",
-        username=event.chat.username or "Неизвестно",
-    )
-
-    await add_user_channel(session, channel.user_id, channel)

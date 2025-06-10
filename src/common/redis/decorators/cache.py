@@ -1,6 +1,6 @@
 from collections.abc import Awaitable, Callable
 from functools import wraps
-from typing import Any, Concatenate, ParamSpec, TypeVar, cast
+from typing import Any, ParamSpec, TypeVar, cast
 
 from loguru import logger
 from redis.asyncio import Redis
@@ -91,8 +91,8 @@ def cache(
 
 
 def invalidate_cache(
-    cached_function: Callable[P, Awaitable[R]],
-    key_builder: Callable[Concatenate[Any, P], str],
+    cached_function: Callable[..., Any],
+    key_builder: Callable[..., str],
     *,
     redis_instance: Redis | None = None,
 ) -> Callable[[Callable[P, Awaitable[R]]], Callable[P, Awaitable[R]]]:

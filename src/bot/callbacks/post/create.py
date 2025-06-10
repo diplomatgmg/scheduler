@@ -19,5 +19,5 @@ class PostCreateActionEnum(StrEnum):
     SCHEDULE = "schedule"
 
 
-class PostCreateCallback(CallbackData, prefix="post"):
+class PostCreateCallback(CallbackData, prefix="post_create"):
     action: PostCreateActionEnum

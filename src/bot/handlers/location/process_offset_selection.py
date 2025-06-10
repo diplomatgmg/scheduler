@@ -23,9 +23,7 @@ def get_utc_offsets() -> list[int]:
 
 
 # noinspection PyTypeChecker
-@router.callback_query(
-    LocationCallback.filter(F.action == LocationActionEnum.CHOOSE_LOCATION), LocationState.waiting_for_method
-)
+@router.callback_query(LocationCallback.filter(F.action == LocationActionEnum.CHOOSE_LOCATION))
 async def process_offset_selection(query: CallbackQuery, state: FSMContext) -> None:
     message = await get_message(query)
 

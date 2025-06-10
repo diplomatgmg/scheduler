@@ -19,8 +19,9 @@ def register_middlewares(dp: Dispatcher) -> None:
     logger.debug("Registering middlewares")
 
     if env_config.debug:
-        dp.update.outer_middleware(LoggingMiddleware())
+        dp.update.middleware(LoggingMiddleware())
 
     dp.update.outer_middleware(DatabaseMiddleware())
     dp.message.middleware(AuthMiddleware())
+    dp.callback_query.middleware(AuthMiddleware())
     dp.message.middleware(LocationMiddleware())

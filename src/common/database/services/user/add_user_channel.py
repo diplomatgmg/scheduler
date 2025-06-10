@@ -24,13 +24,17 @@ async def add_user_channel(
 
     if not existing_channel:
         logger.debug(f"Chat_id={channel_model.id} not found for user_id={user_id}. Adding")
+
         session.add(channel_model)
-    else:
-        logger.debug(f"Channel chat_id={channel_model.chat_id} found for user_id={user_id}. Updating")
-        existing_channel.title = channel_model.title
-        existing_channel.username = channel_model.username
+        await session.flush()
+
+        return channel_model
+
+    logger.debug(f"Channel chat_id={channel_model.chat_id} found for user_id={user_id}. Updating")
+
+    existing_channel.title = channel_model.title
+    existing_channel.username = channel_model.username
 
     await session.flush()
-    await session.refresh(channel_model)
 
     return channel_model

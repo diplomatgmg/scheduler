@@ -8,7 +8,7 @@ from timezonefinder import TimezoneFinder
 
 from bot.handlers.location.utils import update_user_offset
 from bot.states.location import LocationState
-from bot.utils.user import get_user
+from common.database.models import UserModel
 
 
 __all__ = ["router"]
@@ -19,7 +19,7 @@ router = Router(name="location")
 
 # noinspection PyTypeChecker
 @router.message(LocationState.waiting_for_share, F.location)
-async def handle_location_shared(message: Message, session: AsyncSession) -> None:
+async def handle_location_shared(message: Message, session: AsyncSession, user: UserModel) -> None:
     latitude, longitude = message.location.latitude, message.location.longitude  # type: ignore[union-attr]
     tf = TimezoneFinder()
 
@@ -31,7 +31,5 @@ async def handle_location_shared(message: Message, session: AsyncSession) -> Non
         )
     tz = pytz.timezone(timezone_str)
     offset = tz.utcoffset(datetime.now()).total_seconds() / 3600
-
-    user = await get_user(message)
 
     await update_user_offset(message, session, user.id, offset)

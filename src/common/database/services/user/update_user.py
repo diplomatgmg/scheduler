@@ -5,7 +5,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from common.database.exceptions import UserDoesNotExistError
 from common.database.models import UserModel
-from common.database.services.user import find_user
+from common.database.services.user.find_user import find_user
 from common.redis.decorators import invalidate_cache
 from common.redis.decorators.cache import build_key
 
