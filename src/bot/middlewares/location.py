@@ -5,7 +5,7 @@ from aiogram import BaseMiddleware
 from aiogram.types import Message, TelegramObject
 
 from bot.keyboards.inline.location import location_selection_keyboard
-from bot.states.location import TimezoneSetupState
+from bot.states.location import LocationState
 
 
 if TYPE_CHECKING:
@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from common.database.models import UserModel
 
 
-class TimezoneMiddleware(BaseMiddleware):
+class LocationMiddleware(BaseMiddleware):
     async def __call__(
         self,
         handler: Callable[[TelegramObject, dict[str, Any]], Awaitable[Any]],
@@ -26,23 +26,18 @@ class TimezoneMiddleware(BaseMiddleware):
 
         user: UserModel = data["user"]
         state: FSMContext = data["state"]
+        current_state = await state.get_state()
 
-        if await state.get_state() == TimezoneSetupState.waiting_for_timezone:
+        if current_state in {LocationState.waiting_for_manual_choose, LocationState.waiting_for_share}:
             return await handler(event, data)
 
         if not user.timezone_offset:
-            await state.set_state(TimezoneSetupState.waiting_for_timezone)
-            await request_timezone(event)
+            await state.set_state(LocationState.waiting_for_method)
+            await event.answer(
+                "⚠️ Для работы с отложенными сообщениями нам нужно знать ваш часовой пояс.\n\n"
+                "Вы можете поделиться геопозицией или выбрать временную зону вручную.",
+                reply_markup=location_selection_keyboard(),
+            )
             return None
 
         return await handler(event, data)
-
-
-async def request_timezone(message: Message) -> None:
-    """Отправляет запрос на установку временной зоны"""
-
-    await message.answer(
-        "⚠️ Для работы с отложенными сообщениями нам нужно знать ваш часовой пояс.\n\n"
-        "Вы можете поделиться геопозицией или выбрать временную зону вручную.",
-        reply_markup=location_selection_keyboard(),
-    )

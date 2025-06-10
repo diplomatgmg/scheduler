@@ -4,8 +4,8 @@ from loguru import logger
 from bot.core import config
 from bot.middlewares.auth import AuthMiddleware
 from bot.middlewares.database import DatabaseMiddleware
+from bot.middlewares.location import LocationMiddleware
 from bot.middlewares.logging import LoggingMiddleware
-from bot.middlewares.timezone import TimezoneMiddleware
 from common.environment.config import env_config
 
 
@@ -23,4 +23,4 @@ def register_middlewares(dp: Dispatcher) -> None:
 
     dp.update.outer_middleware(DatabaseMiddleware())
     dp.message.middleware(AuthMiddleware())
-    dp.message.middleware(TimezoneMiddleware())
+    dp.message.middleware(LocationMiddleware())

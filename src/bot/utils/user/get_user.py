@@ -1,4 +1,4 @@
-from aiogram.types import CallbackQuery, User
+from aiogram.types import CallbackQuery, Message, User
 
 from bot.exceptions import UserNotAvailableError
 
@@ -8,7 +8,7 @@ __all__ = [
 ]
 
 
-async def get_user(event: CallbackQuery) -> User:
+async def get_user(event: CallbackQuery | Message) -> User:
     """Возвращает объект пользователя или выбрасывает исключение"""
     user = event.from_user
 

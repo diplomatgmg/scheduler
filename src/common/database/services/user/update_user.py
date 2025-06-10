@@ -10,12 +10,12 @@ from common.redis.decorators import invalidate_cache
 from common.redis.decorators.cache import build_key
 
 
-def key_builder(_: AsyncSession, user_id: int, **__: dict[str, Any]) -> str:
+def key_builder(_: AsyncSession, user_id: int, **__: Any) -> str:
     return build_key(user_id)
 
 
 @invalidate_cache(find_user, key_builder)
-async def update_user(session: AsyncSession, user_id: int, **kwargs: dict[str, Any]) -> UserModel:
+async def update_user(session: AsyncSession, user_id: int, **fields_to_update: object) -> UserModel:
     """Обновляет поля пользователя в БД"""
     logger.debug(f"Updating user id={user_id}")
 
@@ -24,7 +24,7 @@ async def update_user(session: AsyncSession, user_id: int, **kwargs: dict[str, A
     if user is None:
         raise UserDoesNotExistError
 
-    for field, value in kwargs.items():
+    for field, value in fields_to_update.items():
         if hasattr(user, field) and getattr(user, field) != value:
             setattr(user, field, value)
             logger.debug(f"Set {field}={value} for user id={user_id}")
@@ -32,8 +32,7 @@ async def update_user(session: AsyncSession, user_id: int, **kwargs: dict[str, A
             msg = f'UserModel has no attribute "{field}"'
             raise AttributeError(msg)
 
-    await session.commit()
-
-    # FIXME ПОЛЬЗОВАТЕЛЬ НЕ обновляется
+    await session.flush()
+    await session.refresh(user)
 
     return user

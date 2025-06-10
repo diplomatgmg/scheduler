@@ -13,8 +13,8 @@ def register_handlers_routers(dp: Dispatcher) -> None:
     logger.debug("Registering handler routers")
 
     dp.include_routers(
-        start.router,
         location.router,
+        start.router,
         support.router,
         admin_channels.router,
         post.router,

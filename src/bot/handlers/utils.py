@@ -1,3 +1,5 @@
+import asyncio
+
 from aiogram.types import Message
 from loguru import logger
 
@@ -8,8 +10,11 @@ from bot.utils.user import get_username
 __all__ = ["show_main_menu"]
 
 
-async def show_main_menu(message: Message, *, edit_previous_text: bool = False) -> None:
+async def show_main_menu(message: Message, *, edit_previous_text: bool = False, delay: float | None = None) -> None:
     logger.debug(f"Showing main menu for user: {get_username(message)}")
+
+    if delay:
+        await asyncio.sleep(delay)
 
     message_text = "Здесь вы можете создавать посты, просматривать статистику и выполнять другие задачи."
 

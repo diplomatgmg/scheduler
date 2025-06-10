@@ -1,24 +1,36 @@
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
-from bot.callbacks.timezone import TimezoneCallback
-from bot.schemas.location import LocationButtonTextEnum
+from bot.callbacks.location import LocationActionEnum, LocationCallback
 
 
 __all__ = [
     "location_selection_keyboard",
+    "share_location_keyboard",
     "timezone_offset_selection_keyboard",
 ]
 
 
-def location_selection_keyboard() -> ReplyKeyboardMarkup:
-    return ReplyKeyboardMarkup(
-        keyboard=[
+def location_selection_keyboard() -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
             [
-                KeyboardButton(text=LocationButtonTextEnum.SHARE_LOCATION, request_location=True),
-                KeyboardButton(text=LocationButtonTextEnum.CHOOSE_MANUALLY),
+                InlineKeyboardButton(
+                    text="📍 Поделиться",
+                    callback_data=LocationCallback(action=LocationActionEnum.SHARE_LOCATION).pack(),
+                ),
+                InlineKeyboardButton(
+                    text="🌍 Выбрать",
+                    callback_data=LocationCallback(action=LocationActionEnum.CHOOSE_LOCATION).pack(),
+                ),
             ]
-        ],
+        ]
+    )
+
+
+def share_location_keyboard() -> ReplyKeyboardMarkup:
+    return ReplyKeyboardMarkup(
+        keyboard=[[KeyboardButton(text="📍 Поделиться", request_location=True)]],
         one_time_keyboard=True,
         resize_keyboard=True,
     )
@@ -29,7 +41,12 @@ def timezone_offset_selection_keyboard(offsets: list[int]) -> InlineKeyboardMark
         return f"UTC{value}" if value < 0 else f"UTC+{value}"
 
     buttons = [
-        [InlineKeyboardButton(text=get_str_offset(offset), callback_data=TimezoneCallback(offset=offset).pack())]
+        [
+            InlineKeyboardButton(
+                text=get_str_offset(offset),
+                callback_data=LocationCallback(action=LocationActionEnum.CHOOSE_LOCATION, offset=offset).pack(),
+            )
+        ]
         for offset in offsets
     ]
 
