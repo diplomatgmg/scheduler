@@ -6,6 +6,7 @@ from common.schemas.url import HttpsUrl
 
 __all__ = [
     "PostContext",
+    "PostScheduleContext",
     "PreviewMessageContext",
     "UrlButton",
 ]
@@ -26,3 +27,8 @@ class PostContext(BaseModel):
     selected_channel_title: str
     selected_channel_username: str | None
     preview_message: PreviewMessageContext | None = None
+
+
+class PostScheduleContext(BaseModel):
+    date: int | None = None  # timestamp
+    time: int | None = None  # timestamp

@@ -1,7 +1,4 @@
-__all__ = [
-    "BotError",
-    "MessageNotAvailableError",
-]
+__all__ = ["BotError", "MessageNotAvailableError", "UserNotAvailableError"]
 
 
 class BotError(Exception):
@@ -13,3 +10,10 @@ class MessageNotAvailableError(BotError):
 
     def __init__(self, text: str | None = None) -> None:
         super().__init__(text or "Message is not available")
+
+
+class UserNotAvailableError(BotError):
+    """Исключение при недоступном User в CallbackQuery"""
+
+    def __init__(self, text: str | None = None) -> None:
+        super().__init__(text or "User is not available")

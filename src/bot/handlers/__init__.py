@@ -1,7 +1,7 @@
 from aiogram import Dispatcher
 from loguru import logger
 
-from bot.handlers import admin_channels, post, start, support, unhandled_message
+from bot.handlers import admin_channels, location, noop, post, start, support
 
 
 __all__ = [
@@ -13,10 +13,10 @@ def register_handlers_routers(dp: Dispatcher) -> None:
     logger.debug("Registering handler routers")
 
     dp.include_routers(
-        support.router,
+        location.router,
         start.router,
+        support.router,
         admin_channels.router,
         post.router,
-        # always bottom
-        unhandled_message.router,
+        noop.router,
     )

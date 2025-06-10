@@ -2,7 +2,7 @@ from collections.abc import Awaitable, Callable
 from typing import TYPE_CHECKING, Any
 
 from aiogram import BaseMiddleware
-from aiogram.types import TelegramObject
+from aiogram.types import CallbackQuery, Message, TelegramObject
 from loguru import logger
 
 
@@ -28,5 +28,9 @@ class LoggingMiddleware(BaseMiddleware):
         if fsm_context:
             current_state = await fsm_context.get_state()
             logger.debug(f"FSM State: {current_state}")
+
+        if isinstance(event, (CallbackQuery, Message)):
+            handler_name = data["handler"].callback.__name__
+            logger.info(f"Handling update with handler: {handler_name}")
 
         return await handler(event, data)

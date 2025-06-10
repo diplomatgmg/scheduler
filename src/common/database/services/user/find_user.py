@@ -12,11 +12,11 @@ __all__ = [
 ]
 
 
-def _key_builder(_: AsyncSession, user_id: int) -> str:
+def key_builder(_: AsyncSession, user_id: int) -> str:
     return build_key(user_id)
 
 
-@cache(key_builder=_key_builder)
+@cache(key_builder)
 async def find_user(session: AsyncSession, user_id: int) -> UserModel | None:
     """Возвращает пользователя из БД."""
     logger.debug(f"Getting user id={user_id}")

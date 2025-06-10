@@ -1,6 +1,6 @@
 from collections.abc import Awaitable, Callable
 from functools import wraps
-from typing import Any, TypeVar
+from typing import Any, ParamSpec, TypeVar, cast
 
 from loguru import logger
 from redis.asyncio import Redis
@@ -13,18 +13,25 @@ from common.utils.serializers import AbstractSerializer, PickleSerializer
 __all__ = [
     "build_key",
     "cache",
+    "invalidate_cache",
 ]
 
 
-Func = TypeVar("Func")
+P = ParamSpec("P")
+R = TypeVar("R")
 
 
 def build_key(*args: Any, **kwargs: Any) -> str:
-    """Создает ключ для кеширования в Redis"""
+    """Создает ключ для кеширования в Redis."""
     args_str = ":".join(map(str, args))
     kwargs_str = ":".join(f"{key}={value}" for key, value in sorted(kwargs.items()))
 
     return f"{args_str}:{kwargs_str}"
+
+
+def get_key_prefix(fn: Callable[..., Any]) -> str:
+    """Создает префикс для кешируемого ключа."""
+    return f"{fn.__module__}:{fn.__name__}"
 
 
 async def set_redis_value(
@@ -35,7 +42,7 @@ async def set_redis_value(
     *,
     is_transaction: bool = False,
 ) -> None:
-    """Кеширует значение по ключу в Redis"""
+    """Кеширует значение по ключу в Redis."""
     async with redis_instance.pipeline(transaction=is_transaction) as pipeline:
         await pipeline.set(key, value)
         logger.debug(f"Set cache. {key=}, {value=}")
@@ -45,27 +52,27 @@ async def set_redis_value(
 
 
 def cache(
+    key_builder: Callable[..., str],
     cache_ttl: int | None = None,
     redis_instance: Redis | None = None,
-    key_builder: Callable[..., str] = build_key,
     serializer: AbstractSerializer | None = None,
-) -> Callable[[Callable[..., Awaitable[Func]]], Callable[..., Awaitable[Func]]]:
+) -> Callable[[Callable[P, Awaitable[R]]], Callable[P, Awaitable[R]]]:
     """Кеширует результат функции на основе аргументов функции"""
     cache_ttl = cache_ttl or redis_cache_config.ttl
     serializer = serializer or PickleSerializer()
     redis_instance = redis_instance or get_redis_instance(redis_cache_config.connection.dsn)
 
-    def decorator(fn: Callable[..., Awaitable[Func]]) -> Callable[..., Awaitable[Func]]:
+    def decorator(fn: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R]]:
         @wraps(fn)
-        async def wrapper(*args: Any, **kwargs: Any) -> Any:
+        async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
             key_build = key_builder(*args, **kwargs)
-            key_module = f"{fn.__module__}:{fn.__name__}"
-            key = f"{key_module}:{key_build}"
+            key_prefix = get_key_prefix(fn)
+            key = f"{key_prefix}:{key_build}"
 
             cached_value = await redis_instance.get(key)
             if cached_value is not None:
                 logger.debug(f"Getting cache. {key=}")
-                return serializer.deserialize(cached_value)
+                return cast("R", serializer.deserialize(cached_value))
 
             result = await fn(*args, **kwargs)
 
@@ -77,6 +84,35 @@ def cache(
             )
 
             return result
+
+        return wrapper
+
+    return decorator
+
+
+def invalidate_cache(
+    cached_function: Callable[..., Any],
+    key_builder: Callable[..., str],
+    *,
+    redis_instance: Redis | None = None,
+) -> Callable[[Callable[P, Awaitable[R]]], Callable[P, Awaitable[R]]]:
+    """Декоратор для инвалидации кеша."""
+    redis_instance = redis_instance or get_redis_instance(redis_cache_config.connection.dsn)
+
+    def decorator(fn: Callable[P, Awaitable[R]]) -> Callable[P, Awaitable[R]]:
+        @wraps(fn)
+        async def wrapper(*args: P.args, **kwargs: P.kwargs) -> R:
+            key_build = key_builder(*args, **kwargs)
+            key_prefix = get_key_prefix(cached_function)
+            key = f"{key_prefix}:{key_build}"
+
+            deleted = await redis_instance.delete(key)
+            if deleted:
+                logger.debug(f"Invalidated cache for key: {key}")
+            else:
+                logger.debug(f"No cache to invalidate for key: {key}")
+
+            return await fn(*args, **kwargs)
 
         return wrapper
 

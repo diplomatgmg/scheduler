@@ -15,5 +15,5 @@ class PostMenuActionEnum(StrEnum):
     EDIT = "edit"
 
 
-class PostMenuCallback(CallbackData, prefix="post"):
+class PostMenuCallback(CallbackData, prefix="post_menu"):
     action: PostMenuActionEnum

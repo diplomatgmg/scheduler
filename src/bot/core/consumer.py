@@ -8,7 +8,6 @@ __all__ = [
 ]
 
 
-# FIXME вынести в src.tasks??
 async def start_redis_consumer() -> None:
     """Получает updates с очереди Redis и передает их в Dispatcher"""
     queue = RedisQueueClient()

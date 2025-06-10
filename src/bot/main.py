@@ -7,7 +7,7 @@ from bot.core.config import bot_config
 from bot.core.consumer import start_redis_consumer
 from bot.core.loader import bot, dp
 from bot.handlers import register_handlers_routers
-from bot.keyboards import default_commands
+from bot.keyboards.commands import default_commands
 from bot.middlewares import register_middlewares
 from common.environment.config import env_config
 from common.logging.setup import setup_module_logging
