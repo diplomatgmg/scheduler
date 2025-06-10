@@ -25,4 +25,4 @@ async def handle_offset_selected(
     message = await get_message(query)
     offset = cast("int", callback_data.offset)
 
-    await update_user_offset(message, session, user.id, offset, edit_message=True)
+    await update_user_offset(message, session, user, offset, edit_message=True)

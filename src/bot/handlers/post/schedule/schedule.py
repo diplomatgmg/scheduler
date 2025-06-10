@@ -67,8 +67,8 @@ async def process_time_selection(message: Message, state: FSMContext) -> None:
         await state.set_state(PostScheduleState.waiting_for_time)
         return
 
-    user_data = await state.get_data()
-    timestamp_date = user_data.get("date")
+    post_schedule_context = PostScheduleContext(**await state.get_data())
+    timestamp_date = post_schedule_context.date
 
     if timestamp_date is None:
         await message.answer("❌ Дата не найдена. Попробуйте выбрать дату заново.")
