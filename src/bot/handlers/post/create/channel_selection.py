@@ -5,7 +5,7 @@ from aiogram.types import CallbackQuery
 from loguru import logger
 
 from bot.callbacks import SelectChannelCallback
-from bot.callbacks.post import PostCreateActionEnum, PostMenuCallback
+from bot.callbacks.post import PostCreateActionEnum, PostCreateCallback
 from bot.handlers.utils import show_main_menu
 from bot.keyboards.inline.post import select_another_channel_keyboard
 from bot.schemas import PostContext
@@ -50,7 +50,7 @@ async def channel_selection(query: CallbackQuery, callback_data: SelectChannelCa
 
 
 # noinspection PyTypeChecker
-@router.callback_query(PostMenuCallback.filter(F.action == PostCreateActionEnum.BACK))
+@router.callback_query(PostCreateCallback.filter(F.action == PostCreateActionEnum.BACK))
 async def handle_select_another_channel_callback(query: CallbackQuery, state: FSMContext) -> None:
     """Обработчик для выбора другого канала"""
     logger.debug(f"[handle_back_callback] callback from {get_username(query)}")
