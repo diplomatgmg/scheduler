@@ -99,7 +99,7 @@ services:
       - "${REDIS_PORT}:${REDIS_PORT}"
     command: [ "redis-server", "--port", "${REDIS_PORT}" ]
     volumes:
-      - redis-data:/var/lib/redis/data
+      - redis-data:/data
     networks:
       - app-network
     healthcheck:

@@ -32,4 +32,4 @@ async def handle_location_shared(message: Message, session: AsyncSession, user: 
     tz = pytz.timezone(timezone_str)
     offset = tz.utcoffset(datetime.now()).total_seconds() / 3600
 
-    await update_user_offset(message, session, user.id, offset)
+    await update_user_offset(message, session, user, offset)

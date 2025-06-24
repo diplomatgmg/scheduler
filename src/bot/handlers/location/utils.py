@@ -2,6 +2,7 @@ from aiogram.types import Message, ReplyKeyboardRemove
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from bot.handlers.utils import show_main_menu
+from common.database.models import UserModel
 from common.database.services.user import update_user
 
 
@@ -11,9 +12,9 @@ __all__ = [
 
 
 async def update_user_offset(
-    message: Message, session: AsyncSession, user_id: int, offset: int, *, edit_message: bool = False
+    message: Message, session: AsyncSession, user: UserModel, offset: int, *, edit_message: bool = False
 ) -> None:
-    await update_user(session, user_id, timezone_offset=offset)
+    await update_user(session, user, timezone_offset=offset)
 
     formatted_offset = f"UTC{int(offset)}" if offset < 0 else f"UTC+{int(offset)}"
     update_text = f"✅ Установлена зона: {formatted_offset}"
