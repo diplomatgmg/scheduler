@@ -30,7 +30,7 @@ runs:
         message: |
           *${{ inputs.title }}*
 
-          📂 [Repo](${{ github.server_url }}/${{ github.repository }})
+          📂 *Repo*: [${{ github.repository }}](${{ github.server_url }}/${{ github.repository }})
           👤 *Actor*: [${{ github.actor }}](${{ github.server_url }}/${{ github.actor }})
           🛠️ *Job*: [${{ inputs.job_name }}](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }})
           ✉️ *Commit/PR*: ```${{ github.event.head_commit.message || github.event.pull_request.title }}```
